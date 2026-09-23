@@ -16,12 +16,12 @@ for (const points of POINT_COUNTS) {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(String(e)));
     await page.goto(`http://localhost:5181/?points=${points}`);
-    await page.waitForFunction(() => window.__spike?.fps > 0, null, {
+    await page.waitForFunction(() => window.__globe?.fps > 0, null, {
       timeout: 120_000,
       polling: 300,
     });
 
-    const s = await page.evaluate(() => window.__spike);
+    const s = await page.evaluate(() => window.__globe);
     console.log(
       `globe display: points=${s.pointCount} ${s.frameMs.toFixed(1)}ms/frame ` +
         `(${s.fps.toFixed(2)} fps) renderer=${s.renderer}`,
@@ -38,7 +38,7 @@ for (const points of POINT_COUNTS) {
     // demand, or coalesce the pick into the frame, never read back against a
     // saturated queue.
     await page.goto(`http://localhost:5181/?points=${points}&pick=sync&loop=off`);
-    await page.waitForFunction(() => window.__spike?.fps > 0, null, {
+    await page.waitForFunction(() => window.__globe?.fps > 0, null, {
       timeout: 120_000,
       polling: 300,
     });
@@ -47,10 +47,10 @@ for (const points of POINT_COUNTS) {
     let hits = 0;
     for (let i = 0; i < 8; i++) {
       await page.mouse.move(600 + i * 12, 340 + i * 7);
-      await page.waitForFunction(() => window.__spike.pickMs > 0, null, { polling: 50 });
+      await page.waitForFunction(() => window.__globe.pickMs > 0, null, { polling: 50 });
       const r = await page.evaluate(() => {
-        const v = { ms: window.__spike.pickMs, id: window.__spike.pickedId };
-        window.__spike.pickMs = 0;
+        const v = { ms: window.__globe.pickMs, id: window.__globe.pickedId };
+        window.__globe.pickMs = 0;
         return v;
       });
       times.push(r.ms);

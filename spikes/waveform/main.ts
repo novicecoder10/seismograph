@@ -4,7 +4,7 @@ import { sonify, type SonifiedBuffer } from "./sonify.js";
 
 declare global {
   interface Window {
-    __spike: {
+    __wave: {
       traceCount: number;
       sampleCount: number;
       sourceRate: number;
@@ -16,7 +16,7 @@ declare global {
     };
   }
 }
-window.__spike = {
+window.__wave = {
   traceCount: 0, sampleCount: 0, sourceRate: 0, sampleRate: 0,
   speedUp: 0, durationS: 0, played: false, error: null,
 };
@@ -61,7 +61,7 @@ async function load(name: string) {
     const t = traces[0]!;
     const audio = sonify(t);
     current = audio;
-    Object.assign(window.__spike, {
+    Object.assign(window.__wave, {
       traceCount: traces.length,
       sampleCount: audio.samples.length,
       sourceRate: t.sampleRate,
@@ -77,7 +77,7 @@ async function load(name: string) {
       `${t.samples.length} samples · ${gaps} gap samples · ` +
       `${audio.speedUp.toFixed(0)}x · ${audio.durationS.toFixed(2)} s of audio`;
   } catch (e) {
-    window.__spike.error = String(e);
+    window.__wave.error = String(e);
     status.textContent = `failed: ${e}`;
   }
 }
@@ -87,12 +87,12 @@ playBtn.onclick = async () => {
   const ac = new AudioContext();
   await ac.resume();
   const buf = ac.createBuffer(1, current.samples.length, current.sampleRate);
-  buf.copyToChannel(current.samples, 0);
+  buf.copyToChannel(new Float32Array(current.samples), 0);
   const src = ac.createBufferSource();
   src.buffer = buf;
   src.connect(ac.destination);
   src.start();
-  window.__spike.played = true;
+  window.__wave.played = true;
 };
 
 pick.onchange = () => void load(pick.value);

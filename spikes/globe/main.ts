@@ -12,7 +12,7 @@ const POINT_COUNT = (() => {
 
 declare global {
   interface Window {
-    __spike: {
+    __globe: {
       fps: number;
       pointCount: number;
       pickedId: number | null;
@@ -35,17 +35,17 @@ function webglAvailable(): boolean {
   }
 }
 
-window.__spike = {
-  fps: 0, pointCount: 0, pickedId: null, pickMs: 0, frameMs: 0,
+window.__globe = {
+  fps: 0, pointCount: 0, pickedId: null, pickMs: 0, frameMs: 0, pickMode: "",
   renderer: "", webglOk: false, error: null,
 };
 const hud = document.getElementById("hud")!;
 
 if (!webglAvailable()) {
-  window.__spike.error = "WebGL unavailable";
+  window.__globe.error = "WebGL unavailable";
   hud.textContent = "WebGL unavailable — production must fall back to 2D canvas";
 } else {
-  window.__spike.webglOk = true;
+  window.__globe.webglOk = true;
   main();
 }
 
@@ -55,7 +55,7 @@ function main() {
   camera.position.set(0, 0, 3.2);
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   const dbg = renderer.getContext().getExtension("WEBGL_debug_renderer_info");
-  window.__spike.renderer = dbg
+  window.__globe.renderer = dbg
     ? String(renderer.getContext().getParameter(dbg.UNMASKED_RENDERER_WEBGL))
     : "unknown";
   renderer.setSize(innerWidth, innerHeight);
@@ -153,7 +153,7 @@ function main() {
 
   const points = new THREE.Points(geom, displayMat);
   scene.add(points);
-  window.__spike.pointCount = POINT_COUNT;
+  window.__globe.pointCount = POINT_COUNT;
 
   // GPU picking: render IDs into a 1x1 target through a view offset under the cursor.
   const pickTarget = new THREE.WebGLRenderTarget(1, 1);
@@ -198,7 +198,7 @@ function main() {
     renderPickPass(x, y);
     renderer.readRenderTargetPixels(pickTarget, 0, 0, 1, 1, pickPixel);
     const out = finishPick();
-    window.__spike.pickMs = performance.now() - t0;
+    window.__globe.pickMs = performance.now() - t0;
     return out;
   }
 
@@ -207,23 +207,23 @@ function main() {
     renderPickPass(x, y);
     await renderer.readRenderTargetPixelsAsync(pickTarget, 0, 0, 1, 1, pickPixel);
     const out = finishPick();
-    window.__spike.pickMs = performance.now() - t0;
+    window.__globe.pickMs = performance.now() - t0;
     return out;
   }
 
   // One pick in flight at a time. Without this, a fast pointer sweep queues a
   // pick per move event and they serialise behind each other.
-  window.__spike.pickMode = PICK_MODE;
+  window.__globe.pickMode = PICK_MODE;
   let picking = false;
   addEventListener("pointermove", (e) => {
     if (PICK_MODE === "sync") {
-      window.__spike.pickedId = pickSync(e.clientX, e.clientY);
+      window.__globe.pickedId = pickSync(e.clientX, e.clientY);
       return;
     }
     if (picking) return;
     picking = true;
     void pickAsync(e.clientX, e.clientY).then((id) => {
-      window.__spike.pickedId = id;
+      window.__globe.pickedId = id;
       picking = false;
     });
   });
@@ -243,12 +243,12 @@ function main() {
     renderer.render(scene, camera);
     frames++;
     if (frames >= FRAME_WINDOW || now - last >= 1000) {
-      window.__spike.fps = (frames * 1000) / (now - last);
-      window.__spike.frameMs = (now - last) / frames;
+      window.__globe.fps = (frames * 1000) / (now - last);
+      window.__globe.frameMs = (now - last) / frames;
       hud.textContent =
-        `${POINT_COUNT.toLocaleString()} pts · ${window.__spike.fps.toFixed(1)} fps · ` +
-        `${window.__spike.frameMs.toFixed(1)} ms/frame · ` +
-        `pick ${window.__spike.pickMs.toFixed(1)}ms · id ${window.__spike.pickedId ?? "—"}`;
+        `${POINT_COUNT.toLocaleString()} pts · ${window.__globe.fps.toFixed(1)} fps · ` +
+        `${window.__globe.frameMs.toFixed(1)} ms/frame · ` +
+        `pick ${window.__globe.pickMs.toFixed(1)}ms · id ${window.__globe.pickedId ?? "—"}`;
       frames = 0;
       last = now;
     }
@@ -260,8 +260,8 @@ function main() {
   if (!LOOP_ON) {
     const t0 = performance.now();
     renderer.render(scene, camera);
-    window.__spike.frameMs = performance.now() - t0;
-    window.__spike.fps = 1000 / window.__spike.frameMs;
+    window.__globe.frameMs = performance.now() - t0;
+    window.__globe.fps = 1000 / window.__globe.frameMs;
   }
 
   addEventListener("resize", () => {

@@ -21,3 +21,11 @@ python3 -m venv .venv && .venv/bin/pip install -r traveltime/requirements.txt
 Headless measurement of the two browser spikes: `npm run e2e` with both dev servers up.
 Headless Chromium renders through SwiftShader, so its frame rate is a **floor**, not a
 real-GPU number.
+
+## Status
+
+Phase 0 complete, 2026-09-23. All answers in `FINDINGS.md`. Suite: 25 unit tests
+(`npm test`, ~1 s) and 8 browser tests (`npm run e2e`, ~37 s with both dev servers up).
+Headless Chromium needs `--use-angle=vulkan` to reach the GPU — it is set in
+`playwright.config.ts`, and every measurement line prints the renderer string so a silent
+SwiftShader fallback is detectable.
