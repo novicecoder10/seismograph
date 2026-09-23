@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+spikes/node_modules/
+spikes/.venv/

@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Spike: waveform round-trip</title>
+<style>
+  body { margin: 0; background: #07090c; color: #cfe6dd;
+         font: 13px ui-monospace, monospace; padding: 16px; }
+  h1 { font-size: 15px; font-weight: 500; color: #7fe0c5; }
+  canvas { width: 100%; height: 220px; display: block; background: #0b0f14; margin: 12px 0; }
+  button { font: inherit; padding: 6px 14px; background: #0f2a24; color: #7fe0c5;
+           border: 1px solid #2a6a58; cursor: pointer; }
+  select { font: inherit; background: #0b0f14; color: #cfe6dd; border: 1px solid #22303a; }
+</style>
+<h1>miniSEED → render → audio</h1>
+<label>fixture
+  <select id="pick">
+    <option value="rshake-R0066-EHZ.mseed">AM.R0066.00.EHZ — Raspberry Shake, 100 Hz</option>
+    <option value="iu-anmo-bhz.mseed">IU.ANMO.00.BHZ — GSN broadband, 40 Hz</option>
+  </select>
+</label>
+<div id="status">loading…</div>
+<canvas id="wf" width="1600" height="220"></canvas>
+<button id="play">play</button>
+<script type="module" src="./main.ts"></script>

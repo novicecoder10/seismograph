@@ -1,0 +1,23 @@
+{
+  "name": "seismograph-spikes",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "dev:globe": "vite --config vite.globe.config.ts",
+    "dev:waveform": "vite --config vite.waveform.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/three": "^0.170.0",
+    "happy-dom": "^20.14.5",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "seisplotjs": "^3.2.7",
+    "three": "^0.170.0"
+  }
+}
