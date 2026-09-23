@@ -1,0 +1,341 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "generated": 1790190963000,
+  "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson",
+  "title": "USGS Significant Earthquakes, Past Month",
+  "status": 200,
+  "api": "2.7.0",
+  "count": 8
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 6.4,
+    "place": "49 km NNE of Kainantu, Papua New Guinea",
+    "time": 1789895855624,
+    "updated": 1789982725530,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tiqc",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us7000tiqc.geojson",
+    "felt": 30,
+    "cdi": 5.6,
+    "mmi": 5.41,
+    "alert": "green",
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 647,
+    "net": "us",
+    "code": "7000tiqc",
+    "ids": ",us7000tiqc,",
+    "sources": ",us,",
+    "types": ",dyfi,ground-failure,losspager,moment-tensor,origin,phase-data,shakemap,",
+    "nst": 91,
+    "dmin": 3.637,
+    "rms": 0.64,
+    "gap": 22,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "M 6.4 - 49 km NNE of Kainantu, Papua New Guinea"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     146.0922,
+     -5.9021,
+     104.329
+    ]
+   },
+   "id": "us7000tiqc"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 6.5,
+    "place": "169 km W of Nikolski, Alaska",
+    "time": 1789654792210,
+    "updated": 1790173803267,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000ti1p",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us7000ti1p.geojson",
+    "felt": 8,
+    "cdi": 3.4,
+    "mmi": 4.983,
+    "alert": "green",
+    "status": "reviewed",
+    "tsunami": 1,
+    "sig": 653,
+    "net": "us",
+    "code": "7000ti1p",
+    "ids": ",attliih5,aka2026slmipb,us7000ti1p,",
+    "sources": ",at,ak,us,",
+    "types": ",dyfi,event-sequence,ground-failure,impact-link,losspager,moment-tensor,oaf,origin,phase-data,shakemap,",
+    "nst": 147,
+    "dmin": 0.82,
+    "rms": 1.15,
+    "gap": 29,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "M 6.5 - 169 km W of Nikolski, Alaska"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -171.3756,
+     52.8594,
+     98
+    ]
+   },
+   "id": "us7000ti1p"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 6.5,
+    "place": "126 km NNE of Teluknaga, Indonesia",
+    "time": 1789161835907,
+    "updated": 1789248599017,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tgrk",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us7000tgrk.geojson",
+    "felt": 21,
+    "cdi": 3.4,
+    "mmi": 3.013,
+    "alert": "green",
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 657,
+    "net": "us",
+    "code": "7000tgrk",
+    "ids": ",us7000tgrk,",
+    "sources": ",us,",
+    "types": ",dyfi,ground-failure,losspager,moment-tensor,origin,phase-data,shakemap,",
+    "nst": 116,
+    "dmin": 5.557,
+    "rms": 0.73,
+    "gap": 23,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "M 6.5 - 126 km NNE of Teluknaga, Indonesia"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     106.8742,
+     -4.9832,
+     372
+    ]
+   },
+   "id": "us7000tgrk"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 3.75,
+    "place": "20 km E of Castle Rock, Washington",
+    "time": 1788606568270,
+    "updated": 1789568324336,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/uw714095342",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/uw714095342.geojson",
+    "felt": 1025,
+    "cdi": 4.3,
+    "mmi": 3.72,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 646,
+    "net": "uw",
+    "code": "714095342",
+    "ids": ",ew1788606570,uw714095342,us7000teiz,",
+    "sources": ",ew,uw,us,",
+    "types": ",dyfi,moment-tensor,origin,phase-data,shake-alert,shakemap,",
+    "nst": 142,
+    "dmin": 0.07882,
+    "rms": 0.1,
+    "gap": 17,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 3.8 - 20 km E of Castle Rock, Washington"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.642,
+     46.2465,
+     17.67
+    ]
+   },
+   "id": "uw714095342"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 5.4,
+    "place": "21 km WNW of Jiangyou, China",
+    "time": 1788435581981,
+    "updated": 1788522392144,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tdw6",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us7000tdw6.geojson",
+    "felt": 6,
+    "cdi": 3.1,
+    "mmi": 5.884,
+    "alert": "yellow",
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 652,
+    "net": "us",
+    "code": "7000tdw6",
+    "ids": ",us7000tdw6,",
+    "sources": ",us,",
+    "types": ",dyfi,ground-failure,losspager,origin,phase-data,shakemap,",
+    "nst": 89,
+    "dmin": 4.155,
+    "rms": 0.81,
+    "gap": 26,
+    "magType": "mb",
+    "type": "earthquake",
+    "title": "M 5.4 - 21 km WNW of Jiangyou, China"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     104.5066,
+     31.8458,
+     10
+    ]
+   },
+   "id": "us7000tdw6"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 6.3,
+    "place": "84 km SSW of Nikolski, Alaska",
+    "time": 1788434244056,
+    "updated": 1790076446805,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tdvt",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us7000tdvt.geojson",
+    "felt": 3,
+    "cdi": 5,
+    "mmi": 3.846,
+    "alert": "green",
+    "status": "reviewed",
+    "tsunami": 1,
+    "sig": 612,
+    "net": "us",
+    "code": "7000tdvt",
+    "ids": ",attkscoz,aka2026rljynh,us7000tdvt,",
+    "sources": ",at,ak,us,",
+    "types": ",dyfi,event-sequence,ground-failure,impact-link,losspager,moment-tensor,oaf,origin,phase-data,shakemap,",
+    "nst": 136,
+    "dmin": 0.563,
+    "rms": 1.28,
+    "gap": 59,
+    "magType": "mww",
+    "type": "earthquake",
+    "title": "M 6.3 - 84 km SSW of Nikolski, Alaska"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -169.4088,
+     52.2579,
+     35
+    ]
+   },
+   "id": "us7000tdvt"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 5.2,
+    "place": "55 km NW of Kodāri̇̄, Nepal",
+    "time": 1787712730000,
+    "updated": 1789508374886,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tbwb",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us7000tbwb.geojson",
+    "felt": 2,
+    "cdi": 2,
+    "mmi": null,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 601,
+    "net": "us",
+    "code": "7000tbwb",
+    "ids": ",us7000tbwb,",
+    "sources": ",us,",
+    "types": ",dyfi,general-header,general-text,origin,phase-data,significance,",
+    "nst": 0,
+    "dmin": null,
+    "rms": 3.9,
+    "gap": null,
+    "magType": "ms_vx",
+    "type": "landslide",
+    "title": "M 5.2 Landslide - 55 km NW of Kodāri̇̄, Nepal"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     85.515,
+     28.271,
+     0
+    ]
+   },
+   "id": "us7000tbwb"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 4.9,
+    "place": "16 km NE of Jalālābād, Afghanistan",
+    "time": 1787620725217,
+    "updated": 1790182919040,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000tna9",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us6000tna9.geojson",
+    "felt": 1,
+    "cdi": 5.2,
+    "mmi": 5.675,
+    "alert": "yellow",
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 651,
+    "net": "us",
+    "code": "6000tna9",
+    "ids": ",us6000tna9,",
+    "sources": ",us,",
+    "types": ",dyfi,ground-failure,impact-text,losspager,moment-tensor,origin,phase-data,shakemap,",
+    "nst": 140,
+    "dmin": 1.208,
+    "rms": 0.81,
+    "gap": 80,
+    "magType": "mb",
+    "type": "earthquake",
+    "title": "M 4.9 - 16 km NE of Jalālābād, Afghanistan"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     70.5973,
+     34.5108,
+     10
+    ]
+   },
+   "id": "us6000tna9"
+  }
+ ],
+ "bbox": [
+  -171.3756,
+  -5.9021,
+  0,
+  146.0922,
+  52.8594,
+  372
+ ]
+}

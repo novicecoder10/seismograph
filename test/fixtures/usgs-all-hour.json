@@ -1,0 +1,421 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "generated": 1790190966000,
+  "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
+  "title": "USGS All Earthquakes, Past Hour",
+  "status": 200,
+  "api": "2.7.0",
+  "count": 10
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 1.3,
+    "place": "54 km ENE of Pedro Bay, Alaska",
+    "time": 1790190874711,
+    "updated": 1790190959335,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026swyhso",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/aka2026swyhso.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 26,
+    "net": "ak",
+    "code": "a2026swyhso",
+    "ids": ",aka2026swyhso,",
+    "sources": ",ak,",
+    "types": ",origin,phase-data,",
+    "nst": 54,
+    "dmin": 0.1,
+    "rms": 0.5,
+    "gap": 103,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 1.3 - 54 km ENE of Pedro Bay, Alaska"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -153.251,
+     60.013,
+     132.3
+    ]
+   },
+   "id": "aka2026swyhso"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 0.73,
+    "place": "8 km WNW of Cobb, CA",
+    "time": 1790190703270,
+    "updated": 1790190800773,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75440442",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/nc75440442.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 8,
+    "net": "nc",
+    "code": "75440442",
+    "ids": ",nc75440442,",
+    "sources": ",nc,",
+    "types": ",nearby-cities,origin,phase-data,",
+    "nst": 15,
+    "dmin": 0.01418,
+    "rms": 0.02,
+    "gap": 57,
+    "magType": "md",
+    "type": "earthquake",
+    "title": "M 0.7 - 8 km WNW of Cobb, CA"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.808502197266,
+     38.8381652832031,
+     1.45000004768372
+    ]
+   },
+   "id": "nc75440442"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 1.3,
+    "place": "16 km WSW of Johannesburg, CA",
+    "time": 1790190234870,
+    "updated": 1790190443411,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41337871",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/ci41337871.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 26,
+    "net": "ci",
+    "code": "41337871",
+    "ids": ",ci41337871,",
+    "sources": ",ci,",
+    "types": ",nearby-cities,origin,phase-data,",
+    "nst": 35,
+    "dmin": 0.05778,
+    "rms": 0.16,
+    "gap": 58,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 1.3 - 16 km WSW of Johannesburg, CA"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -117.798166666667,
+     35.3101666666667,
+     6.24
+    ]
+   },
+   "id": "ci41337871"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 0.8,
+    "place": "9 km NW of Garnet, CA",
+    "time": 1790190203240,
+    "updated": 1790190410531,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41337863",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/ci41337863.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 10,
+    "net": "ci",
+    "code": "41337863",
+    "ids": ",ci41337863,",
+    "sources": ",ci,",
+    "types": ",nearby-cities,origin,phase-data,",
+    "nst": 33,
+    "dmin": 0.03456,
+    "rms": 0.13,
+    "gap": 60,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 0.8 - 9 km NW of Garnet, CA"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -116.605833333333,
+     33.9616666666667,
+     8.49
+    ]
+   },
+   "id": "ci41337863"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 1.65,
+    "place": "17 km WSW of Johannesburg, CA",
+    "time": 1790190013610,
+    "updated": 1790190224072,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41337855",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/ci41337855.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 42,
+    "net": "ci",
+    "code": "41337855",
+    "ids": ",ci41337855,",
+    "sources": ",ci,",
+    "types": ",nearby-cities,origin,phase-data,scitech-link,",
+    "nst": 42,
+    "dmin": 0.05542,
+    "rms": 0.17,
+    "gap": 59,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 1.7 - 17 km WSW of Johannesburg, CA"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -117.799333333333,
+     35.3078333333333,
+     6.41
+    ]
+   },
+   "id": "ci41337855"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 1.5,
+    "place": "70 km ESE of Cantwell, Alaska",
+    "time": 1790189941608,
+    "updated": 1790190028762,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026swxufl",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/aka2026swxufl.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 35,
+    "net": "ak",
+    "code": "a2026swxufl",
+    "ids": ",aka2026swxufl,",
+    "sources": ",ak,",
+    "types": ",origin,phase-data,",
+    "nst": 10,
+    "dmin": 0.6,
+    "rms": 0.7,
+    "gap": 102,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 1.5 - 70 km ESE of Cantwell, Alaska"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -147.657,
+     63.151,
+     5.2
+    ]
+   },
+   "id": "aka2026swxufl"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 1.72,
+    "place": "5 km ESE of Interlaken, CA",
+    "time": 1790188620340,
+    "updated": 1790189545121,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75440427",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/nc75440427.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 46,
+    "net": "nc",
+    "code": "75440427",
+    "ids": ",nc75440427,",
+    "sources": ",nc,",
+    "types": ",nearby-cities,origin,phase-data,scitech-link,",
+    "nst": 29,
+    "dmin": 0.01959,
+    "rms": 0.13,
+    "gap": 59,
+    "magType": "md",
+    "type": "earthquake",
+    "title": "M 1.7 - 5 km ESE of Interlaken, CA"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -121.686332702637,
+     36.9309997558594,
+     12.1300001144409
+    ]
+   },
+   "id": "nc75440427"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 1.5,
+    "place": "79 km SSE of Central, Alaska",
+    "time": 1790188596416,
+    "updated": 1790188661649,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026swxatz",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/aka2026swxatz.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 35,
+    "net": "ak",
+    "code": "a2026swxatz",
+    "ids": ",aka2026swxatz,",
+    "sources": ",ak,",
+    "types": ",origin,phase-data,",
+    "nst": 10,
+    "dmin": 0.5,
+    "rms": 0.3,
+    "gap": 86,
+    "magType": "ml",
+    "type": "earthquake",
+    "title": "M 1.5 - 79 km SSE of Central, Alaska"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -144.431,
+     64.88,
+     5
+    ]
+   },
+   "id": "aka2026swxatz"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 2.69,
+    "place": "25 km SW of Toms Place, CA",
+    "time": 1790188136100,
+    "updated": 1790189228167,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75440422",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/nc75440422.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "automatic",
+    "tsunami": 0,
+    "sig": 111,
+    "net": "nc",
+    "code": "75440422",
+    "ids": ",nc75440422,nn00924795,",
+    "sources": ",nc,nn,",
+    "types": ",focal-mechanism,nearby-cities,origin,phase-data,scitech-link,",
+    "nst": 29,
+    "dmin": 0.1788,
+    "rms": 0.07,
+    "gap": 96,
+    "magType": "md",
+    "type": "earthquake",
+    "title": "M 2.7 - 25 km SW of Toms Place, CA"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -118.890167236328,
+     37.417667388916,
+     2.97000002861023
+    ]
+   },
+   "id": "nc75440422"
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "mag": 2.31,
+    "place": "2 km NNE of Guayanilla, Puerto Rico",
+    "time": 1790187391870,
+    "updated": 1790187965870,
+    "tz": null,
+    "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71534263",
+    "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/pr71534263.geojson",
+    "felt": null,
+    "cdi": null,
+    "mmi": null,
+    "alert": null,
+    "status": "reviewed",
+    "tsunami": 0,
+    "sig": 82,
+    "net": "pr",
+    "code": "71534263",
+    "ids": ",pr71534263,",
+    "sources": ",pr,",
+    "types": ",origin,phase-data,",
+    "nst": 12,
+    "dmin": 0.02188,
+    "rms": 0.11,
+    "gap": 112,
+    "magType": "md",
+    "type": "earthquake",
+    "title": "M 2.3 - 2 km NNE of Guayanilla, Puerto Rico"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -66.7846666666667,
+     18.041,
+     14.44
+    ]
+   },
+   "id": "pr71534263"
+  }
+ ],
+ "bbox": [
+  -153.251,
+  18.041,
+  1.4500000476837,
+  -66.784666666667,
+  64.88,
+  132.3
+ ]
+}

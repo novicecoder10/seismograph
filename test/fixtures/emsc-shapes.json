@@ -1,0 +1,102 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "seconds-epoch",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.8, "time": 1790136000, "flynn_region": "CENTRAL ITALY" }
+    },
+    {
+      "id": "millis-epoch",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.8, "time": 1790136000000, "flynn_region": "CENTRAL ITALY" }
+    },
+    {
+      "id": "iso-string",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.8, "time": "2026-09-23T04:00:00Z", "flynn_region": "X" }
+    },
+    {
+      "id": "nested-time-object",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.8, "time": { "time": 1790136000 }, "flynn_region": "X" }
+    },
+    {
+      "id": "fractional-seconds",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.8, "time": { "time": 1790136000.43 }, "flynn_region": "X" }
+    },
+    {
+      "id": "lastupdate-fallback",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.8, "lastupdate": "2026-09-23T04:00:00Z", "flynn_region": "X" }
+    },
+    {
+      "id": "magnitude-object",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": {
+        "magnitude": { "mag": 5.1, "mag_type": "mb" },
+        "time": 1790136000,
+        "flynn_region": "X"
+      }
+    },
+    {
+      "id": "magnitude-object-legacy-magtype",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": {
+        "magnitude": { "mag": 5.1, "magtype": "ML" },
+        "time": 1790136000,
+        "flynn_region": "X"
+      }
+    },
+    {
+      "id": "location-object-no-geometry",
+      "properties": {
+        "mag": 4.6,
+        "time": 1790136000,
+        "location": { "lat": 41.9, "lon": 12.5 },
+        "depth": { "depth": 33.0 },
+        "flynn_region": "X"
+      }
+    },
+    {
+      "id": "place-object",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": {
+        "mag": 4.6,
+        "time": 1790136000,
+        "place": { "region": "SLOVENIA", "cities": [] }
+      }
+    },
+    {
+      "id": "tsunami-object-none",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": {
+        "mag": 4.6,
+        "time": 1790136000,
+        "tsunami": { "type": "NONE", "state": "", "link": [] },
+        "flynn_region": "X"
+      }
+    },
+    {
+      "id": "tsunami-object-real",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": {
+        "mag": 7.6,
+        "time": 1790136000,
+        "tsunami": { "type": "WATCH", "state": "", "link": [] },
+        "flynn_region": "X"
+      }
+    },
+    {
+      "id": "no-magnitude",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "time": 1790136000, "flynn_region": "X" }
+    },
+    {
+      "id": "no-time-at-all",
+      "geometry": { "type": "Point", "coordinates": [12.5, 41.9, 10.0] },
+      "properties": { "mag": 4.9, "flynn_region": "X" }
+    }
+  ]
+}

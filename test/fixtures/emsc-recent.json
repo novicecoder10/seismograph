@@ -1,0 +1,1651 @@
+{
+ "type": "FeatureCollection",
+ "metadata": {
+  "conf": {
+   "lng": {
+    "agobef": [
+     "ar",
+     "sr"
+    ],
+    "agorv": [
+     "sw"
+    ]
+   }
+  },
+  "latest": true,
+  "showappreview": false,
+  "generated_time": 1759391457,
+  "generated_time_str": "Thu, 02 Oct 2025 07:50:57 +0000",
+  "url": "https://www.emsc-csem.org/service/api/1.6/get.geojson",
+  "title": "Api 1.6",
+  "api": "1.6",
+  "status": 200
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "id": 1874697,
+   "properties": {
+    "evid": 1874697,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874697",
+    "time": {
+     "time": 1759391262.43,
+     "time_str": "Thu, 02 Oct 2025 07:47:42 +0000",
+     "tz": 120,
+     "tz_str": "Europe/Ljubljana",
+     "time_epi_str": "Thu, 02 Oct 2025 09:47:42 +0200",
+     "last_update_time": 1759391414.051162,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:50:14 +0000"
+    },
+    "location": {
+     "lat": 46.3062,
+     "lon": 13.484
+    },
+    "magnitude": {
+     "mag": 0.6,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 18,
+     "depth_str": "18 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "SLOVENIA",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874697/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     13.484,
+     46.3062,
+     18
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874691,
+   "properties": {
+    "evid": 1874691,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874691",
+    "time": {
+     "time": 1759390236.9,
+     "time_str": "Thu, 02 Oct 2025 07:30:36 +0000",
+     "tz": 0,
+     "tz_str": "Atlantic/Azores",
+     "time_epi_str": "Thu, 02 Oct 2025 07:30:36 +0000",
+     "last_update_time": 1759390671.538236,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:37:51 +0000"
+    },
+    "location": {
+     "lat": 38.652,
+     "lon": -29.04
+    },
+    "magnitude": {
+     "mag": 2.3,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 4,
+     "depth_str": "4 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "AZORES ISLANDS, PORTUGAL",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874691/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -29.04,
+     38.652,
+     4
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874690,
+   "properties": {
+    "evid": 1874690,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874690",
+    "time": {
+     "time": 1759390114.1,
+     "time_str": "Thu, 02 Oct 2025 07:28:34 +0000",
+     "tz": 0,
+     "tz_str": "Atlantic/Azores",
+     "time_epi_str": "Thu, 02 Oct 2025 07:28:34 +0000",
+     "last_update_time": 1759390412.132129,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:33:32 +0000"
+    },
+    "location": {
+     "lat": 38.658,
+     "lon": -29.042
+    },
+    "magnitude": {
+     "mag": 3.1,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 3.6,
+     "depth_str": "3.6 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "AZORES ISLANDS, PORTUGAL",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874690/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -29.042,
+     38.658,
+     3.6
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874698,
+   "properties": {
+    "evid": 1874698,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874698",
+    "time": {
+     "time": 1759389972,
+     "time_str": "Thu, 02 Oct 2025 07:26:12 +0000",
+     "tz": -360,
+     "tz_str": "America/Mexico_City",
+     "time_epi_str": "Thu, 02 Oct 2025 01:26:12 -0600",
+     "last_update_time": 1759391420.599669,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:50:20 +0000"
+    },
+    "location": {
+     "lat": 16.37,
+     "lon": -94.668
+    },
+    "magnitude": {
+     "mag": 4.2,
+     "mag_type": "M"
+    },
+    "depth": {
+     "depth": 87.6,
+     "depth_str": "87.6 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "OAXACA, MEXICO",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874698/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -94.668,
+     16.37,
+     87.6
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874692,
+   "properties": {
+    "evid": 1874692,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874692",
+    "time": {
+     "time": 1759389949.42,
+     "time_str": "Thu, 02 Oct 2025 07:25:49 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 10:25:49 +0300",
+     "last_update_time": 1759391455.887857,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:50:55 +0000"
+    },
+    "location": {
+     "lat": 38.0811,
+     "lon": 27.0405
+    },
+    "magnitude": {
+     "mag": 1.4,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 12.2,
+     "depth_str": "12.2 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874692/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     27.0405,
+     38.0811,
+     12.2
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874685,
+   "properties": {
+    "evid": 1874685,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874685",
+    "time": {
+     "time": 1759389795.3,
+     "time_str": "Thu, 02 Oct 2025 07:23:15 +0000",
+     "tz": 120,
+     "tz_str": "Europe/Zurich",
+     "time_epi_str": "Thu, 02 Oct 2025 09:23:15 +0200",
+     "last_update_time": 1759390005.544447,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:26:45 +0000"
+    },
+    "location": {
+     "lat": 47.4051,
+     "lon": 7.174
+    },
+    "magnitude": {
+     "mag": 1,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": -0.5,
+     "depth_str": "-0.5 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "SWITZERLAND",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874685/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     7.174,
+     47.4051,
+     -0.5
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874684,
+   "properties": {
+    "evid": 1874684,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874684",
+    "time": {
+     "time": 1759389569.95,
+     "time_str": "Thu, 02 Oct 2025 07:19:29 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 10:19:29 +0300",
+     "last_update_time": 1759390610.317707,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:36:50 +0000"
+    },
+    "location": {
+     "lat": 39.2489,
+     "lon": 28.9858
+    },
+    "magnitude": {
+     "mag": 1.4,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 16.6,
+     "depth_str": "16.6 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874684/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.9858,
+     39.2489,
+     16.6
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874681,
+   "properties": {
+    "evid": 1874681,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874681",
+    "time": {
+     "time": 1759389229.321,
+     "time_str": "Thu, 02 Oct 2025 07:13:49 +0000",
+     "tz": -480,
+     "tz_str": "America/Nome",
+     "time_epi_str": "Wed, 01 Oct 2025 23:13:49 -0800",
+     "last_update_time": 1759389953.986883,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:25:53 +0000"
+    },
+    "location": {
+     "lat": 57.6579,
+     "lon": -155.4223
+    },
+    "magnitude": {
+     "mag": 4.6,
+     "mag_type": "Mw"
+    },
+    "depth": {
+     "depth": 4.1,
+     "depth_str": "4.1 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "ALASKA PENINSULA",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874681/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.4223,
+     57.6579,
+     4.1
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874680,
+   "properties": {
+    "evid": 1874680,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874680",
+    "time": {
+     "time": 1759389042.525544,
+     "time_str": "Thu, 02 Oct 2025 07:10:42 +0000",
+     "tz": 120,
+     "tz_str": "Europe/Paris",
+     "time_epi_str": "Thu, 02 Oct 2025 09:10:42 +0200",
+     "last_update_time": 1759389246.895702,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:14:06 +0000"
+    },
+    "location": {
+     "lat": 43.14456,
+     "lon": 5.95743
+    },
+    "magnitude": {
+     "mag": 2.2,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 5,
+     "depth_str": "5 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "NEAR SOUTH COAST OF FRANCE",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874680/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.95743,
+     43.14456,
+     5
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874689,
+   "properties": {
+    "evid": 1874689,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874689",
+    "time": {
+     "time": 1759388798.45,
+     "time_str": "Thu, 02 Oct 2025 07:06:38 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 10:06:38 +0300",
+     "last_update_time": 1759391308.282293,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:48:28 +0000"
+    },
+    "location": {
+     "lat": 39.1359,
+     "lon": 28.9881
+    },
+    "magnitude": {
+     "mag": 1.1,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 16,
+     "depth_str": "16 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874689/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.9881,
+     39.1359,
+     16
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874678,
+   "properties": {
+    "evid": 1874678,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874678",
+    "time": {
+     "time": 1759388340.46,
+     "time_str": "Thu, 02 Oct 2025 06:59:00 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:59:00 +0300",
+     "last_update_time": 1759389622.272664,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:20:22 +0000"
+    },
+    "location": {
+     "lat": 39.7942,
+     "lon": 27.4731
+    },
+    "magnitude": {
+     "mag": 1.6,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 18.7,
+     "depth_str": "18.7 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874678/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     27.4731,
+     39.7942,
+     18.7
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874674,
+   "properties": {
+    "evid": 1874674,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874674",
+    "time": {
+     "time": 1759388113.3,
+     "time_str": "Thu, 02 Oct 2025 06:55:13 +0000",
+     "tz": 120,
+     "tz_str": "Europe/Zurich",
+     "time_epi_str": "Thu, 02 Oct 2025 08:55:13 +0200",
+     "last_update_time": 1759388449.608737,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:00:49 +0000"
+    },
+    "location": {
+     "lat": 46.8696,
+     "lon": 8.6104
+    },
+    "magnitude": {
+     "mag": 1.2,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 0.8,
+     "depth_str": "0.8 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "SWITZERLAND",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874674/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.6104,
+     46.8696,
+     0.8
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874688,
+   "properties": {
+    "evid": 1874688,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874688",
+    "time": {
+     "time": 1759387871.99,
+     "time_str": "Thu, 02 Oct 2025 06:51:11 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Athens",
+     "time_epi_str": "Thu, 02 Oct 2025 09:51:11 +0300",
+     "last_update_time": 1759390703.41412,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:38:23 +0000"
+    },
+    "location": {
+     "lat": 36.5034,
+     "lon": 28.2878
+    },
+    "magnitude": {
+     "mag": 1.4,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 27.1,
+     "depth_str": "27.1 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "DODECANESE IS.-TURKEY BORDER REG",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874688/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.2878,
+     36.5034,
+     27.1
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874675,
+   "properties": {
+    "evid": 1874675,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874675",
+    "time": {
+     "time": 1759387737.46,
+     "time_str": "Thu, 02 Oct 2025 06:48:57 +0000",
+     "tz": -240,
+     "tz_str": "America/Puerto_Rico",
+     "time_epi_str": "Thu, 02 Oct 2025 02:48:57 -0400",
+     "last_update_time": 1759388722.897031,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:05:22 +0000"
+    },
+    "location": {
+     "lat": 17.97517,
+     "lon": -66.83067
+    },
+    "magnitude": {
+     "mag": 2.4,
+     "mag_type": "MD"
+    },
+    "depth": {
+     "depth": 14.2,
+     "depth_str": "14.2 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "PUERTO RICO",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874675/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -66.83067,
+     17.97517,
+     14.2
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874673,
+   "properties": {
+    "evid": 1874673,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874673",
+    "time": {
+     "time": 1759387491.02,
+     "time_str": "Thu, 02 Oct 2025 06:44:51 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:44:51 +0300",
+     "last_update_time": 1759389749.334779,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:22:29 +0000"
+    },
+    "location": {
+     "lat": 39.2238,
+     "lon": 28.9878
+    },
+    "magnitude": {
+     "mag": 1.5,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 16,
+     "depth_str": "16 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874673/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.9878,
+     39.2238,
+     16
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874672,
+   "properties": {
+    "evid": 1874672,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874672",
+    "time": {
+     "time": 1759387239.71,
+     "time_str": "Thu, 02 Oct 2025 06:40:39 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:40:39 +0300",
+     "last_update_time": 1759390597.71848,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:36:37 +0000"
+    },
+    "location": {
+     "lat": 39.2449,
+     "lon": 28.9789
+    },
+    "magnitude": {
+     "mag": 1.6,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 13.2,
+     "depth_str": "13.2 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874672/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.9789,
+     39.2449,
+     13.2
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874670,
+   "properties": {
+    "evid": 1874670,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874670",
+    "time": {
+     "time": 1759387049.8,
+     "time_str": "Thu, 02 Oct 2025 06:37:29 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:37:29 +0300",
+     "last_update_time": 1759390747.672595,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:39:07 +0000"
+    },
+    "location": {
+     "lat": 40.7205,
+     "lon": 28.6272
+    },
+    "magnitude": {
+     "mag": 2,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 14,
+     "depth_str": "14 Km",
+     "depth_type": "f"
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874670/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.6272,
+     40.7205,
+     14
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874669,
+   "properties": {
+    "evid": 1874669,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874669",
+    "time": {
+     "time": 1759386732.29,
+     "time_str": "Thu, 02 Oct 2025 06:32:12 +0000",
+     "tz": -420,
+     "tz_str": "America/Los_Angeles",
+     "time_epi_str": "Wed, 01 Oct 2025 23:32:12 -0700",
+     "last_update_time": 1759386832.950691,
+     "last_update_time_str": "Thu, 02 Oct 2025 06:33:52 +0000"
+    },
+    "location": {
+     "lat": 40.96017,
+     "lon": -123.34267
+    },
+    "magnitude": {
+     "mag": 2.8,
+     "mag_type": "MD"
+    },
+    "depth": {
+     "depth": 29.4,
+     "depth_str": "29.4 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "NORTHERN CALIFORNIA",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874669/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -123.34267,
+     40.96017,
+     29.4
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874676,
+   "properties": {
+    "evid": 1874676,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874676",
+    "time": {
+     "time": 1759386574.32,
+     "time_str": "Thu, 02 Oct 2025 06:29:34 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:29:34 +0300",
+     "last_update_time": 1759389140.97317,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:12:20 +0000"
+    },
+    "location": {
+     "lat": 38.5227,
+     "lon": 38.0173
+    },
+    "magnitude": {
+     "mag": 2.1,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 7,
+     "depth_str": "7 Km",
+     "depth_type": "f"
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "EASTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874676/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.0173,
+     38.5227,
+     7
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874668,
+   "properties": {
+    "evid": 1874668,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874668",
+    "time": {
+     "time": 1759386408.39,
+     "time_str": "Thu, 02 Oct 2025 06:26:48 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:26:48 +0300",
+     "last_update_time": 1759388597.222593,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:03:17 +0000"
+    },
+    "location": {
+     "lat": 39.2079,
+     "lon": 28.1043
+    },
+    "magnitude": {
+     "mag": 1.2,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 11,
+     "depth_str": "11 Km",
+     "depth_type": "f"
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874668/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.1043,
+     39.2079,
+     11
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874666,
+   "properties": {
+    "evid": 1874666,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874666",
+    "time": {
+     "time": 1759385856.62,
+     "time_str": "Thu, 02 Oct 2025 06:17:36 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:17:36 +0300",
+     "last_update_time": 1759388533.861019,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:02:13 +0000"
+    },
+    "location": {
+     "lat": 39.2286,
+     "lon": 28.0839
+    },
+    "magnitude": {
+     "mag": 1.9,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 7,
+     "depth_str": "7 Km",
+     "depth_type": "f"
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "WESTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static1.emsc.eu/Images/EVID_V2/187/1874/1874666/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     28.0839,
+     39.2286,
+     7
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874677,
+   "properties": {
+    "evid": 1874677,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874677",
+    "time": {
+     "time": 1759385739,
+     "time_str": "Thu, 02 Oct 2025 06:15:39 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:15:39 +0300",
+     "last_update_time": 1759388817.388382,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:06:57 +0000"
+    },
+    "location": {
+     "lat": 37.97556,
+     "lon": 38.10111
+    },
+    "magnitude": {
+     "mag": 1.4,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 7,
+     "depth_str": "7 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "EASTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874677/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.10111,
+     37.97556,
+     7
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874682,
+   "properties": {
+    "evid": 1874682,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874682",
+    "time": {
+     "time": 1759385625,
+     "time_str": "Thu, 02 Oct 2025 06:13:45 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:13:45 +0300",
+     "last_update_time": 1759389850.617068,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:24:10 +0000"
+    },
+    "location": {
+     "lat": 37.99028,
+     "lon": 38.10833
+    },
+    "magnitude": {
+     "mag": 1.7,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 7,
+     "depth_str": "7 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "EASTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static2.emsc.eu/Images/EVID_V2/187/1874/1874682/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.10833,
+     37.99028,
+     7
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874663,
+   "properties": {
+    "evid": 1874663,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874663",
+    "time": {
+     "time": 1759385161,
+     "time_str": "Thu, 02 Oct 2025 06:06:01 +0000",
+     "tz": -360,
+     "tz_str": "America/El_Salvador",
+     "time_epi_str": "Thu, 02 Oct 2025 00:06:01 -0600",
+     "last_update_time": 1759385721.615836,
+     "last_update_time_str": "Thu, 02 Oct 2025 06:15:21 +0000"
+    },
+    "location": {
+     "lat": 14.06,
+     "lon": -89.83
+    },
+    "magnitude": {
+     "mag": 2.8,
+     "mag_type": "M"
+    },
+    "depth": {
+     "depth": 8,
+     "depth_str": "8 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "EL SALVADOR",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874663/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -89.83,
+     14.06,
+     8
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "id": 1874683,
+   "properties": {
+    "evid": 1874683,
+    "url": "https://www.emsc-csem.org/Earthquake_information/earthquake.php?id=1874683",
+    "time": {
+     "time": 1759385149,
+     "time_str": "Thu, 02 Oct 2025 06:05:49 +0000",
+     "tz": 180,
+     "tz_str": "Europe/Istanbul",
+     "time_epi_str": "Thu, 02 Oct 2025 09:05:49 +0300",
+     "last_update_time": 1759389922.814881,
+     "last_update_time_str": "Thu, 02 Oct 2025 07:25:22 +0000"
+    },
+    "location": {
+     "lat": 38.00639,
+     "lon": 38.21083
+    },
+    "magnitude": {
+     "mag": 1.2,
+     "mag_type": "ML"
+    },
+    "depth": {
+     "depth": 7,
+     "depth_str": "7 Km",
+     "depth_type": ""
+    },
+    "safe_enable": 0,
+    "evtyp": "",
+    "place": {
+     "region": "EASTERN TURKEY",
+     "cities": []
+    },
+    "tsunami": {
+     "type": "NONE",
+     "state": "",
+     "link": []
+    },
+    "effects": {
+     "type": [],
+     "color": [],
+     "messages": [
+      ""
+     ],
+     "pref_color": {
+      "string": "grey",
+      "hexa": "#9C918F"
+     },
+     "nb_comm": 0,
+     "nb_pics": 0
+    },
+    "maps": {
+     "seismicity": "https://static3.emsc.eu/Images/EVID_V2/187/1874/1874683/seismicity.app.jpg"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.21083,
+     38.00639,
+     7
+    ]
+   }
+  }
+ ]
+}
