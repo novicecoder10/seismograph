@@ -53,6 +53,37 @@ describe("travelTime", () => {
     expect(rms).toBeLessThan(0.5);
   });
 
+  it("confines miss/hit disagreements to phase-cutoff boundaries", () => {
+    // A bilinear cell is null if ANY corner is null, so the null boundary is
+    // grid-quantised: it sits up to one cell inside the true cutoff. This test
+    // measures that width, because Phase 5's wavefront glow must be at least
+    // this wide or the front will show a gap at each phase cutoff.
+    const disagreements: { phase: string; distDeg: number; gapDeg: number }[] = [];
+    for (const s of truth.samples) {
+      const got = travelTime(table, s.phase, s.depthKm, s.distDeg);
+      const bothMiss = s.timeS === null && got === null;
+      const bothHit = s.timeS !== null && got !== null;
+      if (bothMiss || bothHit) continue;
+      // Walk outward to the nearest distance where the two agree again.
+      let gap = 0;
+      for (let k = 1; k <= 8; k++) {
+        gap = k * table.distStepDeg;
+        const a = travelTime(table, s.phase, s.depthKm, s.distDeg - gap);
+        const b = travelTime(table, s.phase, s.depthKm, s.distDeg + gap);
+        if ((s.timeS === null) === (a === null) || (s.timeS === null) === (b === null)) break;
+      }
+      disagreements.push({ phase: s.phase, distDeg: s.distDeg, gapDeg: gap });
+    }
+    for (const d of disagreements) {
+      console.log(`  boundary: ${d.phase} at ${d.distDeg.toFixed(2)}deg, ` +
+        `resolved within ${d.gapDeg.toFixed(2)}deg`);
+    }
+    const worst = disagreements.reduce((m, d) => Math.max(m, d.gapDeg), 0);
+    console.log(`boundary quantisation: ${disagreements.length} samples, ` +
+      `worst ${worst.toFixed(2)}deg (grid step ${table.distStepDeg}deg)`);
+    expect(worst).toBeLessThanOrEqual(table.distStepDeg * 4);
+  });
+
   it("returns null in the P shadow zone, never zero", () => {
     expect(travelTime(table, "P", 0, 120)).toBeNull();
     expect(travelTime(table, "P", 0, 60)).toBeGreaterThan(400);
