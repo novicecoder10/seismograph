@@ -35,7 +35,8 @@ test("an unknown event id explains itself instead of crashing", async ({ page })
 });
 
 test("no page in this build makes a forward-looking claim", async ({ page }) => {
-  // Spec §2.4 and §10.12: Phase 1 ships no forecast and no prediction.
+  // Spec §2.4, §10.10: forecasts live on /forecast/ pages the user opens; nowhere
+  // else may make a claim about what will happen.
   for (const url of ["/", `/event/${encodeURIComponent(RICH)}`]) {
     await page.goto(url);
     await page.waitForTimeout(2500);
