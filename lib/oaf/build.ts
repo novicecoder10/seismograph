@@ -53,7 +53,8 @@ export function toOafForecast(opts: {
       name: opts.modelName,
       parameters: {
         a: post.mean.a, b: post.b, magMain: post.magMain, p: post.mean.p, c: post.mean.c,
-        aSigma: post.sd.a, pSigma: post.sd.p,
+        aSigma: post.grid.a.length > 1 ? post.sd.a : 0,
+        pSigma: post.grid.p.length > 1 ? post.sd.p : 0,
         Mcat: opts.completeness.magCat, F: opts.completeness.F, G: opts.completeness.G, H: opts.completeness.H,
         regionType: "circle", regionCenterLat: opts.region.lat, regionCenterLon: opts.region.lon, regionRadius: opts.region.radiusKm,
       },

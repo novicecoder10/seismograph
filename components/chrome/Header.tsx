@@ -23,7 +23,7 @@ export function Header() {
         SEISMOGRAPH
       </h1>
       <span style={{ fontSize: 11, color: "var(--text-faint)" }}>
-        hypocenters at true depth · no forecast in this build
+        hypocenters at true depth · forecasts only on the pages you open
       </span>
     </header>
   );

@@ -48,6 +48,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <span style={{ color: "var(--text-faint)" }}>
           b-value, Omori decay, completeness and declustering for the events around this one
         </span>
+        <br />
+        <Link href={`/forecast/${encodeURIComponent(event.id)}`} data-testid="forecast-link" style={{ color: "var(--text-primary)", textDecoration: "underline" }}>
+          Aftershock forecast →
+        </Link>{" "}
+        <span style={{ color: "var(--text-faint)" }}>
+          chances of aftershocks over the next day, week, month and year
+        </span>
       </p>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />

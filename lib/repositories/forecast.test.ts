@@ -40,7 +40,7 @@ describe("loadForecast", () => {
     const r = await loadForecast("usgs:m", { events: repo([ev("usgs:m", T0, 7.0), ...after]), products: noProducts, now: () => T0 + 10 * DAY, regime: sz });
     if (!("kind" in r) || r.kind !== "computed") throw new Error(JSON.stringify(r));
     expect(r.posterior.n).toBeGreaterThan(20);
-    expect(r.posterior.mean.a).toBeGreaterThan(r.baseline.model.parameters.a);
+    expect(r.posterior.mean.a).toBeGreaterThan(r.baseline.model.parameters.a!);
     const week = r.forecast.forecast[1]!;
     expect(week.label).toBe("1 Week");
     expect(week.timeStart % 3_600_000).toBe(0);
@@ -59,7 +59,7 @@ describe("loadForecast", () => {
     const r = await loadForecast("usgs:m", { events: repo([ev("usgs:m", T0, 6.0)]), products: noProducts, now: () => T0 + 30 * DAY, regime: sz });
     if (!("kind" in r) || r.kind !== "computed") throw new Error(JSON.stringify(r));
     expect(r.posterior.n).toBe(0);
-    expect(r.posterior.mean.a).toBeLessThan(r.baseline.model.parameters.a);
+    expect(r.posterior.mean.a).toBeLessThan(r.baseline.model.parameters.a!);
   });
 
   it("shows USGS's forecast, reproduced, where USGS issued one", async () => {

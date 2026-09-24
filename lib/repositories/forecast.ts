@@ -2,7 +2,7 @@ import type { Event } from "../events/types";
 import { bboxAround } from "../geo/bbox";
 import { reproduceUsgs, toOafForecast } from "../oaf/build";
 import { GENERIC_RJ, REGIME_DESCRIPTION, WORLD, regimeAt, type RegimeCode } from "../oaf/regimes";
-import type { OafForecast } from "../oaf/types";
+import { isOafForecast, type OafForecast } from "../oaf/types";
 import { greatCircleKm } from "../science/distance";
 import { genericSigma, gridAxis, rjPosterior, type RjPosterior } from "../science/rj";
 import { wellsCoppersmithRuptureKm } from "../science/sequence";
@@ -21,6 +21,8 @@ export type ForecastResult =
       published: OafForecast;
       /** This implementation's reproduction of USGS's numbers from USGS's own inputs. */
       reproduction: { maxRelError: number; n: number } | null;
+      /** Why there is no reproduction, when there is none. */
+      reproductionNote: string | null;
       productUpdatedMs: number | null;
     }
   | {
@@ -89,16 +91,24 @@ export async function loadForecast(eventId: string, deps: ForecastDeps = {}): Pr
   const tree = event.source === "usgs" ? await products.byEvent(event.sourceId) : null;
   if (tree?.oaf) {
     try {
-      const published = JSON.parse(await fetchText(tree.oaf.forecastUrl)) as OafForecast;
+      const parsed: unknown = JSON.parse(await fetchText(tree.oaf.forecastUrl));
+      if (!isOafForecast(parsed)) {
+        return { error: "USGS has issued a forecast for this event, but its file is not in a form this page can read. None is computed here in its place." };
+      }
+      const published = parsed;
       let reproduction: { maxRelError: number; n: number } | null = null;
-      if (tree.oaf.forecastDataUrl) {
+      let reproductionNote: string | null = null;
+      if (!tree.oaf.forecastDataUrl) {
+        reproductionNote = "USGS did not publish the inputs behind this forecast, so it is not recomputed here.";
+      } else {
         try {
           reproduction = reproduceUsgs(published, await fetchText(tree.oaf.forecastDataUrl));
-        } catch {
-          reproduction = null;
+          if (!reproduction) reproductionNote = `USGS used a model this project does not implement (${published.model.name}), so it is not recomputed here.`;
+        } catch (e) {
+          reproductionNote = `USGS's inputs could not be fetched (${message(e)}), so it is not recomputed here.`;
         }
       }
-      return { kind: "usgs", event, published, reproduction, productUpdatedMs: tree.oaf.updatedMs };
+      return { kind: "usgs", event, published, reproduction, reproductionNote, productUpdatedMs: tree.oaf.updatedMs };
     } catch (e) {
       return { error: `USGS has issued a forecast for this event, but it could not be fetched (${message(e)}). None is computed here in its place.` };
     }
