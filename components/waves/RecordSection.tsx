@@ -118,7 +118,7 @@ export function RecordSection(p: RecordSectionProps) {
         onPointerMove={(e) => p.onScrub(toSeconds(e.clientX))}
         onPointerDown={(e) => { p.onScrub(toSeconds(e.clientX)); p.onSelect(nearestTrace(e.clientY)); }}
       >
-        <Frame x={x} y={y} xLabel="seconds after the earthquake" yLabel="distance from the earthquake (°)" xFormat={(v) => `${Math.round(v / 60)} min`}>
+        <Frame height={H} x={x} y={y} xLabel="seconds after the earthquake" yLabel="distance from the earthquake (°)" xFormat={(v) => `${Math.round(v / 60)} min`}>
           {curves.map((c) => (
             <path key={c.ph} d={c.d} fill="none" stroke={PHASE_STYLE[c.ph]!.colour} strokeWidth={2} strokeOpacity={0.55} strokeLinecap="round" />
           ))}

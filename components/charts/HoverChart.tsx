@@ -22,6 +22,10 @@ export interface HoverChartProps {
   ariaLabel: string;
   points: HoverPoint[];
   children: React.ReactNode;
+  /** "x" for line charts (crosshair), "xy" for scatter plots. */
+  nearestBy?: "x" | "xy";
+  /** viewBox height; frames other than the default VIEW set it. */
+  height?: number;
 }
 
 /**
@@ -30,19 +34,20 @@ export interface HoverChartProps {
  * tooltip lists every series there, value first. Tooltips enhance and never
  * gate: each chart also has a table view.
  */
-export function HoverChart({ testId, ariaLabel, points, children }: HoverChartProps) {
+export function HoverChart({ testId, ariaLabel, points, children, nearestBy = "x", height = VIEW.height }: HoverChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [active, setActive] = useState<number | null>(null);
 
-  const nearest = (clientX: number): number | null => {
+  const nearest = (clientX: number, clientY: number): number | null => {
     const svg = svgRef.current;
     if (svg === null || points.length === 0) return null;
     const rect = svg.getBoundingClientRect();
     const vx = ((clientX - rect.left) / Math.max(1, rect.width)) * VIEW.width;
+    const vy = ((clientY - rect.top) / Math.max(1, rect.height)) * height;
+    // Line charts snap by x (a crosshair); scatter plots by distance.
+    const d = (i: number) => (nearestBy === "x" ? Math.abs(points[i]!.x - vx) : Math.hypot(points[i]!.x - vx, points[i]!.y - vy));
     let best = 0;
-    for (let i = 1; i < points.length; i++) {
-      if (Math.abs(points[i]!.x - vx) < Math.abs(points[best]!.x - vx)) best = i;
-    }
+    for (let i = 1; i < points.length; i++) if (d(i) < d(best)) best = i;
     return best;
   };
 
@@ -52,12 +57,12 @@ export function HoverChart({ testId, ariaLabel, points, children }: HoverChartPr
     <div data-testid={testId} style={{ position: "relative" }}>
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
+        viewBox={`0 0 ${VIEW.width} ${height}`}
         role="img"
         aria-label={ariaLabel}
         style={{ width: "100%", height: "auto", display: "block", touchAction: "none" }}
         tabIndex={0}
-        onPointerMove={(e) => setActive(nearest(e.clientX))}
+        onPointerMove={(e) => setActive(nearest(e.clientX, e.clientY))}
         onPointerLeave={() => setActive(null)}
         onFocus={() => setActive(points.length > 0 ? points.length - 1 : null)}
         onBlur={() => setActive(null)}
@@ -70,7 +75,7 @@ export function HoverChart({ testId, ariaLabel, points, children }: HoverChartPr
         {children}
         {p && (
           <g pointerEvents="none">
-            <line x1={p.x} x2={p.x} y1={VIEW.top} y2={VIEW.height - VIEW.bottom} stroke={CHART.textMuted} strokeWidth={1} />
+            {nearestBy === "x" && <line x1={p.x} x2={p.x} y1={VIEW.top} y2={height - VIEW.bottom} stroke={CHART.textMuted} strokeWidth={1} />}
             <circle cx={p.x} cy={p.y} r={5} fill={CHART.observed} stroke={CHART.surface} strokeWidth={2} />
           </g>
         )}

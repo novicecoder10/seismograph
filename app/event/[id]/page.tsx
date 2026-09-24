@@ -63,6 +63,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <span style={{ color: "var(--text-faint)" }}>
           seismic phases crossing the globe, recorded at stations worldwide, as sound
         </span>
+        <br />
+        <Link href={`/section/${encodeURIComponent(event.id)}`} data-testid="section-link" style={{ color: "var(--text-primary)", textDecoration: "underline" }}>
+          Depth cross-section →
+        </Link>{" "}
+        <span style={{ color: "var(--text-faint)" }}>
+          fifty years of earthquakes beneath this one, with the subducting slab
+        </span>
       </p>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
