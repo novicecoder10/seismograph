@@ -114,6 +114,19 @@ export async function loadForecast(eventId: string, deps: ForecastDeps = {}): Pr
     }
   }
 
+  return computeForecast(event, { events, now: () => now, regime: lookup });
+}
+
+/** This project's own forecast for an event, ignoring any USGS product. Issuance
+ *  (scripts/ledger-issue.ts) calls this, so the ledger holds exactly what the page shows. */
+export async function computeForecast(
+  event: Event,
+  deps: Pick<ForecastDeps, "events" | "now" | "regime"> = {},
+): Promise<Extract<ForecastResult, { kind: "computed" | "refused" }> | { error: string }> {
+  const events = deps.events ?? createUsgsFdsnRepository();
+  const now = (deps.now ?? Date.now)();
+  const lookup = deps.regime ?? regimeAt;
+  const eventId = event.id;
   const ageDays = (now - event.time) / DAY;
   if (event.magnitude < MIN_MAGNITUDE) {
     return { kind: "refused", event, reason: `Forecasts are issued here for earthquakes of M ${MIN_MAGNITUDE.toFixed(1)} and above. Outside regional networks the global catalogue is complete only from about M 4.6, so a smaller mainshock has too few recorded aftershocks for its own data to move the forecast away from the generic prior.` };
@@ -181,4 +194,38 @@ export async function loadForecast(eventId: string, deps: ForecastDeps = {}): Pr
 
 function message(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
+}
+
+export const BASELINE_YEARS = 20;
+
+/**
+ * The reference every forecast must beat: the long-term rate of M ≥ Mcat inside
+ * the same circle over the 20 years ending 30 days before the mainshock (so the
+ * sequence's own foreshocks are excluded), as a Poisson rate. A count of zero is
+ * taken as half an event, so the baseline never calls an earthquake impossible.
+ */
+export async function baselineRate(
+  region: { lat: number; lon: number; radiusKm: number },
+  mcat: number,
+  mainshockTime: number,
+  events: EventRepository,
+): Promise<{ ratePerDayAtMcat: number; years: number; count: number; truncated: boolean }> {
+  const endMs = mainshockTime - 30 * DAY;
+  const startMs = endMs - BASELINE_YEARS * 365.25 * DAY;
+  const page = await events.query(
+    {
+      range: { startMs, endMs },
+      minMagnitude: mcat,
+      maxMagnitude: null, minDepthKm: null, maxDepthKm: null,
+      bbox: bboxAround(region.lat, region.lon, region.radiusKm),
+    },
+    { limit: 20_000 },
+  );
+  const count = page.events.filter((e) => greatCircleKm(region.lat, region.lon, e.lat, e.lon) <= region.radiusKm).length;
+  return {
+    ratePerDayAtMcat: Math.max(count, 0.5) / ((endMs - startMs) / DAY),
+    years: BASELINE_YEARS,
+    count,
+    truncated: page.cursor !== null,
+  };
 }
