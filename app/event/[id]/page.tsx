@@ -41,6 +41,15 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         {event.lon.toFixed(4)}° · {event.source.toUpperCase()} · {event.status}
       </p>
 
+      <p style={{ margin: "0 0 18px", fontSize: 12 }}>
+        <Link href={`/sequence/${encodeURIComponent(event.id)}`} data-testid="sequence-link" style={{ color: "var(--text-primary)", textDecoration: "underline" }}>
+          Sequence analysis →
+        </Link>{" "}
+        <span style={{ color: "var(--text-faint)" }}>
+          b-value, Omori decay, completeness and declustering for the events around this one
+        </span>
+      </p>
+
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
 
       {tree === null ? (

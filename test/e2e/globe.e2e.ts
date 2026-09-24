@@ -88,6 +88,11 @@ test("picks never outnumber frames", async ({ page }) => {
 test("picking stays fast at the live catalogue size", async ({ page }) => {
   await page.goto("/");
   await waitForGlobe(page);
+  // Under a parallel run the feed can arrive after the globe; measuring an empty
+  // globe would pass without testing anything.
+  await expect
+    .poll(() => page.evaluate(() => window.__globeStats?.pointCount ?? 0), { timeout: 60_000 })
+    .toBeGreaterThan(0);
   const times: number[] = [];
   for (let i = 0; i < 10; i++) {
     await page.mouse.move(480 + i * 18, 300 + i * 9);

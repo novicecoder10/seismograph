@@ -14,11 +14,18 @@ function niceStep(span: number, nTicks: number): number {
   return nice * mag;
 }
 
+/** Screen coordinates to 0.01 px. Node and the browser disagree in the last
+ *  bits of Math.log10 and Math.pow, and an SVG rendered on the server must
+ *  hydrate against identical attributes on the client. */
+function px(v: number): number {
+  return Math.round(v * 100) / 100;
+}
+
 export function linearScale(domain: [number, number], range: [number, number], nTicks = 5): Scale {
   const [d0, d1] = domain;
   const [r0, r1] = range;
   const span = d1 - d0 || 1;
-  const f = ((v: number) => r0 + ((v - d0) / span) * (r1 - r0)) as Scale;
+  const f = ((v: number) => px(r0 + ((v - d0) / span) * (r1 - r0))) as Scale;
   const step = niceStep(Math.abs(d1 - d0) || 1, nTicks);
   const ticks: number[] = [];
   for (let t = Math.ceil(Math.min(d0, d1) / step) * step; t <= Math.max(d0, d1) + 1e-9; t += step) {
@@ -38,7 +45,7 @@ export function logScale(domain: [number, number], range: [number, number]): Sca
   const l1 = Math.log10(Math.max(floor, domain[1]));
   const span = l1 - l0 || 1;
   const [r0, r1] = range;
-  const f = ((v: number) => r0 + ((Math.log10(Math.max(floor, v)) - l0) / span) * (r1 - r0)) as Scale;
+  const f = ((v: number) => px(r0 + ((Math.log10(Math.max(floor, v)) - l0) / span) * (r1 - r0))) as Scale;
   const ticks: number[] = [];
   for (let e = Math.ceil(l0 - 1e-9); e <= Math.floor(l1 + 1e-9); e++) ticks.push(10 ** e);
   f.domain = domain;

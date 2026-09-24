@@ -30,7 +30,7 @@ export function Frame({ x, y, xLabel, yLabel, xFormat, children }: FrameProps) {
       {x.ticks.map((t) => (
         <g key={`x${t}`}>
           <line x1={x(t)} x2={x(t)} y1={VIEW.top} y2={bottom} stroke={CHART.grid} strokeWidth={1} />
-          <text x={x(t)} y={bottom + 16} textAnchor="middle" fontSize={11} fill={CHART.textSecondary}
+          <text x={x(t)} y={bottom + 16} textAnchor={x(t) > VIEW.width - VIEW.right - 36 ? "end" : "middle"} fontSize={11} fill={CHART.textSecondary}
             style={{ fontVariantNumeric: "tabular-nums" }}>
             {fmtX(t)}
           </text>

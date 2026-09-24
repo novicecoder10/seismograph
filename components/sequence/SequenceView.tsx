@@ -72,7 +72,7 @@ export function SequenceView({ analysis, truncated = false }: { analysis: Sequen
         </ul>
       </section>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 10 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(190px, 100%), 1fr))", gap: 10 }}>
         <Stat testId="stat-b-aki-utsu" label="b-value, Aki-Utsu (Shi-Bolt σ)" symbol="b" stat={bStat(bValue.akiUtsu)} />
         <Stat testId="stat-b-positive" label="b-value, b-positive (van der Elst)" symbol="b⁺" stat={bStat(bValue.bPositive)} />
         <Stat testId="stat-mc-maxc" label="completeness, MAXC + 0.2" symbol="Mc" stat={mcStat(mc.maxc)} digits={1} />
@@ -83,13 +83,14 @@ export function SequenceView({ analysis, truncated = false }: { analysis: Sequen
       </div>
 
       <p style={{ fontSize: 11, color: "var(--text-dim)", margin: 0 }}>
-        Statistics above completeness use the larger of the two Mc estimates
-        {mc.used === null ? " — neither could be estimated here" : `, M ${mc.used.toFixed(1)}`}: the
-        conservative choice. Where the two b-values disagree, b-positive is the one that resists the
-        short-lived incompleteness after a large event; a narrow interval on Aki-Utsu does not rule out bias.
+        {mc.used === null
+          ? "Neither completeness estimate could be made, so no statistic that depends on it is shown."
+          : `Statistics above completeness use the larger of the two Mc estimates, M ${mc.used.toFixed(1)}: the conservative choice.`}
+        {!isRefusal(bValue.akiUtsu) && !isRefusal(bValue.bPositive) &&
+          " Where the two b-values disagree, b-positive is the one that resists the short-lived incompleteness after a large event; a narrow interval on Aki-Utsu does not rule out bias."}
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))", gap: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(420px, 100%), 1fr))", gap: 14 }}>
         <Panel title="Frequency-magnitude distribution" caption="Gutenberg-Richter is a straight line on these axes; the curve bends over below completeness.">
           <FrequencyMagnitude bins={analysis.bins} cumulative={analysis.cumulative} mc={mc.used} b={bValue.akiUtsu} />
         </Panel>
