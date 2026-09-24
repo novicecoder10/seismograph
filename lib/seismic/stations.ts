@@ -20,27 +20,13 @@ export interface StationWithDistance extends Station {
   distanceKm: number;
 }
 
+import { greatCircleKm } from "../science/distance";
+
+export { greatCircleKm };
+
 const RSHAKE_STATION =
   "https://data.raspberryshake.org/fdsnws/station/1/query";
 
-const EARTH_RADIUS_KM = 6371;
-
-/** Great-circle distance, which is what "nearest station" has to mean on a
- *  sphere: a degree of longitude is 111 km at the equator and 0 at the pole. */
-export function greatCircleKm(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number,
-): number {
-  const toRad = Math.PI / 180;
-  const dLat = (lat2 - lat1) * toRad;
-  const dLon = (lon2 - lon1) * toRad;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.sin(dLon / 2) ** 2;
-  return 2 * EARTH_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(a)));
-}
 
 function parseTime(v: string | undefined): number | null {
   if (v === undefined || v.trim() === "") return null;

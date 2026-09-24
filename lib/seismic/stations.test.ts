@@ -1,28 +1,8 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { findNearestStations, greatCircleKm, parseStationText } from "./stations";
+import { findNearestStations, parseStationText } from "./stations";
 
 const fixture = readFileSync("test/fixtures/rshake-stations.txt", "utf8");
-
-describe("greatCircleKm", () => {
-  it("is zero for a point against itself", () => {
-    expect(greatCircleKm(35.7, -117.6, 35.7, -117.6)).toBeCloseTo(0, 6);
-  });
-
-  it("gives about 111 km per degree of latitude", () => {
-    expect(greatCircleKm(0, 0, 1, 0)).toBeCloseTo(111.19, 1);
-  });
-
-  it("knows a degree of longitude shrinks toward the pole", () => {
-    const atEquator = greatCircleKm(0, 0, 0, 1);
-    const atSixty = greatCircleKm(60, 0, 60, 1);
-    expect(atSixty).toBeLessThan(atEquator * 0.55);
-  });
-
-  it("measures across the antimeridian by the short way", () => {
-    expect(greatCircleKm(0, 179.5, 0, -179.5)).toBeLessThan(120);
-  });
-});
 
 describe("parseStationText", () => {
   const stations = parseStationText(fixture);
