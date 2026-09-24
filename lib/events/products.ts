@@ -60,6 +60,8 @@ export interface EventProducts {
   } | null;
   momentTensors: MomentTensor[];
   groundFailure: { landslideAlert: string | null; liquefactionAlert: string | null } | null;
+  /** USGS Operational Aftershock Forecast, when USGS issued one. */
+  oaf: { forecastUrl: string; forecastDataUrl: string | null; updatedMs: number | null } | null;
 }
 
 type ProductItem = {
@@ -185,7 +187,14 @@ export function parseProducts(detail: unknown): EventProducts {
           liquefactionAlert: str(gfItem.properties?.["liquefaction-alert"]),
         };
 
-  return { origins, shakemap, dyfi, pager, momentTensors, groundFailure };
+  const oafItem = productList(detail, "oaf")[0];
+  const oafUrl = oafItem ? contentUrl(oafItem, "forecast.json") : null;
+  const oaf =
+    oafItem && oafUrl
+      ? { forecastUrl: oafUrl, forecastDataUrl: contentUrl(oafItem, "forecast_data.json"), updatedMs: num(oafItem.updateTime) }
+      : null;
+
+  return { origins, shakemap, dyfi, pager, momentTensors, groundFailure, oaf };
 }
 
 export function detailUrl(sourceId: string): string {
