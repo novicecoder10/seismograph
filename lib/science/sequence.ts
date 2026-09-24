@@ -14,6 +14,10 @@ import { isRefusal, refuse, type Refusal } from "./refusal";
 
 const DAY_MS = 86_400_000;
 const ZBZ_MAX_EVENTS = 3000;
+/** Frequency-magnitude statistics are computed on 0.1-unit bins even where a
+ *  network reports two decimals (ComCat's CI and NC magnitudes): at 0.01 the
+ *  histogram is mostly empty or single-count bins and MAXC chases noise. */
+const MIN_ANALYSIS_BIN = 0.1;
 const SWARM_GAP = 0.5;
 const MIN_SEQUENCE = 5;
 
@@ -161,8 +165,10 @@ export function analyseSequence(
   const aftershocks = events.filter((e) => e.time > mainshock.time);
   const classification = classifySequence(events, mainshock.id);
 
-  const mags = events.map((e) => e.magnitude);
-  const binWidth = inferBinWidth(mags);
+  const binWidth = Math.max(MIN_ANALYSIS_BIN, inferBinWidth(events.map((e) => e.magnitude)));
+  const toBin = (m: number) => Number((Math.round(m / binWidth + 1e-9) * binWidth).toFixed(3));
+  const binned = events.map((e) => ({ ...e, magnitude: toBin(e.magnitude) }));
+  const mags = binned.map((e) => e.magnitude);
   const bins = binMagnitudes(mags, binWidth);
   const cumulative = cumulativeFromBins(bins);
 
@@ -174,7 +180,7 @@ export function analyseSequence(
   const isolated = classification.kind === "isolated";
   const noMc = refuse("Completeness could not be estimated, so no statistic above it can be.");
   const aki = isolated || used === null ? (isolated ? refuse(classification.reasons[0]!) : noMc) : akiUtsu(mags, used, binWidth);
-  const pos = isolated ? refuse(classification.reasons[0]!) : bPositive(events, { binWidth });
+  const pos = isolated ? refuse(classification.reasons[0]!) : bPositive(binned, { binWidth });
 
   let omori: OmoriFit | Refusal;
   if (isolated) omori = refuse(classification.reasons[0]!);
@@ -228,8 +234,8 @@ export function analyseSequence(
     bValue: { akiUtsu: aki, bPositive: pos },
     omori,
     ogata,
-    mcOverTime: mcOverTime(events, { window: Math.max(100, Math.min(250, Math.floor(events.length / 4))) }),
-    mcSpatial: mcSpatial(events, { cellDeg: 0.25, minPerCell: 50 }),
+    mcOverTime: mcOverTime(binned, { window: Math.max(100, Math.min(250, Math.floor(events.length / 4))) }),
+    mcSpatial: mcSpatial(binned, { cellDeg: 0.25, minPerCell: 50 }),
     declustering: { gardnerKnopoff: gk, zaliapin: zbz, agreement },
   };
 }
