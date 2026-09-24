@@ -9,6 +9,7 @@ import {
 import { unprojectDirection } from "@/lib/geo/project";
 import { makeGraticule } from "./graticule";
 import { makeDisplayMaterial, makePickMaterial, makeShellMaterial } from "./materials";
+import { makeStations, makeWavefront, type StationMarker, type WavefrontInput } from "./wavefront";
 
 /**
  * PHASE 0 FINDING, ENFORCED HERE (spikes/FINDINGS.md §2):
@@ -64,6 +65,8 @@ export class GlobeRenderer {
   private readonly pickPixel = new Uint8Array(4);
 
   private points: THREE.Points | null = null;
+  private wave: ReturnType<typeof makeWavefront> | null = null;
+  private stationLayer: ReturnType<typeof makeStations> | null = null;
   private buffers: HypocenterBuffers | null = null;
   private geometry: THREE.BufferGeometry | null = null;
   private frameHandle: number | null = null;
@@ -111,6 +114,63 @@ export class GlobeRenderer {
   /** How long an event stays visually "recent", in seconds of catalogue time. */
   setFadeSeconds(seconds: number): void {
     this.displayMaterial.uniforms.uFadeSeconds!.value = Math.max(1, seconds);
+    this.requestRender();
+  }
+
+  /** Wavefronts for one event; null removes them. */
+  setWavefront(w: WavefrontInput | null): void {
+    if (this.wave) {
+      this.scene.remove(this.wave.mesh);
+      this.wave.mesh.geometry.dispose();
+      this.wave.material.dispose();
+      this.wave.texture.dispose();
+      this.wave = null;
+    }
+    if (w) {
+      this.wave = makeWavefront(w);
+      this.scene.add(this.wave.mesh);
+    }
+    this.requestRender();
+  }
+
+  /** Seconds since the event's origin; negative hides the fronts. */
+  setWaveTime(seconds: number): void {
+    if (!this.wave) return;
+    this.wave.material.uniforms.uT!.value = seconds;
+    this.requestRender();
+  }
+
+  setStations(stations: StationMarker[]): void {
+    if (this.stationLayer) {
+      this.scene.remove(this.stationLayer.points);
+      this.stationLayer.points.geometry.dispose();
+      (this.stationLayer.points.material as THREE.Material).dispose();
+      this.stationLayer = null;
+    }
+    if (stations.length) {
+      this.stationLayer = makeStations(stations);
+      this.scene.add(this.stationLayer.points);
+    }
+    this.requestRender();
+  }
+
+  /** For tests: how many stations are drawn, and their current brightness. */
+  stationDebug(): { count: number; brightness: number[] } {
+    const b = this.stationLayer?.brightness;
+    return { count: b?.count ?? 0, brightness: b ? Array.from(b.array as Float32Array) : [] };
+  }
+
+  /** 0..1 per station, in setStations order. */
+  setStationBrightness(values: ArrayLike<number>): void {
+    const b = this.stationLayer?.brightness;
+    if (!b) return;
+    for (let i = 0; i < b.count; i++) {
+      const v = values[i] ?? 0;
+      // A NaN reaching gl_PointSize is undefined behaviour: one bad sample drew
+      // a station as a disc covering 25° of the globe.
+      b.setX(i, Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0);
+    }
+    b.needsUpdate = true;
     this.requestRender();
   }
 
@@ -240,6 +300,8 @@ export class GlobeRenderer {
     points.material = this.pickMaterial;
     this.shell.visible = false;
     this.graticule.visible = false;
+    if (this.wave) this.wave.mesh.visible = false;
+    if (this.stationLayer) this.stationLayer.points.visible = false;
     this.renderer.setRenderTarget(this.pickTarget);
     this.renderer.setClearColor(0x000000, 1);
     this.renderer.clear();
@@ -249,6 +311,8 @@ export class GlobeRenderer {
     this.renderer.setClearColor(0x0a0c0e, 1);
     this.shell.visible = true;
     this.graticule.visible = true;
+    if (this.wave) this.wave.mesh.visible = true;
+    if (this.stationLayer) this.stationLayer.points.visible = true;
     points.material = this.displayMaterial;
     return decodeId(this.pickPixel[0]!, this.pickPixel[1]!, this.pickPixel[2]!);
   }
@@ -283,6 +347,8 @@ export class GlobeRenderer {
   }
 
   dispose(): void {
+    this.setWavefront(null);
+    this.setStations([]);
     this.disposed = true;
     if (this.frameHandle !== null) cancelAnimationFrame(this.frameHandle);
     this.geometry?.dispose();

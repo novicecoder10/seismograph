@@ -78,7 +78,10 @@ export function envelope(x: Float32Array, step: number): Float32Array {
   let max = 0;
   for (let k = 0; k < n; k++) {
     let m = 0;
-    for (let i = k * step; i < Math.min(x.length, (k + 1) * step); i++) m = Math.max(m, Math.abs(x[i]!));
+    for (let i = k * step; i < Math.min(x.length, (k + 1) * step); i++) {
+      const v = Math.abs(x[i]!);
+      if (v > m) m = v; // NaN (a data gap) never compares greater, so it is skipped
+    }
     out[k] = m;
     max = Math.max(max, m);
   }

@@ -47,6 +47,11 @@ describe("dsp", () => {
     expect(Array.from(e)).toEqual([0.25, 1, 0]);
   });
 
+  it("envelope skips data gaps instead of turning the window NaN", () => {
+    const e = envelope(Float32Array.from([NaN, 1, NaN, NaN, 2, NaN]), 2);
+    expect(Array.from(e)).toEqual([0.5, 0, 1]);
+  });
+
   it("rotates sensors at 0/90 as identity and at 180/270 as negation", () => {
     const a = Float32Array.from([1, 2]), b = Float32Array.from([3, 4]);
     const id = rotateToNorthEast(a, 0, b, 90);

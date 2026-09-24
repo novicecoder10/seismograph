@@ -55,6 +55,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <span style={{ color: "var(--text-faint)" }}>
           chances of aftershocks over the next day, week, month and year
         </span>
+        <br />
+        <Link href={`/waves/${encodeURIComponent(event.id)}`} data-testid="waves-link" style={{ color: "var(--text-primary)", textDecoration: "underline" }}>
+          Watch the waves →
+        </Link>{" "}
+        <span style={{ color: "var(--text-faint)" }}>
+          seismic phases crossing the globe, recorded at stations worldwide, as sound
+        </span>
       </p>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
