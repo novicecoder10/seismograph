@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { buildFdsnUrl, parseMiniSeed, type Trace } from "@/lib/seismic/miniseed";
+import type { Trace } from "@/lib/seismic/miniseed";
 import { sonify, type SonifiedBuffer } from "@/lib/seismic/sonify";
-import { findNearestStations, type StationWithDistance } from "@/lib/seismic/stations";
-
-const RSHAKE_DATASELECT = "https://data.raspberryshake.org/fdsnws/dataselect/1/query";
+import type { StationWithDistance } from "@/lib/seismic/stations";
+import { findNearestTrace } from "@/lib/seismic/traces";
 
 export interface WaveformPanelProps {
   lat: number;
@@ -33,54 +32,17 @@ export function WaveformPanel({ lat, lon, timeMs }: WaveformPanelProps) {
     let cancelled = false;
 
     void (async () => {
-      let stations: StationWithDistance[];
-      try {
-        stations = await findNearestStations(lat, lon, { maxRadiusDeg: 3, limit: 4, atMs: timeMs });
-      } catch (e) {
-        if (!cancelled) setState({ kind: "error", why: `station service: ${e}` });
-        return;
-      }
+      const result = await findNearestTrace(lat, lon, timeMs, {
+        onProgress: (what) => {
+          if (!cancelled) setState({ kind: "loading", what });
+        },
+      });
       if (cancelled) return;
-      if (stations.length === 0) {
-        setState({
-          kind: "none",
-          why: "No open citizen seismometer within 3° of the epicentre.",
-        });
-        return;
-      }
-
-      // Try the nearest stations in turn: a station can be listed as open and
-      // still have no data for this window.
-      for (const station of stations) {
-        if (cancelled) return;
-        setState({ kind: "loading", what: `fetching ${station.network}.${station.station}` });
-        try {
-          const url = buildFdsnUrl({
-            base: RSHAKE_DATASELECT,
-            net: station.network,
-            sta: station.station,
-            loc: "00",
-            cha: "EHZ",
-            start: new Date(timeMs - 30_000),
-            end: new Date(timeMs + 270_000),
-          });
-          const res = await fetch(url);
-          if (!res.ok) continue;
-          const traces = parseMiniSeed(await res.arrayBuffer());
-          const trace = traces[0];
-          if (trace === undefined || trace.samples.length < 100) continue;
-          if (cancelled) return;
-          setState({ kind: "ready", data: { station, trace, audio: sonify(trace) } });
-          return;
-        } catch {
-          // Try the next station rather than failing the whole panel.
-        }
-      }
-      if (!cancelled) {
-        setState({
-          kind: "none",
-          why: `No data from the ${stations.length} nearest stations for this window.`,
-        });
+      if (result.kind === "ok") {
+        const { station, trace } = result.value;
+        setState({ kind: "ready", data: { station, trace, audio: sonify(trace) } });
+      } else {
+        setState({ kind: result.kind, why: result.why });
       }
     })();
 

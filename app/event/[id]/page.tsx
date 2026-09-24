@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { formatDepth, formatMagnitude, formatUtc } from "@/lib/events/format";
-import { detailUrl, parseProducts, type EventProducts } from "@/lib/events/products";
+import type { EventProducts } from "@/lib/events/products";
+import { createUsgsProductRepository } from "@/lib/repositories/products";
 import { createUsgsFdsnRepository } from "@/lib/repositories/usgs-fdsn";
 import { WaveformPanelLazy } from "@/components/waveform/WaveformPanelLazy";
 
 const repo = createUsgsFdsnRepository();
+const products = createUsgsProductRepository();
 
 /** Every section is omitted when its product is absent, and says why when a
  *  fetch fails. Degradation is always toward showing something, honestly
@@ -25,15 +27,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  let products: EventProducts | null = null;
-  let productsError: string | null = null;
-  try {
-    const res = await fetch(detailUrl(event.sourceId), { next: { revalidate: 300 } });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    products = parseProducts(await res.json());
-  } catch (e) {
-    productsError = String(e);
-  }
+  const tree: EventProducts | null = await products.byEvent(event.sourceId);
+  const productsError = products.lastError();
 
   return (
     <Shell>
@@ -48,7 +43,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
 
-      {products === null ? (
+      {tree === null ? (
         <Panel title="Products">
           <p style={{ color: "var(--accent-warn)" }}>
             The product tree could not be retrieved ({productsError}). The origin above comes
@@ -84,7 +79,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                 </tr>
               </thead>
               <tbody>
-                {products.origins.map((o, i) => (
+                {tree.origins.map((o, i) => (
                   <tr key={`${o.source}-${i}`} style={{ borderBottom: "1px solid var(--line)" }}>
                     <td style={cell}>{o.source}</td>
                     <td style={cell}>
@@ -110,9 +105,9 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             </table>
           </Panel>
 
-          {products.momentTensors.length > 0 && (
+          {tree.momentTensors.length > 0 && (
             <Panel title="Moment tensor">
-              {products.momentTensors.map((mt, i) => (
+              {tree.momentTensors.map((mt, i) => (
                 <div key={i} style={{ fontSize: 12, color: "var(--text-dim)" }}>
                   <div>
                     {mt.source} · {mt.magType ?? "Mw"}{" "}
@@ -137,65 +132,65 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
             </Panel>
           )}
 
-          {products.shakemap !== null && (
+          {tree.shakemap !== null && (
             <Panel title="ShakeMap">
               <p style={{ margin: 0, fontSize: 12, color: "var(--text-dim)" }}>
                 Maximum instrumental intensity{" "}
-                {products.shakemap.maxMmi === null
+                {tree.shakemap.maxMmi === null
                   ? "unreported"
-                  : `MMI ${products.shakemap.maxMmi.toFixed(1)}`}
+                  : `MMI ${tree.shakemap.maxMmi.toFixed(1)}`}
                 .
               </p>
               <Links
                 items={[
-                  ["intensity contours (cont_mmi.json)", products.shakemap.contourMmiUrl],
-                  ["finite-fault rupture (rupture.json)", products.shakemap.ruptureUrl],
-                  ["processing info (info.json)", products.shakemap.infoUrl],
+                  ["intensity contours (cont_mmi.json)", tree.shakemap.contourMmiUrl],
+                  ["finite-fault rupture (rupture.json)", tree.shakemap.ruptureUrl],
+                  ["processing info (info.json)", tree.shakemap.infoUrl],
                 ]}
               />
             </Panel>
           )}
 
-          {products.dyfi !== null && (
+          {tree.dyfi !== null && (
             <Panel title="Did You Feel It?">
               <p style={{ margin: 0, fontSize: 12, color: "var(--text-dim)" }}>
-                {products.dyfi.responses === null
+                {tree.dyfi.responses === null
                   ? "Response count unreported"
-                  : `${products.dyfi.responses.toLocaleString()} felt reports`}
-                {products.dyfi.maxCdi !== null && `, maximum CDI ${products.dyfi.maxCdi.toFixed(1)}`}
+                  : `${tree.dyfi.responses.toLocaleString()} felt reports`}
+                {tree.dyfi.maxCdi !== null && `, maximum CDI ${tree.dyfi.maxCdi.toFixed(1)}`}
                 .
               </p>
               <Links
                 items={[
-                  ["felt bins, 1 km (dyfi_geo_1km.geojson)", products.dyfi.geo1kmUrl],
-                  ["felt bins, 10 km", products.dyfi.geo10kmUrl],
+                  ["felt bins, 1 km (dyfi_geo_1km.geojson)", tree.dyfi.geo1kmUrl],
+                  ["felt bins, 10 km", tree.dyfi.geo10kmUrl],
                 ]}
               />
             </Panel>
           )}
 
-          {products.pager !== null && (
+          {tree.pager !== null && (
             <Panel title="PAGER exposure">
               <p style={{ margin: 0, fontSize: 12, color: "var(--text-dim)" }}>
-                Alert level {products.pager.alertLevel ?? "unreported"}
-                {products.pager.maxMmi !== null && `, maximum MMI ${products.pager.maxMmi}`}. This
+                Alert level {tree.pager.alertLevel ?? "unreported"}
+                {tree.pager.maxMmi !== null && `, maximum MMI ${tree.pager.maxMmi}`}. This
                 is USGS&apos;s published estimate of shaking exposure for an event that has
                 already occurred, not a forecast.
               </p>
               <Links
                 items={[
-                  ["population exposure (exposures.json)", products.pager.exposuresUrl],
-                  ["one-page summary (PDF)", products.pager.onePagerUrl],
+                  ["population exposure (exposures.json)", tree.pager.exposuresUrl],
+                  ["one-page summary (PDF)", tree.pager.onePagerUrl],
                 ]}
               />
             </Panel>
           )}
 
-          {products.groundFailure !== null && (
+          {tree.groundFailure !== null && (
             <Panel title="Ground failure">
               <p style={{ margin: 0, fontSize: 12, color: "var(--text-dim)" }}>
-                Landslide alert: {products.groundFailure.landslideAlert ?? "unreported"}.
-                Liquefaction alert: {products.groundFailure.liquefactionAlert ?? "unreported"}.
+                Landslide alert: {tree.groundFailure.landslideAlert ?? "unreported"}.
+                Liquefaction alert: {tree.groundFailure.liquefactionAlert ?? "unreported"}.
               </p>
             </Panel>
           )}
