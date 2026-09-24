@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatDepth, formatMagnitude, formatUtc } from "@/lib/events/format";
 import { detailUrl, parseProducts, type EventProducts } from "@/lib/events/products";
 import { createUsgsFdsnRepository } from "@/lib/repositories/usgs-fdsn";
+import { WaveformPanelLazy } from "@/components/waveform/WaveformPanelLazy";
 
 const repo = createUsgsFdsnRepository();
 
@@ -44,6 +45,8 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         {formatUtc(event.time)} · {formatDepth(event.depthKm)} · {event.lat.toFixed(4)}°,{" "}
         {event.lon.toFixed(4)}° · {event.source.toUpperCase()} · {event.status}
       </p>
+
+      <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
 
       {products === null ? (
         <Panel title="Products">

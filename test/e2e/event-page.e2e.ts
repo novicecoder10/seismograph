@@ -45,3 +45,37 @@ test("no page in this build makes a forward-looking claim", async ({ page }) => 
     }
   }
 });
+
+test("an event near a citizen seismometer shows its waveform and can play it", async ({
+  page,
+}) => {
+  await page.goto(`/event/${encodeURIComponent(RICH)}`);
+  const panel = page.locator("[data-testid=waveform-panel]");
+  await expect(panel).toBeVisible({ timeout: 60_000 });
+
+  // The panel resolves to one of three honest outcomes: a trace, "no station
+  // nearby", or "the service is down". All three are passes; a spinner that
+  // never resolves is not.
+  await expect
+    .poll(async () => ((await panel.textContent()) ?? "").trim().endsWith("…"), {
+      timeout: 90_000,
+      intervals: [1000],
+    })
+    .toBe(false);
+
+  const text = (await panel.textContent()) ?? "";
+  if (!(await page.locator("[data-testid=waveform-canvas]").isVisible())) {
+    expect(text).toMatch(/No open citizen seismometer|No data from|station service/i);
+    return;
+  }
+
+  // It must say whose recording this is and how far away, and must not imply the
+  // recording is of the motion at the epicentre.
+  expect(text).toMatch(/Recorded at\s+AM\./);
+  expect(text).toMatch(/km from the epicentre/);
+  expect(text).toMatch(/not the motion at the epicentre/);
+  expect(text).toMatch(/\d+× real time/);
+
+  await page.click("[data-testid=waveform-play]");
+  // Playing must not throw: an AudioContext failure would surface as a page error.
+});

@@ -142,14 +142,21 @@ code path — the same function reports 882× or 9,800×.
 
 ### Four things that cost time and are worth recording
 
-1. **`seisplotjs` 3.2.7 cannot be imported under Node at all.** Its barrel entry evaluates
+1. **`seisplotjs` 3.2.7 cannot be imported under Node at all**, and the consequence is
+   sharper than it first appears. Its barrel entry evaluates
    `export class SeisPlotDebugElement extends HTMLElement` at module scope, so the import
    throws `ReferenceError: HTMLElement is not defined`. Its `./nodeonly` export — which
    exists precisely to avoid this — fails identically, as does deep-importing
    `dist/miniseed.mjs`, because that pulls in `util.mjs`. Tests must run in a DOM
-   environment; `happy-dom` works and is what the spike uses. **Consequence: any
-   server-side miniSEED parsing in Phase 5 needs either a DOM shim or a different
-   library.** Worth resolving before Phase 5 commits to `seisplotjs` server-side.
+   environment; `happy-dom` works and is what the spike uses.
+
+   **Consequence, confirmed in Phase 1 and sharper than it first appeared:** marking a
+   component `"use client"` is *not* sufficient. Next.js renders client components on the
+   server to produce the initial HTML, which evaluates their entire module graph — so the
+   event page returned a 500 until the waveform panel was loaded through `next/dynamic`
+   with `ssr: false`. And `ssr: false` is only permitted from a client component, so it
+   needs a thin client wrapper of its own. Any server-side miniSEED parsing in Phase 5
+   needs a DOM shim or a different library.
 2. **The parse API is `miniseed.seismogramPerChannel(records)`**, which returns objects
    carrying `networkCode`/`stationCode`/`sampleRate`/`numPoints`/`segments`/`y`. The
    `miniseed.merge(records)` call most tutorials show returns nothing usable at this
