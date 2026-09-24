@@ -23,3 +23,22 @@ export function splitAntimeridian(b: BBox): BBox[] {
     { west: -180, east: b.east, south: b.south, north: b.north },
   ];
 }
+
+const KM_PER_DEG = 111.19;
+
+/** The smallest lat/lon box containing a circle of `radiusKm`. Wraps across the
+ *  antimeridian, and opens to all longitudes when the circle reaches a pole —
+ *  where a longitude span stops meaning anything. */
+export function bboxAround(lat: number, lon: number, radiusKm: number): BBox {
+  const dLat = radiusKm / KM_PER_DEG;
+  const south = Math.max(-90, lat - dLat);
+  const north = Math.min(90, lat + dLat);
+  if (north >= 89.999 || south <= -89.999) {
+    return { west: -180, east: 180, south, north: north >= 89.999 ? 90 : north };
+  }
+  const maxAbsLat = Math.max(Math.abs(south), Math.abs(north));
+  const dLon = radiusKm / (KM_PER_DEG * Math.cos((maxAbsLat * Math.PI) / 180));
+  if (dLon >= 180) return { west: -180, east: 180, south, north };
+  const wrap = (v: number) => ((((v + 180) % 360) + 360) % 360) - 180;
+  return { west: wrap(lon - dLon), east: wrap(lon + dLon), south, north };
+}

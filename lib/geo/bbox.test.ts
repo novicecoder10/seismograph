@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { bboxContains, crossesAntimeridian, splitAntimeridian } from "./bbox";
+import { greatCircleKm } from "../science/distance";
+import { bboxAround, bboxContains, crossesAntimeridian, splitAntimeridian } from "./bbox";
 
 describe("crossesAntimeridian", () => {
   it("is true when west is greater than east", () => {
@@ -50,5 +51,31 @@ describe("splitAntimeridian", () => {
   it("returns a single box unchanged when it does not cross", () => {
     const box = { west: -120, east: -110, south: 30, north: 40 };
     expect(splitAntimeridian(box)).toEqual([box]);
+  });
+});
+
+describe("bboxAround", () => {
+  it("contains every point within the radius", () => {
+    const box = bboxAround(35, -117, 100);
+    for (let bearing = 0; bearing < 360; bearing += 15) {
+      const rad = (bearing * Math.PI) / 180;
+      const lat = 35 + (95 / 111.19) * Math.cos(rad);
+      const lon = -117 + (95 / (111.19 * Math.cos((35 * Math.PI) / 180))) * Math.sin(rad);
+      expect(greatCircleKm(35, -117, lat, lon)).toBeLessThan(100);
+      expect(bboxContains(box, lat, lon)).toBe(true);
+    }
+  });
+
+  it("wraps across the antimeridian", () => {
+    const box = bboxAround(0, 179.5, 200);
+    expect(box.west).toBeGreaterThan(box.east);
+    expect(bboxContains(box, 0, -179.5)).toBe(true);
+  });
+
+  it("spans every longitude when the circle reaches a pole", () => {
+    const box = bboxAround(89, 0, 300);
+    expect(box.west).toBe(-180);
+    expect(box.east).toBe(180);
+    expect(box.north).toBe(90);
   });
 });
