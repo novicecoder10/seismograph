@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Header() {
   return (
     <header
@@ -25,6 +27,9 @@ export function Header() {
       <span style={{ fontSize: 11, color: "var(--text-faint)" }}>
         hypocenters at true depth · forecasts only on the pages you open
       </span>
+      <Link href="/scoreboard" data-testid="scoreboard-link" style={{ marginLeft: "auto", fontSize: 12, color: "var(--text-dim)" }}>
+        forecast scoreboard
+      </Link>
     </header>
   );
 }
