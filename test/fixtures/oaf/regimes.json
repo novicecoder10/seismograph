@@ -1,0 +1,113 @@
+{
+ "source": "USGS oaf forecast_data.json parameters.generic_regime, captured 2026-09-24",
+ "events": [
+  {
+   "id": "us7000qd1y",
+   "lat": 54.5652,
+   "lon": -160.4689,
+   "regime": "SZ (on-shore)"
+  },
+  {
+   "id": "us6000rsy1",
+   "lat": 60.3127,
+   "lon": -139.5412,
+   "regime": "ACR (shallow)"
+  },
+  {
+   "id": "us7000ti1p",
+   "lat": 52.8594,
+   "lon": -171.3756,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us7000s211",
+   "lat": 52.3258,
+   "lon": 176.3707,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us7000tdvt",
+   "lat": 52.2579,
+   "lon": -169.4088,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us7000srjx",
+   "lat": 22.791,
+   "lon": -85.0919,
+   "regime": "ACR (deep)"
+  },
+  {
+   "id": "aka2026jcufoy",
+   "lat": 50.981,
+   "lon": 179.214,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us6000rlcd",
+   "lat": 12.3924,
+   "lon": 143.1427,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us7000tgky",
+   "lat": 51.213,
+   "lon": -178.5429,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us7000tinl",
+   "lat": 13.0568,
+   "lon": 145.7591,
+   "regime": "SZ (on-shore)"
+  },
+  {
+   "id": "us7000tesi",
+   "lat": 43.9019,
+   "lon": -128.2038,
+   "regime": "ACR (oceanic boundary)"
+  },
+  {
+   "id": "aka2026msxacu",
+   "lat": 60.237,
+   "lon": -145.91,
+   "regime": "SZ (on-shore)"
+  },
+  {
+   "id": "us6000rmia",
+   "lat": 13.7161,
+   "lon": 144.8924,
+   "regime": "SZ (on-shore)"
+  },
+  {
+   "id": "us6000szt5",
+   "lat": 51.7357,
+   "lon": -170.3306,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us6000qv0l",
+   "lat": 18.8435,
+   "lon": 145.4266,
+   "regime": "SZ (on-shore)"
+  },
+  {
+   "id": "us6000qv9g",
+   "lat": 51.6717,
+   "lon": 178.3992,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us6000qvj2",
+   "lat": 54.0969,
+   "lon": -166.602,
+   "regime": "SZ (generic)"
+  },
+  {
+   "id": "us7000rrv2",
+   "lat": 51.9223,
+   "lon": -176.0693,
+   "regime": "SZ (generic)"
+  }
+ ]
+}
