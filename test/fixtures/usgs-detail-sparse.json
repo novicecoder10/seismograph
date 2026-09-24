@@ -1,0 +1,178 @@
+{
+ "type": "Feature",
+ "properties": {
+  "mag": 4.5,
+  "place": "91 km E of Namie, Japan",
+  "time": 1790029799360,
+  "updated": 1790048240040,
+  "tz": null,
+  "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tj1b",
+  "felt": null,
+  "cdi": null,
+  "mmi": null,
+  "alert": null,
+  "status": "reviewed",
+  "tsunami": 0,
+  "sig": 312,
+  "net": "us",
+  "code": "7000tj1b",
+  "ids": ",us7000tj1b,",
+  "sources": ",us,",
+  "types": ",origin,phase-data,",
+  "nst": 40,
+  "dmin": 3.216,
+  "rms": 0.77,
+  "gap": 133,
+  "magType": "mb",
+  "type": "earthquake",
+  "title": "M 4.5 - 91 km E of Namie, Japan",
+  "products": {
+   "origin": [
+    {
+     "indexid": 28616871,
+     "indexTime": 1790048248178,
+     "id": "urn:usgs-product:us:origin:us7000tj1b:1790048240040",
+     "type": "origin",
+     "code": "us7000tj1b",
+     "source": "us",
+     "updateTime": 1790048240040,
+     "status": "UPDATE",
+     "properties": {
+      "azimuthal-gap": "133",
+      "depth": "35",
+      "depth-type": "operator assigned",
+      "error-ellipse-azimuth": "123",
+      "error-ellipse-intermediate": "11390",
+      "error-ellipse-major": "19218",
+      "error-ellipse-minor": "2920",
+      "error-ellipse-plunge": "0",
+      "error-ellipse-rotation": "270",
+      "evaluation-status": "confirmed",
+      "event-type": "earthquake",
+      "eventParametersPublicID": "quakeml:us.anss.org/eventparameters/7000tj1b/1790048241",
+      "eventsource": "us",
+      "eventsourcecode": "7000tj1b",
+      "eventtime": "2026-09-21T22:29:59.360Z",
+      "eventtime-error": "1.55",
+      "horizontal-error": "9.73",
+      "latitude": "37.5214",
+      "latitude-error": "0.0844",
+      "longitude": "142.0382",
+      "longitude-error": "0.1282",
+      "magnitude": "4.5",
+      "magnitude-error": "0.106",
+      "magnitude-num-stations-used": "26",
+      "magnitude-source": "us",
+      "magnitude-type": "mb",
+      "minimum-distance": "3.216",
+      "num-phases-used": "40",
+      "num-stations-used": "40",
+      "origin-source": "us",
+      "pdl-client-version": "Version 3.5.4 2026-01-22",
+      "quakeml-magnitude-publicid": "quakeml:us.anss.org/magnitude/7000tj1b/mb",
+      "quakeml-origin-publicid": "quakeml:us.anss.org/origin/7000tj1b",
+      "quakeml-publicid": "quakeml:us.anss.org/event/7000tj1b",
+      "review-status": "reviewed",
+      "standard-error": "0.77",
+      "title": "91 km E of Namie, Japan",
+      "vertical-error": "1.933"
+     },
+     "preferredWeight": 158,
+     "contents": {
+      "contents.xml": {
+       "contentType": "application/xml",
+       "lastModified": 1790048243000,
+       "length": 195,
+       "url": "https://earthquake.usgs.gov/product/origin/us7000tj1b/us/1790048240040/contents.xml",
+       "sha256": "ABhLiaqdYWmIak24eD/csBAWouBShhatD9bUzLNEZFk="
+      },
+      "quakeml.xml": {
+       "contentType": "application/xml",
+       "lastModified": 1790048240000,
+       "length": 3809,
+       "url": "https://earthquake.usgs.gov/product/origin/us7000tj1b/us/1790048240040/quakeml.xml",
+       "sha256": "3RbFipDji21GBdh88f88epQJFBzgtMlIOtBxoUWQdq8="
+      }
+     }
+    }
+   ],
+   "phase-data": [
+    {
+     "indexid": 28616872,
+     "indexTime": 1790048249433,
+     "id": "urn:usgs-product:us:phase-data:us7000tj1b:1790048240040",
+     "type": "phase-data",
+     "code": "us7000tj1b",
+     "source": "us",
+     "updateTime": 1790048240040,
+     "status": "UPDATE",
+     "properties": {
+      "azimuthal-gap": "133",
+      "depth": "35",
+      "depth-type": "operator assigned",
+      "error-ellipse-azimuth": "123",
+      "error-ellipse-intermediate": "11390",
+      "error-ellipse-major": "19218",
+      "error-ellipse-minor": "2920",
+      "error-ellipse-plunge": "0",
+      "error-ellipse-rotation": "270",
+      "evaluation-status": "confirmed",
+      "event-type": "earthquake",
+      "eventParametersPublicID": "quakeml:us.anss.org/eventparameters/7000tj1b/1790048241",
+      "eventsource": "us",
+      "eventsourcecode": "7000tj1b",
+      "eventtime": "2026-09-21T22:29:59.360Z",
+      "eventtime-error": "1.55",
+      "horizontal-error": "9.73",
+      "latitude": "37.5214",
+      "latitude-error": "0.0844",
+      "longitude": "142.0382",
+      "longitude-error": "0.1282",
+      "magnitude": "4.5",
+      "magnitude-error": "0.106",
+      "magnitude-num-stations-used": "26",
+      "magnitude-source": "us",
+      "magnitude-type": "mb",
+      "minimum-distance": "3.216",
+      "num-phases-used": "40",
+      "num-stations-used": "40",
+      "origin-source": "us",
+      "pdl-client-version": "Version 3.5.4 2026-01-22",
+      "quakeml-magnitude-publicid": "quakeml:us.anss.org/magnitude/7000tj1b/mb",
+      "quakeml-origin-publicid": "quakeml:us.anss.org/origin/7000tj1b",
+      "quakeml-publicid": "quakeml:us.anss.org/event/7000tj1b",
+      "review-status": "reviewed",
+      "standard-error": "0.77",
+      "vertical-error": "1.933"
+     },
+     "preferredWeight": 158,
+     "contents": {
+      "contents.xml": {
+       "contentType": "application/xml",
+       "lastModified": 1790048243000,
+       "length": 195,
+       "url": "https://earthquake.usgs.gov/product/phase-data/us7000tj1b/us/1790048240040/contents.xml",
+       "sha256": "ABhLiaqdYWmIak24eD/csBAWouBShhatD9bUzLNEZFk="
+      },
+      "quakeml.xml": {
+       "contentType": "application/xml",
+       "lastModified": 1790048240000,
+       "length": 96989,
+       "url": "https://earthquake.usgs.gov/product/phase-data/us7000tj1b/us/1790048240040/quakeml.xml",
+       "sha256": "RpRAKh2z6w4W58LG1PT3PqMWup9D4cdWJq63aZOd5Hw="
+      }
+     }
+    }
+   ]
+  }
+ },
+ "geometry": {
+  "type": "Point",
+  "coordinates": [
+   142.0382,
+   37.5214,
+   35
+  ]
+ },
+ "id": "us7000tj1b"
+}
