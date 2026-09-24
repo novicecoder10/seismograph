@@ -106,3 +106,14 @@ export function slabMesh(s: Slab): { vertices: Float32Array; indices: Uint32Arra
     }
   return { vertices: Float32Array.from(verts), indices: Uint32Array.from(idx) };
 }
+
+let cached: Promise<Slab[]> | null = null;
+
+export function loadSlabs(url = "/data/slab2.bin", fetchImpl: typeof fetch = fetch): Promise<Slab[]> {
+  cached ??= fetchImpl(url).then(async (r) => {
+    if (!r.ok) throw new Error(`slab2: HTTP ${r.status}`);
+    return parseSlab2(await r.arrayBuffer());
+  });
+  cached.catch(() => (cached = null));
+  return cached;
+}

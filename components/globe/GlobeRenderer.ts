@@ -9,7 +9,11 @@ import {
 import { unprojectDirection } from "@/lib/geo/project";
 import { makeGraticule } from "./graticule";
 import { makeDisplayMaterial, makePickMaterial, makeShellMaterial } from "./materials";
+import { makeMechanisms } from "./mechanisms";
+import { makeSlabs } from "./slabs";
+import type { Mechanism } from "@/lib/structure/mechanism";
 import { makeStations, makeWavefront, type StationMarker, type WavefrontInput } from "./wavefront";
+import type { Slab } from "@/lib/structure/slab2";
 
 /**
  * PHASE 0 FINDING, ENFORCED HERE (spikes/FINDINGS.md §2):
@@ -42,6 +46,7 @@ export interface GlobeStats {
   lastFrameMs: number;
   lastPickMs: number;
   pointCount: number;
+  mechanismCount: number;
 }
 
 export class GlobeRenderer {
@@ -52,6 +57,7 @@ export class GlobeRenderer {
     lastFrameMs: 0,
     lastPickMs: 0,
     pointCount: 0,
+    mechanismCount: 0,
   };
 
   private readonly renderer: THREE.WebGLRenderer;
@@ -67,6 +73,9 @@ export class GlobeRenderer {
   private points: THREE.Points | null = null;
   private wave: ReturnType<typeof makeWavefront> | null = null;
   private stationLayer: ReturnType<typeof makeStations> | null = null;
+  private slabs: THREE.Mesh | null = null;
+  private mechanisms: ReturnType<typeof makeMechanisms> | null = null;
+  private nowShader = 0;
   private buffers: HypocenterBuffers | null = null;
   private geometry: THREE.BufferGeometry | null = null;
   private frameHandle: number | null = null;
@@ -108,12 +117,49 @@ export class GlobeRenderer {
     const shaderTime = toShaderTime(tMs);
     this.displayMaterial.uniforms.uNow!.value = shaderTime;
     this.pickMaterial.uniforms.uNow!.value = shaderTime;
+    this.nowShader = shaderTime;
+    if (this.mechanisms) this.mechanisms.material.uniforms.uNow!.value = shaderTime;
     this.requestRender();
   }
 
   /** How long an event stays visually "recent", in seconds of catalogue time. */
   setFadeSeconds(seconds: number): void {
     this.displayMaterial.uniforms.uFadeSeconds!.value = Math.max(1, seconds);
+    this.requestRender();
+  }
+
+  /** Focal mechanisms as 3D beachballs; null removes them. */
+  setMechanisms(ms: Mechanism[] | null): void {
+    if (this.mechanisms) {
+      this.scene.remove(this.mechanisms.points);
+      this.mechanisms.points.geometry.dispose();
+      this.mechanisms.material.dispose();
+      this.mechanisms = null;
+    }
+    this.stats.mechanismCount = ms?.length ?? 0;
+    // With mechanisms shown, hypocenters step back to small dots so the
+    // beachballs, which carry more information, are not buried under glows.
+    this.displayMaterial.uniforms.uPointScale!.value = ms && ms.length ? 3.5 : 8.0;
+    if (ms && ms.length) {
+      this.mechanisms = makeMechanisms(ms);
+      this.mechanisms.material.uniforms.uNow!.value = this.nowShader;
+      this.scene.add(this.mechanisms.points);
+    }
+    this.requestRender();
+  }
+
+  /** Slab2 surfaces; null removes them. */
+  setSlabs(slabs: Slab[] | null): void {
+    if (this.slabs) {
+      this.scene.remove(this.slabs);
+      this.slabs.geometry.dispose();
+      (this.slabs.material as THREE.Material).dispose();
+      this.slabs = null;
+    }
+    if (slabs && slabs.length) {
+      this.slabs = makeSlabs(slabs);
+      this.scene.add(this.slabs);
+    }
     this.requestRender();
   }
 
@@ -278,6 +324,10 @@ export class GlobeRenderer {
     }
 
     this.renderer.setRenderTarget(null);
+    if (this.mechanisms) {
+      this.camera.updateMatrixWorld();
+      (this.mechanisms.material.uniforms.uViewInv!.value as THREE.Matrix3).setFromMatrix4(this.camera.matrixWorld);
+    }
     this.renderer.render(this.scene, this.camera);
     this.stats.renders++;
     this.stats.frames++;
@@ -302,6 +352,8 @@ export class GlobeRenderer {
     this.graticule.visible = false;
     if (this.wave) this.wave.mesh.visible = false;
     if (this.stationLayer) this.stationLayer.points.visible = false;
+    if (this.slabs) this.slabs.visible = false;
+    if (this.mechanisms) this.mechanisms.points.visible = false;
     this.renderer.setRenderTarget(this.pickTarget);
     this.renderer.setClearColor(0x000000, 1);
     this.renderer.clear();
@@ -313,6 +365,8 @@ export class GlobeRenderer {
     this.graticule.visible = true;
     if (this.wave) this.wave.mesh.visible = true;
     if (this.stationLayer) this.stationLayer.points.visible = true;
+    if (this.slabs) this.slabs.visible = true;
+    if (this.mechanisms) this.mechanisms.points.visible = true;
     points.material = this.displayMaterial;
     return decodeId(this.pickPixel[0]!, this.pickPixel[1]!, this.pickPixel[2]!);
   }
@@ -349,6 +403,8 @@ export class GlobeRenderer {
   dispose(): void {
     this.setWavefront(null);
     this.setStations([]);
+    this.setSlabs(null);
+    this.setMechanisms(null);
     this.disposed = true;
     if (this.frameHandle !== null) cancelAnimationFrame(this.frameHandle);
     this.geometry?.dispose();

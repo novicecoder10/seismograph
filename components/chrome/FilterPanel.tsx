@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayerStore } from "@/lib/store/layers";
 import { useFilterStore } from "@/lib/store/filters";
 
 const RANGES = [
@@ -14,6 +15,7 @@ const VIEWS = ["globe", "table"] as const;
 
 export function FilterPanel() {
   const { filter, view, setFilter, setView } = useFilterStore();
+  const layers = useLayerStore();
   const spanMs = filter.range.endMs - filter.range.startMs;
 
   return (
@@ -76,6 +78,28 @@ export function FilterPanel() {
       </span>
 
       <span style={{ display: "flex", gap: 6, alignItems: "center", marginLeft: "auto" }}>
+        layers
+        {(["slabs", "mechanisms"] as const).map((l) => (
+          <button
+            key={l}
+            data-testid={`layer-${l}`}
+            aria-pressed={layers[l]}
+            onClick={() => layers.toggle(l)}
+            style={{
+              background: layers[l] ? "var(--bg-panel-raised)" : "transparent",
+              color: layers[l] ? "var(--accent-warn)" : "var(--text-dim)",
+              border: "1px solid var(--line)",
+              padding: "4px 9px",
+              fontSize: 11,
+              cursor: "pointer",
+            }}
+          >
+            {l === "slabs" ? "subducting slabs" : "focal mechanisms"}
+          </button>
+        ))}
+      </span>
+
+      <span style={{ display: "flex", gap: 6, alignItems: "center" }}>
         {VIEWS.map((v) => (
           <button
             key={v}

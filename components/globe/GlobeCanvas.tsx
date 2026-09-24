@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { formatDepth, formatMagnitude, formatUtc } from "@/lib/events/format";
 import type { Event } from "@/lib/events/types";
+import { useLayerStore } from "@/lib/store/layers";
+import { useTimeStore } from "@/lib/store/time";
+import type { Mechanism } from "@/lib/structure/mechanism";
+import { loadSlabs } from "@/lib/structure/slab2";
 import { GlobeRenderer } from "./GlobeRenderer";
 
 function webglAvailable(): boolean {
@@ -125,6 +129,34 @@ export function GlobeCanvas({
   useEffect(() => {
     rendererRef.current?.setTime(t);
   }, [t]);
+
+  const mechanismsOn = useLayerStore((s) => s.mechanisms);
+  const rangeKey = useTimeStore((s) => `${Math.floor(s.range.startMs / 3_600_000)}:${Math.floor(s.range.endMs / 3_600_000)}`);
+  useEffect(() => {
+    if (!mechanismsOn) {
+      rendererRef.current?.setMechanisms(null);
+      return;
+    }
+    const { startMs, endMs } = useTimeStore.getState().range;
+    const ctrl = new AbortController();
+    fetch(`/api/mechanisms?from=${Math.floor(startMs)}&to=${Math.ceil(endMs)}`, { signal: ctrl.signal })
+      .then((r) => r.json())
+      .then((j: { mechanisms?: Mechanism[] }) => rendererRef.current?.setMechanisms(j.mechanisms ?? []))
+      .catch(() => {});
+    return () => ctrl.abort();
+  }, [mechanismsOn, rangeKey, supported]);
+
+  const slabsOn = useLayerStore((s) => s.slabs);
+  useEffect(() => {
+    if (!slabsOn) {
+      rendererRef.current?.setSlabs(null);
+      return;
+    }
+    let cancelled = false;
+    // The slab layer is a reading aid: failing to load it must not cost the globe.
+    loadSlabs().then((slabs) => { if (!cancelled) rendererRef.current?.setSlabs(slabs); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [slabsOn, supported]);
 
   useEffect(() => {
     rendererRef.current?.setFadeSeconds(fadeSeconds);

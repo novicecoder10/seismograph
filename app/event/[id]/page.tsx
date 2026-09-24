@@ -3,6 +3,7 @@ import { formatDepth, formatMagnitude, formatUtc } from "@/lib/events/format";
 import type { EventProducts } from "@/lib/events/products";
 import { createUsgsProductRepository } from "@/lib/repositories/products";
 import { createUsgsFdsnRepository } from "@/lib/repositories/usgs-fdsn";
+import { Beachball } from "@/components/structure/Beachball";
 import { WaveformPanelLazy } from "@/components/waveform/WaveformPanelLazy";
 
 const repo = createUsgsFdsnRepository();
@@ -140,6 +141,11 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
                       ? "double couple unknown"
                       : `${(mt.percentDoubleCouple * 100).toFixed(0)}% double couple`}
                   </div>
+                  {mt.planes !== null && (
+                    <div style={{ float: "right", marginLeft: 12 }}>
+                      <Beachball plane={mt.planes[0]} label={`Focal mechanism: nodal planes ${mt.planes.map((p) => `${p.strike}/${p.dip}/${p.rake}`).join(" and ")}`} />
+                    </div>
+                  )}
                   {mt.planes !== null && (
                     <div style={{ marginTop: 4 }}>
                       {mt.planes.map((p, j) => (
