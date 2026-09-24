@@ -5,10 +5,19 @@ import { chooseFeed, createUsgsFeedRepository } from "./usgs-feed";
 
 const hourFixture = readFileSync("test/fixtures/usgs-all-hour.json", "utf8");
 
+/** The clock comes from the fixture, never from the wall clock. A committed
+ *  fixture ages: a test that assumes "now" is near its capture time starts
+ *  failing the next day, or worse, passes vacuously on an empty page. */
+const FIXTURE_NOW = Math.max(
+  ...(JSON.parse(hourFixture) as { features: { properties: { time: number } }[] }).features.map(
+    (f) => f.properties.time,
+  ),
+);
+
 // The range must sit inside a feed window, or chooseFeed returns null and every
 // assertion below passes vacuously on an empty page.
 const filter = (over: Partial<EventFilter> = {}): EventFilter => ({
-  range: { startMs: Date.now() - 1_800_000, endMs: Date.now() + 60_000 },
+  range: { startMs: FIXTURE_NOW - 1_800_000, endMs: FIXTURE_NOW + 60_000 },
   minMagnitude: 0,
   maxMagnitude: null,
   minDepthKm: null,
@@ -31,9 +40,10 @@ describe("chooseFeed", () => {
 });
 
 describe("createUsgsFeedRepository", () => {
-  const repo = (body = hourFixture) =>
+  const repo = (body = hourFixture, now = FIXTURE_NOW) =>
     createUsgsFeedRepository({
       fetchImpl: async () => new Response(body, { status: 200 }),
+      now: () => now,
     });
 
   it("returns the fixture's events for a range inside the feed window", async () => {
@@ -76,7 +86,7 @@ describe("createUsgsFeedRepository", () => {
         {
           id: "nd",
           geometry: { type: "Point", coordinates: [0, 0, null] },
-          properties: { mag: 5, time: Date.now(), place: "p" },
+          properties: { mag: 5, time: FIXTURE_NOW, place: "p" },
         },
       ],
     });
@@ -94,7 +104,7 @@ describe("createUsgsFeedRepository", () => {
         {
           id: "nd",
           geometry: { type: "Point", coordinates: [0, 0, null] },
-          properties: { mag: 5, time: Date.now(), place: "p" },
+          properties: { mag: 5, time: FIXTURE_NOW, place: "p" },
         },
       ],
     });

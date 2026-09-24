@@ -1,10 +1,107 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import { GlobeCanvas } from "@/components/globe/GlobeCanvas";
+import { FilterPanel } from "@/components/chrome/FilterPanel";
+import { Header } from "@/components/chrome/Header";
+import { StatusBanner } from "@/components/chrome/StatusBanner";
+import { TimeScrubber } from "@/components/chrome/TimeScrubber";
+import { EventTable } from "@/components/table/EventTable";
+import type { Event } from "@/lib/events/types";
+import { useEvents } from "@/lib/events/useEvents";
+import { useFilterStore } from "@/lib/store/filters";
+import { useTimeStore } from "@/lib/store/time";
+
 export default function Home() {
+  const { filter, view, camera, setCamera, setSelectedId } = useFilterStore();
+  const t = useTimeStore((s) => s.t);
+  const timeRange = useTimeStore((s) => s.range);
+  const hydrated = useRef(false);
+  const [initialCamera, setInitialCamera] = useState<typeof camera>(null);
+  // Nothing below the header can render on the server: the time range is seeded
+  // from Date.now() and the real state comes from the URL, so a server render
+  // would differ from the first client render and fail hydration.
+  const [mounted, setMounted] = useState(false);
+
+  // Hydrate once from the URL, before the first fetch, so a shared link does not
+  // first load the default view and then jump.
+  useEffect(() => {
+    if (hydrated.current) return;
+    hydrated.current = true;
+    const state = useFilterStore.getState();
+    state.hydrateFromUrl(window.location.search);
+    setInitialCamera(useFilterStore.getState().camera);
+    setMounted(true);
+  }, []);
+
+  // Mirror state into the URL. replaceState, not pushState: scrubbing time must
+  // not fill the back stack with hundreds of entries.
+  useEffect(() => {
+    if (!hydrated.current) return;
+    const write = () => {
+      const qs = useFilterStore.getState().toQueryString();
+      window.history.replaceState(null, "", qs === "" ? window.location.pathname : `?${qs}`);
+    };
+    write();
+    const unsubFilter = useFilterStore.subscribe(write);
+    const unsubTime = useTimeStore.subscribe(write);
+    return () => {
+      unsubFilter();
+      unsubTime();
+    };
+  }, []);
+
+  const query = useEvents(filter);
+  const events = query.data?.events ?? [];
+
+  // The fade window scales with the range on screen: an hour of catalogue and a
+  // year of catalogue need very different notions of "recent".
+  const fadeSeconds = useMemo(
+    () => Math.max(60, (timeRange.endMs - timeRange.startMs) / 1000 / 40),
+    [timeRange],
+  );
+
+  const onSelect = (event: Event | null) => {
+    setSelectedId(event?.id ?? null);
+    if (event !== null) window.open(`/event/${encodeURIComponent(event.id)}`, "_self");
+  };
+
+  if (!mounted) {
+    return (
+      <main style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        <Header />
+        <p style={{ padding: 22, color: "var(--text-dim)" }}>Loading catalogue…</p>
+      </main>
+    );
+  }
+
   return (
-    <main className="grid-motif" style={{ padding: 22 }}>
-      <h1 style={{ fontFamily: "var(--font-display)", fontSize: 18, margin: 0 }}>
-        Seismograph
-      </h1>
-      <p style={{ color: "var(--text-dim)", marginTop: 8 }}>Foundation in place.</p>
+    <main style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Header />
+      <FilterPanel />
+      <StatusBanner
+        repository={query.data?.repository ?? null}
+        fetchedAt={query.data?.fetchedAt ?? null}
+        eventCount={events.length}
+        matchedCount={query.data?.total ?? null}
+        isError={query.isError}
+        isFetching={query.isFetching}
+      />
+      <div style={{ flex: 1, minHeight: 0 }}>
+        {view === "table" ? (
+          <EventTable events={events} onSelect={(e) => onSelect(e)} />
+        ) : (
+          <GlobeCanvas
+            events={events}
+            t={t}
+            fadeSeconds={fadeSeconds}
+            onSelect={onSelect}
+            onCameraChange={setCamera}
+            initialCamera={initialCamera}
+          />
+        )}
+      </div>
+      <TimeScrubber />
     </main>
   );
 }
