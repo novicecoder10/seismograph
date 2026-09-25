@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.0",
+    "hyparquet-writer": "^0.16.10",
     "next": "^15.1.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
