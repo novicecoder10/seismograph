@@ -13,7 +13,10 @@ const reasonText: Record<string, string> = {
 /** The template's paragraphs, replaced by the model's rewrite only when the
  *  server returns one that passed verification. */
 export function Prose({ eventId, template }: { eventId: string; template: string[] }) {
-  const [state, setState] = useState<{ paragraphs: string[]; note: string }>({ paragraphs: template, note: "Written from a fixed template, from the numbers in the tables." });
+  const [state, setState] = useState<{ paragraphs: string[]; note: string }>({
+    paragraphs: template,
+    note: "Written from a fixed template, from the numbers in the tables. A language model is rewriting it now; free models can take a minute or two, and the rewrite appears here only if it passes verification.",
+  });
   useEffect(() => {
     let cancelled = false;
     fetch("/api/analyst", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ eventId }) })
@@ -28,7 +31,7 @@ export function Prose({ eventId, template }: { eventId: string; template: string
           setState((s) => ({ ...s, note: `Written from a fixed template: ${p.reason}.` }));
         }
       })
-      .catch(() => {});
+      .catch(() => setState((s) => ({ ...s, note: "Written from a fixed template, from the numbers in the tables." })));
     return () => { cancelled = true; };
   }, [eventId]);
   return (

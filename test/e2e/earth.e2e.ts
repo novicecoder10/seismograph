@@ -129,3 +129,33 @@ test("the selection card's links navigate even while the catalogue is playing", 
   await expect(page).toHaveURL(/\/event\//, { timeout: 30_000 });
   await expect(page.getByRole("heading").first()).toBeVisible({ timeout: 60_000 });
 });
+
+test("dragging moves the ground exactly with the cursor, straight down and tilted", async ({ page }) => {
+  // The drag used to jump: a flick's inertia kept running during the drag, and
+  // the camera snapped onto the terrain between moves. The grabbed point must
+  // stay under the cursor.
+  type Hooks = { groundAt(x: number, y: number): { lat: number; lon: number } | null; project(la: number, lo: number): { x: number; y: number }; pose(): { heightKm: number } };
+  for (const [cam, limitPx] of [["7.8000,46.4000,1.003139,0.0,0.0", 3], ["7.8000,46.4000,1.003139,30.0,60.0", 10]] as const) {
+    await page.goto(`/?cam=${cam}`);
+    await settle(page);
+    const box = (await page.locator("[data-testid=globe-canvas]").boundingBox())!;
+    const sx = box.width * 0.5, sy = box.height * 0.6;
+    const grabbed = await page.evaluate(([x, y]) => (window as unknown as { __globeTest: Hooks }).__globeTest.groundAt(x!, y!), [sx, sy]);
+    expect(grabbed).not.toBeNull();
+    const h0 = await page.evaluate(() => (window as unknown as { __globeTest: Hooks }).__globeTest.pose().heightKm);
+    await page.mouse.move(box.x + sx, box.y + sy);
+    await page.mouse.down();
+    let worst = 0;
+    for (let i = 1; i <= 25; i++) {
+      const x = sx + i * 10, y = sy - i * 4;
+      await page.mouse.move(box.x + x, box.y + y);
+      await page.waitForTimeout(40);
+      const at = await page.evaluate(([la, lo]) => (window as unknown as { __globeTest: Hooks }).__globeTest.project(la!, lo!), [grabbed!.lat, grabbed!.lon]);
+      worst = Math.max(worst, Math.hypot(at.x - x, at.y - y));
+    }
+    const h1 = await page.evaluate(() => (window as unknown as { __globeTest: Hooks }).__globeTest.pose().heightKm);
+    await page.mouse.up();
+    expect(worst, `grabbed point drifted ${worst.toFixed(1)} px from the cursor (${cam})`).toBeLessThan(limitPx);
+    expect(Math.abs(h1 - h0), "the camera height must be held during a drag").toBeLessThan(0.05);
+  }
+});

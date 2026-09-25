@@ -6,7 +6,8 @@ export default defineConfig({
   timeout: 120_000,
   reporter: [["list"]],
   webServer: {
-    command: "npm run dev",
+    // ANALYST_OFF: tests never wait on, or spend, the owner's language-model keys.
+    command: "ANALYST_OFF=1 npm run dev",
     url: "http://localhost:3000",
     reuseExistingServer: true,
     timeout: 180_000,

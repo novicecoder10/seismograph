@@ -179,6 +179,8 @@ export function GlobeCanvas({ events, t, fadeSeconds, onSelect, onCameraChange, 
           setCamera: (c: CameraState) => renderer.setCamera(c),
           groundAt: (x: number, y: number) => renderer.groundAt(x, y),
           elevationAt: (lat: number, lon: number) => renderer.elevationAt(lat, lon),
+          pose: () => renderer.debugPose(),
+          project: (lat: number, lon: number) => renderer.debugProject(lat, lon),
         }),
       });
     }

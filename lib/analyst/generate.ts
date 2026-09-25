@@ -120,3 +120,106 @@ export function anthropicCall(apiKey: string, model: string, fetchImpl: typeof f
     return (j.content ?? []).filter((c) => c.type === "text").map((c) => c.text ?? "").join("");
   };
 }
+
+/**
+ * OpenRouter (OpenAI-compatible chat completions). Free models are often
+ * overloaded, so each call tries the models in order and moves on after an
+ * error or an empty reply. Reasoning models think before answering: the budget
+ * leaves room for that, and the reasoning itself is excluded from the reply.
+ */
+export function openRouterCall(apiKey: string, models: string[], fetchImpl: typeof fetch = fetch): ModelCall {
+  return async (system, user) => {
+    let last: unknown = new Error("no OpenRouter model configured");
+    for (const model of models) {
+      try {
+        const res = await fetchImpl("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}`, "x-title": "Seismograph" },
+          body: JSON.stringify({
+            model,
+            max_tokens: 4000,
+            temperature: 0.3,
+            reasoning: { exclude: true },
+            messages: [{ role: "system", content: system }, { role: "user", content: user }],
+          }),
+        });
+        if (!res.ok) throw new Error(`OpenRouter ${model} ${res.status}`);
+        const j = (await res.json()) as { choices?: { message?: { content?: string | null } }[]; error?: { message?: string } };
+        if (j.error) throw new Error(`OpenRouter ${model}: ${j.error.message ?? "error"}`);
+        const text = j.choices?.[0]?.message?.content ?? "";
+        if (text.trim() === "") throw new Error(`OpenRouter ${model}: empty reply`);
+        return text;
+      } catch (e) {
+        last = e;
+      }
+    }
+    throw last instanceof Error ? last : new Error(String(last));
+  };
+}
+
+/** Google Gemini API (generateContent). The key travels in a header, never the URL. */
+export function geminiCall(apiKey: string, model: string, fetchImpl: typeof fetch = fetch): ModelCall {
+  return async (system, user) => {
+    const res = await fetchImpl(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-goog-api-key": apiKey },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: system }] },
+        contents: [{ role: "user", parts: [{ text: user }] }],
+        generationConfig: { temperature: 0.3, maxOutputTokens: 4000 },
+      }),
+    });
+    if (!res.ok) throw new Error(`Gemini ${model} ${res.status}`);
+    const j = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
+    const text = (j.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? "").join("");
+    if (text.trim() === "") throw new Error(`Gemini ${model}: empty reply`);
+    return text;
+  };
+}
+
+/** Tries each provider in turn; the first to answer wins. */
+export function chain(calls: { label: string; call: ModelCall }[]): { label: string; call: ModelCall } {
+  return {
+    label: calls.map((c) => c.label).join(" → "),
+    call: async (system, user) => {
+      let last: unknown = new Error("no provider");
+      for (const c of calls) {
+        try {
+          return await c.call(system, user);
+        } catch (e) {
+          last = e;
+        }
+      }
+      throw last instanceof Error ? last : new Error(String(last));
+    },
+  };
+}
+
+export const DEFAULT_OPENROUTER_MODELS = ["nvidia/nemotron-3-ultra-550b-a55b:free", "nvidia/nemotron-3-super-120b-a12b:free"];
+export const DEFAULT_GEMINI_MODEL = "gemini-2.5-flash";
+
+/**
+ * The owner's keys, in the order that costs nothing first: OpenRouter's free
+ * models, then Gemini (free tier), then Anthropic. Null when no key is set,
+ * and the template stands.
+ */
+export function providersFromEnv(env: Record<string, string | undefined>, fetchImpl: typeof fetch = fetch): { label: string; call: ModelCall } | null {
+  // The test suite sets this: it must neither wait minutes on a free model nor
+  // spend the owner's quota.
+  if (env.ANALYST_OFF === "1") return null;
+  const calls: { label: string; call: ModelCall }[] = [];
+  if (env.OPENROUTER_API_KEY) {
+    const models = (env.ANALYST_OPENROUTER_MODELS ?? DEFAULT_OPENROUTER_MODELS.join(",")).split(",").map((m) => m.trim()).filter(Boolean);
+    calls.push({ label: `OpenRouter (${models.join(", ")})`, call: openRouterCall(env.OPENROUTER_API_KEY, models, fetchImpl) });
+  }
+  const google = env.GEMINI_API_KEY ?? env.GOOGLE_API_KEY;
+  if (google) {
+    const model = env.ANALYST_GEMINI_MODEL ?? DEFAULT_GEMINI_MODEL;
+    calls.push({ label: `Gemini (${model})`, call: geminiCall(google, model, fetchImpl) });
+  }
+  if (env.ANTHROPIC_API_KEY) {
+    const model = env.ANALYST_MODEL ?? "claude-sonnet-5";
+    calls.push({ label: `Anthropic (${model})`, call: anthropicCall(env.ANTHROPIC_API_KEY, model, fetchImpl) });
+  }
+  return calls.length === 0 ? null : chain(calls);
+}

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { buildBundle, type TargetSequence } from "./bundle";
 import type { LibrarySequence } from "./features";
-import { anthropicCall, answer, bundleHash, polish, spendGuard, type ModelCall } from "./generate";
+import { anthropicCall, answer, bundleHash, geminiCall, openRouterCall, polish, providersFromEnv, spendGuard, type ModelCall } from "./generate";
 import { renderTemplate } from "./template";
 
 const lib: LibrarySequence[] = JSON.parse(readFileSync("data/sequences/library.json", "utf8")).sequences;
@@ -82,3 +82,51 @@ describe("plumbing", () => {
     expect(JSON.parse(String(seen!.init.body)).model).toBe("claude-sonnet-5");
   });
 });
+
+describe("free-first providers", () => {
+  const recorder = (reply: (url: string, body: Record<string, unknown>) => Response) => {
+    const seen: { url: string; headers: Record<string, string>; body: Record<string, unknown> }[] = [];
+    const f = (async (url: string, init: RequestInit) => {
+      const body = JSON.parse(String(init.body)) as Record<string, unknown>;
+      seen.push({ url, headers: init.headers as Record<string, string>, body });
+      return reply(url, body);
+    }) as unknown as typeof fetch;
+    return { f, seen };
+  };
+
+  it("OpenRouter: key in the Authorization header, falls through an overloaded free model to the next", async () => {
+    const { f, seen } = recorder((_u, body) =>
+      body.model === "a:free" ? new Response("{}", { status: 503 }) : new Response(JSON.stringify({ choices: [{ message: { content: "hello" } }] })),
+    );
+    expect(await openRouterCall("sk-or-test", ["a:free", "b:free"], f)("sys", "user")).toBe("hello");
+    expect(seen.map((s) => s.body.model)).toEqual(["a:free", "b:free"]);
+    expect(seen[0]!.headers.authorization).toBe("Bearer sk-or-test");
+    expect(JSON.stringify(seen[0]!.body)).not.toContain("sk-or-test");
+    expect(seen[0]!.body.messages).toEqual([{ role: "system", content: "sys" }, { role: "user", content: "user" }]);
+  });
+
+  it("OpenRouter: an empty reply counts as a failure, and all failing throws", async () => {
+    const { f } = recorder(() => new Response(JSON.stringify({ choices: [{ message: { content: "" } }] })));
+    await expect(openRouterCall("k", ["a"], f)("s", "u")).rejects.toThrow(/empty/);
+  });
+
+  it("Gemini: key in a header, never the URL", async () => {
+    const { f, seen } = recorder(() => new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "hi" }] } }] })));
+    expect(await geminiCall("AIza-test", "gemini-2.5-flash", f)("sys", "user")).toBe("hi");
+    expect(seen[0]!.url).not.toContain("AIza-test");
+    expect(seen[0]!.url).toContain("gemini-2.5-flash:generateContent");
+    expect(seen[0]!.headers["x-goog-api-key"]).toBe("AIza-test");
+  });
+
+  it("orders providers free first and falls back across them", async () => {
+    expect(providersFromEnv({})).toBeNull();
+    const { f, seen } = recorder((url) =>
+      url.includes("openrouter") ? new Response("{}", { status: 503 }) : new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "from gemini" }] } }] })),
+    );
+    const p = providersFromEnv({ OPENROUTER_API_KEY: "or", GOOGLE_API_KEY: "g", ANTHROPIC_API_KEY: "a" }, f)!;
+    expect(p.label).toMatch(/^OpenRouter.*→ Gemini.*→ Anthropic/);
+    expect(await p.call("s", "u")).toBe("from gemini");
+    expect(seen.filter((s) => s.url.includes("openrouter"))).toHaveLength(2); // both free models tried
+  });
+});
+

@@ -6,7 +6,7 @@ import {
   toShaderTime,
   type HypocenterBuffers,
 } from "./hypocenters";
-import { unprojectDirection } from "@/lib/geo/project";
+import { projectHypocenter, unprojectDirection } from "@/lib/geo/project";
 import { sunDirection } from "@/lib/geo/sun";
 import { cameraPose, clampState, DEFAULT_CAMERA, EARTH_KM, flyPath, raySphere, rotateBy, type CameraState, type V3 } from "@/lib/globe/camera";
 import { EarthLayer, makeAtmosphere, makeStars } from "./earth";
@@ -191,6 +191,21 @@ export class GlobeRenderer {
     this.earth.setTerrain(on);
     this.applyCamera();
     this.requestRender();
+  }
+
+  /** For tests: where a ground point (on the terrain) is on screen, CSS px. */
+  debugProject(lat: number, lon: number): { x: number; y: number } {
+    const v = new THREE.Vector3(...projectHypocenter(lat, lon, -this.earth.elevationAt(lat, lon) / 1000));
+    this.camera.updateMatrixWorld();
+    v.project(this.camera);
+    const { width, height } = this.cssSize();
+    return { x: ((v.x + 1) / 2) * width, y: ((1 - v.y) / 2) * height };
+  }
+
+  /** For tests: the camera's world position and height above sea level, km. */
+  debugPose(): { x: number; y: number; z: number; heightKm: number } {
+    const p = this.camera.position;
+    return { x: p.x, y: p.y, z: p.z, heightKm: (p.length() - 1) * EARTH_KM };
   }
 
   /** Metres above sea level at a point, from the terrain loaded so far. */
@@ -399,19 +414,51 @@ export class GlobeRenderer {
   }
 
   /**
-   * Where a ray meets the ground: the sea-level sphere first, then the sphere
-   * through the terrain height found there, twice, which converges to within
-   * metres on any real slope.
+   * Where a ray meets the terrain. March from where the ray enters the shell of
+   * the highest ground (Everest plus margin) to where it meets sea level, find
+   * the first step that passes below the terrain, and bisect it to under a
+   * metre. Fixed-point refinement (sphere, height there, sphere again) does not
+   * converge at the grazing angles of a tilted view, and its few-hundred-metre
+   * error showed as the ground sliding under the cursor while dragging.
    */
   private hitGround(origin: V3, dir: V3): V3 | null {
-    let hit = raySphere(origin, dir);
-    if (hit === null) return null;
-    for (let i = 0; i < 2; i++) {
-      const ll = unprojectDirection(...hit);
-      const r = 1 + this.earth.elevationAt(ll.lat, ll.lon) / 1000 / EARTH_KM;
-      hit = raySphere(origin, dir, r) ?? hit;
+    const sea = raySphere(origin, dir);
+    const top = 1 + 9.5 / EARTH_KM;
+    const len = Math.hypot(...dir);
+    const d: V3 = [dir[0] / len, dir[1] / len, dir[2] / len];
+    const at = (t: number): V3 => [origin[0] + d[0] * t, origin[1] + d[1] * t, origin[2] + d[2] * t];
+    // Distance along the ray: start at the camera or where it enters the shell.
+    const oR = Math.hypot(...origin);
+    const entry = oR <= top ? origin : raySphere(origin, d, top);
+    if (entry === null) return null;
+    const t0 = Math.hypot(entry[0] - origin[0], entry[1] - origin[1], entry[2] - origin[2]);
+    // End at sea level, or where the ray leaves the shell again past the horizon.
+    const b2 = origin[0] * d[0] + origin[1] * d[1] + origin[2] * d[2];
+    const tFar = sea ? Math.hypot(sea[0] - origin[0], sea[1] - origin[1], sea[2] - origin[2]) : -b2 + Math.sqrt(Math.max(0, b2 * b2 - (oR * oR - top * top)));
+    if (!(tFar > t0)) return sea;
+    // Height of the ray above the terrain at t; negative once below the ground.
+    const above = (t: number) => {
+      const p = at(t);
+      const ll = unprojectDirection(...p);
+      return Math.hypot(...p) - 1 - this.earth.elevationAt(ll.lat, ll.lon) / 1000 / EARTH_KM;
+    };
+    const steps = 64;
+    let prevT = t0, prev = above(t0);
+    if (prev <= 0) return at(t0);
+    for (let i = 1; i <= steps; i++) {
+      const t = t0 + ((tFar - t0) * i) / steps;
+      const h = above(t);
+      if (h <= 0) {
+        let lo = prevT, hi = t;
+        for (let k = 0; k < 24; k++) {
+          const mid = (lo + hi) / 2;
+          if (above(mid) > 0) lo = mid; else hi = mid;
+        }
+        return at((lo + hi) / 2);
+      }
+      prevT = t; prev = h;
     }
-    return hit;
+    return sea;
   }
 
   /** The ground point under a screen position, or null over space. */
@@ -426,9 +473,34 @@ export class GlobeRenderer {
     this.flight = null;
     const a = this.rayAt(fromX, fromY), b = this.rayAt(toX, toY);
     const p = this.hitGround(a.origin, a.dir), q = this.hitGround(b.origin, b.dir);
+    this.dragging = true;
+    // A drag moves the planet exactly with the pointer and nothing else: any
+    // inertia still running from an earlier flick stops here. (It used to keep
+    // being applied on every frame of the drag, so the ground ran ahead of the
+    // cursor and was pulled back on the next move: the "jumping".)
+    this.spin = null;
     if (p && q) {
-      const next = rotateBy(this.cam, p, q);
-      this.spin = { dLon: ((next.lon - this.cam.lon + 540) % 360) - 180, dLat: next.lat - this.cam.lat };
+      // rotateBy shifts the target by the grabbed point's change in lat/lon:
+      // exact looking straight down, first-order when the view is tilted and
+      // the grabbed ground is far ahead. So correct it: cast the ray at the
+      // cursor again and remove what error is left, until the grabbed point
+      // sits under the cursor.
+      const before = this.cam;
+      let next = rotateBy(this.cam, p, q);
+      for (let i = 0; i < 3; i++) {
+        this.cam = next;
+        this.applyCamera();
+        const r = this.rayAt(toX, toY);
+        const hit = this.hitGround(r.origin, r.dir);
+        if (hit === null) break;
+        const err = Math.hypot(hit[0] - p[0], hit[1] - p[1], hit[2] - p[2]);
+        if (err < 3e-7) break; // ~2 m
+        next = rotateBy(next, p, hit);
+      }
+      this.cam = before;
+      const now = performance.now();
+      this.dragSamples.push({ t: now, dLon: ((next.lon - this.cam.lon + 540) % 360) - 180, dLat: next.lat - this.cam.lat });
+      while (this.dragSamples.length > 0 && now - this.dragSamples[0]!.t > 100) this.dragSamples.shift();
       this.cam = next;
     } else {
       this.orbitBy(toX - fromX, toY - fromY);
@@ -438,14 +510,31 @@ export class GlobeRenderer {
     this.requestRender();
   }
 
-  /** Releases a drag: the planet keeps turning briefly, as if flicked. */
+  /** While true the camera height is held: easing it onto the terrain between
+   *  pointer moves would slide the grabbed ground out from under the cursor. */
+  private dragging = false;
+
+  /** Recent grab steps, for the flick velocity at release. */
+  private dragSamples: { t: number; dLon: number; dLat: number }[] = [];
+
+  /** Releases a drag: the planet keeps turning briefly, as if flicked, at the
+   *  speed the pointer was moving in its last 100 ms, and only if it was still
+   *  moving when released. */
   release(): void {
-    if (this.spin && Math.hypot(this.spin.dLon, this.spin.dLat) > 0.02 * (this.cam.altitude - 1)) {
-      this.lastFrameTime = performance.now();
-      this.requestRender();
-    } else {
-      this.spin = null;
-    }
+    this.dragging = false;
+    this.requestRender(); // resume easing onto the terrain
+    const now = performance.now();
+    const recent = this.dragSamples.filter((s) => now - s.t <= 100);
+    this.dragSamples = [];
+    if (recent.length < 2 || now - recent[recent.length - 1]!.t > 60) return;
+    const span = Math.max(16, now - recent[0]!.t) / 1000;
+    const vLon = recent.reduce((a, s) => a + s.dLon, 0) / span;
+    const vLat = recent.reduce((a, s) => a + s.dLat, 0) / span;
+    // Degrees per second; ignore a slow release, which is a placement, not a flick.
+    if (Math.hypot(vLon, vLat) < 0.6 * (this.cam.altitude - 1) * 57.3 * 0.05) return;
+    this.spin = { dLon: vLon, dLat: vLat };
+    this.lastFrameTime = now;
+    this.requestRender();
   }
 
   /** Drag without a ground point (over space): degrees per pixel scaled by range. */
@@ -508,8 +597,10 @@ export class GlobeRenderer {
   /** Elevation under the camera's target, Earth radii; follows terrain as it loads. */
   private ground = 0;
 
+  /** False until terrain first arrives: the first seating is immediate. */
+  private groundSeated = false;
+
   private applyCamera(): void {
-    this.ground = this.earth.elevationAt(this.cam.lat, this.cam.lon) / 1000 / EARTH_KM;
     const pose = cameraPose(this.cam, this.ground);
     this.camera.position.set(...pose.position);
     this.camera.up.set(...pose.up);
@@ -553,12 +644,32 @@ export class GlobeRenderer {
       this.applyCamera();
       busy = true;
     } else if (this.spin) {
+      // Degrees per second, decaying: the same flick feels the same at any frame rate.
       const decay = Math.exp(-dt * 4.5);
       this.spin = { dLon: this.spin.dLon * decay, dLat: this.spin.dLat * decay };
-      this.cam = clampState({ ...this.cam, lon: this.cam.lon + this.spin.dLon, lat: this.cam.lat + this.spin.dLat });
+      this.cam = clampState({ ...this.cam, lon: this.cam.lon + this.spin.dLon * dt, lat: this.cam.lat + this.spin.dLat * dt });
       this.applyCamera();
-      if (Math.hypot(this.spin.dLon, this.spin.dLat) < 1e-4 * Math.max(0.01, this.cam.altitude - 1)) this.spin = null;
+      if (Math.hypot(this.spin.dLon, this.spin.dLat) < 0.02 * Math.max(0.001, this.cam.altitude - 1)) this.spin = null;
       busy = this.spin !== null;
+    }
+    // The camera eases onto the terrain under its target rather than snapping:
+    // dragging from a valley onto a ridge would otherwise lift the whole view by
+    // the ridge's height in one frame. It rises faster than it falls, so it
+    // never sinks into a peak for long.
+    const want = this.earth.elevationAt(this.cam.lat, this.cam.lon) / 1000 / EARTH_KM;
+    // Held during a drag, except to climb out of ground the camera would be inside.
+    const inside = want - this.ground > (this.cam.altitude - 1) * 0.8;
+    if (Math.abs(want - this.ground) > 1e-7 && (!this.dragging || inside || !this.groundSeated)) {
+      if (this.groundSeated) {
+        const tau = want > this.ground ? 0.12 : 0.4;
+        this.ground += (want - this.ground) * (1 - Math.exp(-Math.max(dt, 1 / 120) / tau));
+        if (Math.abs(want - this.ground) < 2e-7) this.ground = want;
+      } else {
+        this.ground = want;
+        this.groundSeated = true;
+      }
+      this.applyCamera();
+      busy = true;
     }
     if (this.xray.value !== this.xray.target) {
       const step = dt / XRAY_SECONDS;
@@ -576,8 +687,6 @@ export class GlobeRenderer {
     const t0 = performance.now();
     const animating = this.animate(t0);
     this.stats.animating = animating;
-    // Heights arrive after the camera settles: re-seat it on the refined ground.
-    if (Math.abs(this.earth.elevationAt(this.cam.lat, this.cam.lon) / 1000 / EARTH_KM - this.ground) > 1e-7) this.applyCamera();
 
     this.earth.update(this.camera, this.viewportHeight);
     this.stats.tilesDrawn = this.earth.stats.drawn;
