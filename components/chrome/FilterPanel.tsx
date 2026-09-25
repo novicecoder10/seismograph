@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayerStore } from "@/lib/store/layers";
+import { useLayerStore, type LayerName } from "@/lib/store/layers";
 import { useFilterStore } from "@/lib/store/filters";
 
 const RANGES = [
@@ -13,6 +13,15 @@ const RANGES = [
 
 const VIEWS = ["globe", "table"] as const;
 
+const LAYERS: [LayerName, string, string][] = [
+  ["labels", "labels", "Place names and borders (OpenStreetMap)"],
+  ["sunlight", "sunlight", "Real day and night at the time on the scrubber, with city lights"],
+  ["xray", "x-ray", "See through the ground: every earthquake sinks to its true depth"],
+  ["slabs", "subducting slabs", "Where one plate dives beneath another (Slab2); shown in x-ray"],
+  ["mechanisms", "focal mechanisms", "How each fault moved, as 3D beachballs (Global CMT)"],
+  ["grid", "grid", "Latitude and longitude lines"],
+];
+
 export function FilterPanel() {
   const { filter, view, setFilter, setView } = useFilterStore();
   const layers = useLayerStore();
@@ -21,6 +30,7 @@ export function FilterPanel() {
   return (
     <div
       data-testid="filter-panel"
+      className="filter-panel"
       style={{
         display: "flex",
         flexWrap: "wrap",
@@ -77,13 +87,14 @@ export function FilterPanel() {
         })}
       </span>
 
-      <span style={{ display: "flex", gap: 6, alignItems: "center", marginLeft: "auto" }}>
+      <span className="layer-row" style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center", marginLeft: "auto" }}>
         layers
-        {(["slabs", "mechanisms"] as const).map((l) => (
+        {LAYERS.map(([l, label, title]) => (
           <button
             key={l}
             data-testid={`layer-${l}`}
             aria-pressed={layers[l]}
+            title={title}
             onClick={() => layers.toggle(l)}
             style={{
               background: layers[l] ? "var(--bg-panel-raised)" : "transparent",
@@ -94,7 +105,7 @@ export function FilterPanel() {
               cursor: "pointer",
             }}
           >
-            {l === "slabs" ? "subducting slabs" : "focal mechanisms"}
+            {label}
           </button>
         ))}
       </span>

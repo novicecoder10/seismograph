@@ -35,8 +35,10 @@ export function TimeScrubber() {
   return (
     <div
       data-testid="time-scrubber"
+      className="time-scrubber"
       style={{
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
         gap: 12,
         padding: "10px 22px",
@@ -74,6 +76,7 @@ export function TimeScrubber() {
 
       <span
         data-testid="time-readout"
+        className="time-readout"
         style={{ fontSize: 12, color: "var(--text-primary)", minWidth: 210 }}
       >
         {formatUtc(t)}

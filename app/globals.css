@@ -72,3 +72,20 @@ button {
   opacity: 0.35;
   pointer-events: none;
 }
+
+/* Phone widths: the globe is the page, so the chrome gets out of its way. */
+.only-wide { display: inline; }
+.only-narrow { display: none; }
+@media (max-width: 720px) {
+  .header-tagline { display: none; }
+  .only-wide { display: none !important; }
+  .only-narrow { display: inline; }
+  .filter-panel { gap: 10px !important; padding: 8px 12px !important; }
+  .layer-row { margin-left: 0 !important; flex-wrap: wrap; row-gap: 6px; }
+  .status-banner { padding: 4px 12px !important; gap: 10px !important; }
+}
+@media (max-width: 720px) {
+  .time-scrubber { padding: 8px 12px !important; gap: 8px !important; }
+  .time-scrubber input[type="range"] { flex-basis: 100% !important; order: 5; }
+  .time-readout { min-width: 0 !important; }
+}

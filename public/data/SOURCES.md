@@ -10,3 +10,18 @@
   and checked for plausibility: each slab lies in its named region, depth ranges match the
   published model, and the 2026 M6.9 Pematangsiantar earthquake (175 km deep) sits about 20 km below
   the Sumatra slab top, where intraslab events belong.
+
+## Streamed at runtime by the globe (Phase 9), not stored here
+
+All free and CORS-open; nothing is proxied, cached server-side or redistributed.
+
+- Day imagery: Sentinel-2 cloudless 2024 by EOX IT Services GmbH (https://s2maps.eu), WMTS `WGS84`
+  grid, CC BY-NC-SA 4.0 (non-commercial use, which this hobby and research project is). Contains
+  modified Copernicus Sentinel data 2024.
+- Labels: EOX `overlay_bright`, rendered by EOX from OpenStreetMap data (© OpenStreetMap
+  contributors, ODbL). The shader drops its orange maritime-zone lines.
+- Fallback day texture: NASA GIBS `BlueMarble_ShadedRelief_Bathymetry` (public domain), stitched in
+  the browser from level-1 tiles.
+- Night lights: NASA GIBS `VIIRS_Black_Marble` 2016 (public domain), stitched from level-2 tiles.
+- Place search: Nominatim (© OpenStreetMap contributors), asked on submit only, per its usage
+  policy of at most one request a second.

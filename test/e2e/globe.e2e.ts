@@ -14,6 +14,10 @@ declare global {
       lastPickMs: number;
       pointCount: number;
       eventCount: number;
+      tilesDrawn: number;
+      tilesPending: number;
+      tileLevel: number;
+      animating: boolean;
     };
   }
 }
@@ -37,7 +41,10 @@ test("the globe renders on demand, not continuously", async ({ page }) => {
     timeout: 90_000,
     polling: 250,
   });
-  await page.waitForTimeout(2000);
+  // Imagery tiles legitimately trigger frames as they arrive; the claim is that
+  // once nothing is loading or animating, nothing renders.
+  await page.waitForFunction(() => { const s = window.__globeStats!; return s.tilesDrawn > 0 && s.tilesPending === 0 && !s.animating; }, null, { timeout: 90_000, polling: 250 });
+  await page.waitForTimeout(1000);
   const first = await page.evaluate(() => window.__globeStats!.renders);
   await page.waitForTimeout(2000);
   const second = await page.evaluate(() => window.__globeStats!.renders);

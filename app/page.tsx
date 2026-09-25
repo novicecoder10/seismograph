@@ -62,10 +62,10 @@ export default function Home() {
     [timeRange],
   );
 
-  const onSelect = (event: Event | null) => {
-    setSelectedId(event?.id ?? null);
-    if (event !== null) window.open(`/event/${encodeURIComponent(event.id)}`, "_self");
-  };
+  // On the globe a selection flies there and opens a card; the table, which has
+  // no "there" to fly to, opens the event page.
+  const onSelect = (event: Event | null) => setSelectedId(event?.id ?? null);
+  const openEvent = (event: Event) => window.open(`/event/${encodeURIComponent(event.id)}`, "_self");
 
   if (!mounted) {
     return (
@@ -92,7 +92,7 @@ export default function Home() {
       </StatusBanner>
       <div style={{ flex: 1, minHeight: 0 }}>
         {view === "table" ? (
-          <EventTable events={events} onSelect={(e) => onSelect(e)} />
+          <EventTable events={events} onSelect={(e) => openEvent(e)} />
         ) : (
           <GlobeCanvas
             events={events}

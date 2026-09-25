@@ -6,6 +6,7 @@ import { play, SPEEDS, type Playing } from "@/lib/seismic/audio";
 import { envelope } from "@/lib/seismic/dsp";
 import { fetchGsnStations, fetchNearbyShakes, fetchThreeComponent, selectRecordSection } from "@/lib/seismic/network";
 import { loadTravelTimes, phaseRow, PHASES, type TravelTimeTable } from "@/lib/seismic/traveltime";
+import { attachControls } from "../globe/controls";
 import { GlobeRenderer } from "../globe/GlobeRenderer";
 import { FILTERS, PHASE_STYLE, PRE_S, SPAN_S, type FilterId } from "./phases";
 import { RecordSection, type Component, type StationTrace } from "./RecordSection";
@@ -91,22 +92,13 @@ export function WavesView({ event }: { event: Event }) {
     renderer.setCamera({ lat: event.lat, lon: event.lon, altitude: 3.4 });
     const ro = new ResizeObserver(([e]) => e && renderer.resize(e.contentRect.width, e.contentRect.height));
     ro.observe(canvas);
-    let drag: { x: number; y: number } | null = null;
-    const down = (e: PointerEvent) => (drag = { x: e.clientX, y: e.clientY });
-    const move = (e: PointerEvent) => { if (drag) { renderer.orbitBy(e.clientX - drag.x, e.clientY - drag.y); drag = { x: e.clientX, y: e.clientY }; } };
-    const up = () => (drag = null);
-    const wheel = (e: WheelEvent) => { e.preventDefault(); renderer.zoomBy(e.deltaY > 0 ? 1.1 : 0.9); };
-    canvas.addEventListener("pointerdown", down);
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    canvas.addEventListener("wheel", wheel, { passive: false });
+    // Evenly lit, so the wavefronts read the same on the night side.
+    renderer.setSunlight(false);
+    const detach = attachControls(canvas, renderer);
     (window as unknown as { __waves?: unknown }).__waves = { stats: () => ({ ...renderer.stats }), stations: () => renderer.stationDebug() };
     return () => {
       ro.disconnect();
-      canvas.removeEventListener("pointerdown", down);
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-      canvas.removeEventListener("wheel", wheel);
+      detach();
       renderer.dispose();
       globeRef.current = null;
     };

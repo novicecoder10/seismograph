@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { describe, expect, it } from "vitest";
 import {
   EARTH_RADIUS_KM,
@@ -67,5 +68,22 @@ describe("projectHypocenter", () => {
 
   it("returns the origin direction for a zero vector rather than NaN", () => {
     expect(unprojectDirection(0, 0, 0)).toEqual({ lat: 0, lon: 0 });
+  });
+
+  it("is a rotation of ECEF, not a reflection: east is on screen right, seen from outside", () => {
+    // Looking down at 0N 0E from space with north up, 10E must be to the right
+    // and 10N above. A mirrored globe passes every other test in this file.
+    const cam = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+    cam.position.set(...projectHypocenter(0, 0, -2 * EARTH_RADIUS_KM));
+    cam.up.set(0, 1, 0);
+    cam.lookAt(0, 0, 0);
+    cam.updateMatrixWorld();
+    const screen = (lat: number, lon: number) => new THREE.Vector3(...projectHypocenter(lat, lon, 0)).project(cam);
+    expect(screen(0, 10).x).toBeGreaterThan(0.05);
+    expect(screen(10, 0).y).toBeGreaterThan(0.05);
+    // And the handedness of the whole map: det of the ECEF → scene matrix is +1.
+    const e = (lat: number, lon: number) => new THREE.Vector3(...projectHypocenter(lat, lon, 0));
+    const det = new THREE.Matrix3().setFromMatrix4(new THREE.Matrix4().makeBasis(e(0, 0), e(0, 90), e(90, 0))).determinant();
+    expect(det).toBeCloseTo(1, 9);
   });
 });

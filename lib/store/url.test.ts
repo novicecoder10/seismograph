@@ -43,6 +43,15 @@ describe("view state round-trip", () => {
     expect(back.selectedId).toBe("usgs:us7000abcd");
   });
 
+  it("carries a turned, tipped close view, and old three-part links still open", () => {
+    const close = { ...sample, camera: { lon: 139.69, lat: 35.68, altitude: 1.0008, heading: 42, tilt: 55 } };
+    const back = decodeViewState(encodeViewState(close), NOW).camera!;
+    expect(back.altitude).toBeCloseTo(1.0008, 6);
+    expect(back).toMatchObject({ heading: 42, tilt: 55 });
+    const old = decodeViewState("cam=-117.6,35.7,2.4", NOW).camera!;
+    expect(old).toMatchObject({ lon: -117.6, lat: 35.7, altitude: 2.4, heading: 0, tilt: 0 });
+  });
+
   it("round-trips for arbitrary valid states", () => {
     fc.assert(
       fc.property(
@@ -135,7 +144,7 @@ describe("decodeViewState is total", () => {
         expect(Math.abs(v.filter.bbox.south)).toBeLessThanOrEqual(90);
         expect(v.filter.bbox.north).toBeGreaterThan(v.filter.bbox.south);
       }
-      if (v.camera) expect(v.camera.altitude).toBeGreaterThanOrEqual(1.05);
+      if (v.camera) expect(v.camera.altitude).toBeGreaterThan(1);
       if (v.selectedId !== null) expect(v.selectedId.length).toBeLessThanOrEqual(128);
     });
   }

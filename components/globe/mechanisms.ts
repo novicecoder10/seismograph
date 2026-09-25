@@ -35,20 +35,23 @@ export function makeMechanisms(ms: Mechanism[]): { points: THREE.Points; materia
   geom.setAttribute("aTime", new THREE.BufferAttribute(time, 1));
   const material = new THREE.RawShaderMaterial({
     glslVersion: THREE.GLSL3,
-    uniforms: { uViewInv: { value: new THREE.Matrix3() }, uNow: { value: 1e9 }, uScale: { value: 9 } },
+    uniforms: { uViewInv: { value: new THREE.Matrix3() }, uNow: { value: 1e9 }, uScale: { value: 9 }, uXray: { value: 0 } },
     vertexShader: `precision highp float;
       uniform mat4 modelViewMatrix, projectionMatrix;
-      uniform float uNow, uScale;
+      uniform float uNow, uScale, uXray;
       in vec3 position; in vec3 aM0; in vec3 aM1; in vec2 aLatLon; in float aMw; in float aDepth; in float aTime;
       flat out vec3 vM0; flat out vec3 vM1; flat out vec3 vUp; flat out vec3 vSouth; flat out vec3 vEast;
       flat out float vDepth; flat out float vFuture;
       void main() {
         vM0 = aM0; vM1 = aM1; vDepth = aDepth; vFuture = aTime > uNow ? 1.0 : 0.0;
         float la = aLatLon.x, lo = aLatLon.y;
-        vUp = vec3(cos(la) * cos(lo), sin(la), cos(la) * sin(lo));
-        vEast = vec3(-sin(lo), 0.0, cos(lo));
-        vSouth = -vec3(-sin(la) * cos(lo), cos(la), -sin(la) * sin(lo));
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        // The local frame in scene axes (see lib/geo/project.ts: z = −cos·sin).
+        vUp = vec3(cos(la) * cos(lo), sin(la), -cos(la) * sin(lo));
+        vEast = vec3(-sin(lo), 0.0, -cos(lo));
+        vSouth = -vec3(-sin(la) * cos(lo), cos(la), sin(la) * sin(lo));
+        // On the ground at the epicentre, or at depth in x-ray (see materials.ts).
+        vec3 placed = mix(normalize(position) * 1.0004, position, uXray);
+        vec4 mv = modelViewMatrix * vec4(placed, 1.0);
         gl_PointSize = clamp((10.0 + max(0.0, aMw - 5.0) * 9.0) * (2.0 / -mv.z) * uScale / 9.0, 7.0, 72.0);
         gl_Position = projectionMatrix * mv;
       }`,

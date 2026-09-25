@@ -16,5 +16,6 @@ test("the scoreboard states its verdict and the ledger's integrity", async ({ pa
 test("the header links to the scoreboard", async ({ page }) => {
   await page.goto("/");
   await page.getByTestId("scoreboard-link").click();
-  await expect(page).toHaveURL(/\/scoreboard$/);
+  // The first visit compiles the route in dev while the globe streams imagery.
+  await expect(page).toHaveURL(/\/scoreboard$/, { timeout: 30_000 });
 });

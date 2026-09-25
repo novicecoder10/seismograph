@@ -30,6 +30,7 @@ export function StatusBanner({
   return (
     <div
       data-testid="status-banner"
+      className="status-banner"
       style={{
         display: "flex",
         flexWrap: "wrap",
@@ -65,7 +66,7 @@ export function StatusBanner({
       {isFetching && <span data-testid="status-fetching">updating…</span>}
       {children}
       <span style={{ marginLeft: "auto", color: "var(--text-faint)" }}>
-        Data: USGS (public domain), EMSC (CC BY 4.0). Research and hobby use.
+        Data: USGS (public domain), EMSC (CC BY 4.0).<span className="only-wide"> Research and hobby use.</span>
       </span>
     </div>
   );

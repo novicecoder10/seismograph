@@ -24,11 +24,11 @@ export function Header() {
       >
         SEISMOGRAPH
       </h1>
-      <span style={{ fontSize: 11, color: "var(--text-faint)" }}>
+      <span className="header-tagline" style={{ fontSize: 11, color: "var(--text-faint)" }}>
         hypocenters at true depth · forecasts only on the pages you open
       </span>
       <Link href="/scoreboard" data-testid="scoreboard-link" style={{ marginLeft: "auto", fontSize: 12, color: "var(--text-dim)" }}>
-        forecast scoreboard
+        <span className="only-wide">forecast </span>scoreboard
       </Link>
       <Link href="/watchlist" data-testid="watchlist-link" style={{ fontSize: 12, color: "var(--text-dim)" }}>
         watchlist

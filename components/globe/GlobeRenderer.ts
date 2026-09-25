@@ -7,8 +7,11 @@ import {
   type HypocenterBuffers,
 } from "./hypocenters";
 import { unprojectDirection } from "@/lib/geo/project";
+import { sunDirection } from "@/lib/geo/sun";
+import { cameraPose, clampState, DEFAULT_CAMERA, flyPath, raySphere, rotateBy, type CameraState, type V3 } from "@/lib/globe/camera";
+import { EarthLayer, makeAtmosphere, makeStars } from "./earth";
 import { makeGraticule } from "./graticule";
-import { makeDisplayMaterial, makePickMaterial, makeShellMaterial } from "./materials";
+import { EPICENTRE_LIFT, makeDisplayMaterial, makePickMaterial } from "./materials";
 import { makeMechanisms } from "./mechanisms";
 import { makeSlabs } from "./slabs";
 import type { Mechanism } from "@/lib/structure/mechanism";
@@ -37,6 +40,8 @@ import type { Slab } from "@/lib/structure/slab2";
 export interface GlobeRendererOptions {
   canvas: HTMLCanvasElement;
   onPick?(index: number | null): void;
+  /** Called after any camera change, including animation frames. */
+  onCameraChange?(camera: CameraState): void;
 }
 
 export interface GlobeStats {
@@ -47,7 +52,15 @@ export interface GlobeStats {
   lastPickMs: number;
   pointCount: number;
   mechanismCount: number;
+  tilesDrawn: number;
+  tilesPending: number;
+  tileLevel: number;
+  animating: boolean;
 }
+
+/** Seconds for the x-ray transition: long enough to watch the hypocenters sink. */
+const XRAY_SECONDS = 1.1;
+const XRAY_GROUND_OPACITY = 0.3;
 
 export class GlobeRenderer {
   readonly stats: GlobeStats = {
@@ -58,12 +71,20 @@ export class GlobeRenderer {
     lastPickMs: 0,
     pointCount: 0,
     mechanismCount: 0,
+    tilesDrawn: 0,
+    tilesPending: 0,
+    tileLevel: 0,
+    animating: false,
   };
 
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
+  private readonly starScene = new THREE.Scene();
   private readonly camera: THREE.PerspectiveCamera;
-  private readonly shell: THREE.Mesh;
+  private readonly starCamera: THREE.PerspectiveCamera;
+  private readonly earth: EarthLayer;
+  private readonly atmosphere: ReturnType<typeof makeAtmosphere>;
+  private readonly stars: THREE.Points;
   private readonly graticule: THREE.LineSegments;
   private readonly displayMaterial = makeDisplayMaterial();
   private readonly pickMaterial = makePickMaterial();
@@ -76,27 +97,42 @@ export class GlobeRenderer {
   private slabs: THREE.Mesh | null = null;
   private mechanisms: ReturnType<typeof makeMechanisms> | null = null;
   private nowShader = 0;
+  private nowMs = Date.now();
+  private sunlight = true;
   private buffers: HypocenterBuffers | null = null;
   private geometry: THREE.BufferGeometry | null = null;
   private frameHandle: number | null = null;
   private pendingPick: { x: number; y: number } | null = null;
   private disposed = false;
+  private viewportHeight = 1;
 
-  /** Camera orientation, driven by drag. Altitude is the distance in scene units. */
-  private orbit = { lon: 0, lat: 0, altitude: 3.2 };
+  private cam: CameraState = { ...DEFAULT_CAMERA };
+  private xray = { value: 0, target: 0 };
+  private flight: { from: CameraState; to: CameraState; start: number; ms: number } | null = null;
+  private spin: { dLon: number; dLat: number } | null = null;
+  private lastFrameTime = 0;
 
   constructor(private readonly opts: GlobeRendererOptions) {
     this.renderer = new THREE.WebGLRenderer({ canvas: opts.canvas, antialias: true });
     this.renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio ?? 1, 2));
-    this.renderer.setClearColor(0x0a0c0e, 1);
+    this.renderer.setClearColor(0x000000, 1);
+    this.renderer.autoClear = false;
 
     this.camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
-    this.applyOrbit();
+    this.starCamera = new THREE.PerspectiveCamera(45, 1, 1, 200);
 
-    this.shell = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), makeShellMaterial());
-    this.scene.add(this.shell);
+    this.earth = new EarthLayer(() => this.requestRender());
+    this.scene.add(this.earth.group);
+    this.atmosphere = makeAtmosphere();
+    this.scene.add(this.atmosphere.mesh);
+    this.stars = makeStars();
+    (this.stars.material as THREE.ShaderMaterial).uniforms.uPixelRatio!.value = this.renderer.getPixelRatio();
+    this.starScene.add(this.stars);
     this.graticule = makeGraticule();
+    this.graticule.visible = false;
     this.scene.add(this.graticule);
+    this.setSunlight(true);
+    this.applyCamera();
 
     // Warm the pick path now rather than on the first hover.
     this.renderer.setRenderTarget(this.pickTarget);
@@ -112,13 +148,16 @@ export class GlobeRenderer {
   }
 
   /** Sets the current instant. Events after t are discarded by the shader, so
-   *  catalogue replay is a uniform update rather than a rebuild. */
+   *  catalogue replay is a uniform update rather than a rebuild. The Sun follows
+   *  the same clock. */
   setTime(tMs: number): void {
     const shaderTime = toShaderTime(tMs);
     this.displayMaterial.uniforms.uNow!.value = shaderTime;
     this.pickMaterial.uniforms.uNow!.value = shaderTime;
     this.nowShader = shaderTime;
+    this.nowMs = tMs;
     if (this.mechanisms) this.mechanisms.material.uniforms.uNow!.value = shaderTime;
+    this.updateSun();
     this.requestRender();
   }
 
@@ -126,6 +165,59 @@ export class GlobeRenderer {
   setFadeSeconds(seconds: number): void {
     this.displayMaterial.uniforms.uFadeSeconds!.value = Math.max(1, seconds);
     this.requestRender();
+  }
+
+  /** Real sunlight at the current instant, or the whole planet evenly lit. */
+  setSunlight(on: boolean): void {
+    this.sunlight = on;
+    this.updateSun();
+    this.requestRender();
+  }
+
+  private updateSun(): void {
+    const d = sunDirection(this.nowMs);
+    this.earth.setSunlight(this.sunlight, d);
+    this.atmosphere.material.uniforms.uSunlight!.value = this.sunlight ? 1 : 0;
+    (this.atmosphere.material.uniforms.uSun!.value as THREE.Vector3).set(...d);
+  }
+
+  setLabels(on: boolean): void {
+    this.earth.setLabels(on);
+    this.requestRender();
+  }
+
+  setGrid(on: boolean): void {
+    this.graticule.visible = on;
+    this.requestRender();
+  }
+
+  /**
+   * X-ray: the ground turns translucent and every hypocenter sinks from its
+   * epicentre to its true depth. Off, the planet is opaque and events sit on
+   * the surface where they would be felt.
+   */
+  setXray(on: boolean, animate = true): void {
+    this.xray.target = on ? 1 : 0;
+    if (!animate) this.xray.value = this.xray.target;
+    this.applyXray();
+    this.requestRender();
+  }
+
+  get xrayOn(): boolean {
+    return this.xray.target > 0.5;
+  }
+
+  private applyXray(): void {
+    const v = this.xray.value;
+    const eased = v * v * (3 - 2 * v);
+    this.displayMaterial.uniforms.uXray!.value = eased;
+    this.pickMaterial.uniforms.uXray!.value = eased;
+    if (this.mechanisms) this.mechanisms.material.uniforms.uXray!.value = eased;
+    this.earth.setOpacity(1 - (1 - XRAY_GROUND_OPACITY) * eased);
+    if (this.slabs) {
+      this.slabs.visible = eased > 0.02;
+      (this.slabs.material as THREE.RawShaderMaterial).uniforms.uFade!.value = eased;
+    }
   }
 
   /** Focal mechanisms as 3D beachballs; null removes them. */
@@ -144,11 +236,12 @@ export class GlobeRenderer {
       this.mechanisms = makeMechanisms(ms);
       this.mechanisms.material.uniforms.uNow!.value = this.nowShader;
       this.scene.add(this.mechanisms.points);
+      this.applyXray();
     }
     this.requestRender();
   }
 
-  /** Slab2 surfaces; null removes them. */
+  /** Slab2 surfaces; null removes them. They are underground, so they show in x-ray. */
   setSlabs(slabs: Slab[] | null): void {
     if (this.slabs) {
       this.scene.remove(this.slabs);
@@ -159,6 +252,7 @@ export class GlobeRenderer {
     if (slabs && slabs.length) {
       this.slabs = makeSlabs(slabs);
       this.scene.add(this.slabs);
+      this.applyXray();
     }
     this.requestRender();
   }
@@ -220,14 +314,26 @@ export class GlobeRenderer {
     this.requestRender();
   }
 
-  setCamera(camera: { lon: number; lat: number; altitude: number }): void {
-    this.orbit = { ...camera };
-    this.applyOrbit();
+  // ---- Camera ------------------------------------------------------------
+
+  setCamera(camera: Partial<CameraState> & { lon: number; lat: number; altitude: number }): void {
+    this.flight = null;
+    this.spin = null;
+    this.cam = clampState({ heading: 0, tilt: 0, ...camera });
+    this.applyCamera();
     this.requestRender();
   }
 
-  getCamera(): { lon: number; lat: number; altitude: number } {
-    return { ...this.orbit };
+  getCamera(): CameraState {
+    return { ...this.cam };
+  }
+
+  /** Animated flight to a view. Interrupted by any direct camera input. */
+  flyTo(to: Partial<CameraState> & { lon: number; lat: number }, ms = 1600): void {
+    const target = clampState({ ...this.cam, heading: 0, tilt: 0, ...to, altitude: to.altitude ?? this.cam.altitude });
+    this.spin = null;
+    this.flight = { from: { ...this.cam }, to: target, start: performance.now(), ms };
+    this.requestRender();
   }
 
   /** Orients the camera at an event so a shared link carrying `sel=` opens
@@ -235,53 +341,128 @@ export class GlobeRenderer {
   focusOn(index: number): boolean {
     const b = this.buffers;
     if (b === null || index < 0 || index >= b.count) return false;
-    const x = b.positions[index * 3] as number;
-    const y = b.positions[index * 3 + 1] as number;
-    const z = b.positions[index * 3 + 2] as number;
-    const { lat, lon } = unprojectDirection(x, y, z);
-    this.orbit = { lon, lat, altitude: this.orbit.altitude };
-    this.applyOrbit();
-    this.requestRender();
+    const { lat, lon } = unprojectDirection(b.positions[index * 3]!, b.positions[index * 3 + 1]!, b.positions[index * 3 + 2]!);
+    this.setCamera({ ...this.cam, lon, lat });
     return true;
   }
 
-  /** Where an event sits on screen, in CSS pixels, or null when it is behind the
-   *  camera or off screen. Used to place labels and leader lines. */
+  /** The event's lat/lon, for callers that fly to a picked event. */
+  positionOf(index: number): { lat: number; lon: number } | null {
+    const b = this.buffers;
+    if (b === null || index < 0 || index >= b.count) return null;
+    return unprojectDirection(b.positions[index * 3]!, b.positions[index * 3 + 1]!, b.positions[index * 3 + 2]!);
+  }
+
+  /** Where an event is drawn on screen, in CSS pixels, or null when it is
+   *  behind the planet, behind the camera or off screen. */
   screenPositionOf(index: number): { x: number; y: number } | null {
     const b = this.buffers;
     if (b === null || index < 0 || index >= b.count) return null;
-    const v = new THREE.Vector3(
-      b.positions[index * 3] as number,
-      b.positions[index * 3 + 1] as number,
-      b.positions[index * 3 + 2] as number,
-    );
+    const true3 = new THREE.Vector3(b.positions[index * 3]!, b.positions[index * 3 + 1]!, b.positions[index * 3 + 2]!);
+    const x = this.displayMaterial.uniforms.uXray!.value as number;
+    const v = true3.clone().normalize().multiplyScalar(EPICENTRE_LIFT).lerp(true3, x);
     this.camera.updateMatrixWorld();
+    if (x < 0.5 && v.dot(this.camera.position) < 1) return null; // beyond the horizon
     v.project(this.camera);
     if (v.z < -1 || v.z > 1) return null;
-    const rect = this.renderer.domElement;
+    const { width, height } = this.cssSize();
+    const sx = ((v.x + 1) / 2) * width;
+    const sy = ((1 - v.y) / 2) * height;
+    if (sx < 0 || sy < 0 || sx > width || sy > height) return null;
+    return { x: sx, y: sy };
+  }
+
+  private cssSize(): { width: number; height: number } {
     const dpr = this.renderer.getPixelRatio();
-    const width = rect.width / dpr;
-    const height = rect.height / dpr;
-    const x = ((v.x + 1) / 2) * width;
-    const y = ((1 - v.y) / 2) * height;
-    if (x < 0 || y < 0 || x > width || y > height) return null;
-    return { x, y };
+    return { width: this.renderer.domElement.width / dpr, height: this.renderer.domElement.height / dpr };
   }
 
-  /** Drag handler: degrees per pixel scaled by altitude so a zoomed-in drag
-   *  moves the same apparent distance. */
+  private rayAt(x: number, y: number): { origin: V3; dir: V3 } {
+    const { width, height } = this.cssSize();
+    this.camera.updateMatrixWorld();
+    const ndc = new THREE.Vector3((x / width) * 2 - 1, 1 - (y / height) * 2, 0.5).unproject(this.camera);
+    const o = this.camera.position;
+    const d = ndc.sub(o).normalize();
+    return { origin: [o.x, o.y, o.z], dir: [d.x, d.y, d.z] };
+  }
+
+  /** The ground point under a screen position, or null over space. */
+  groundAt(x: number, y: number): { lat: number; lon: number } | null {
+    const r = this.rayAt(x, y);
+    const hit = raySphere(r.origin, r.dir);
+    return hit ? unprojectDirection(...hit) : null;
+  }
+
+  /** Grab-drag: the ground under (fromX, fromY) follows the pointer to (toX, toY). */
+  grab(fromX: number, fromY: number, toX: number, toY: number): void {
+    this.flight = null;
+    const a = this.rayAt(fromX, fromY), b = this.rayAt(toX, toY);
+    const p = raySphere(a.origin, a.dir), q = raySphere(b.origin, b.dir);
+    if (p && q) {
+      const next = rotateBy(this.cam, p, q);
+      this.spin = { dLon: ((next.lon - this.cam.lon + 540) % 360) - 180, dLat: next.lat - this.cam.lat };
+      this.cam = next;
+    } else {
+      this.orbitBy(toX - fromX, toY - fromY);
+      return;
+    }
+    this.applyCamera();
+    this.requestRender();
+  }
+
+  /** Releases a drag: the planet keeps turning briefly, as if flicked. */
+  release(): void {
+    if (this.spin && Math.hypot(this.spin.dLon, this.spin.dLat) > 0.02 * (this.cam.altitude - 1)) {
+      this.lastFrameTime = performance.now();
+      this.requestRender();
+    } else {
+      this.spin = null;
+    }
+  }
+
+  /** Drag without a ground point (over space): degrees per pixel scaled by range. */
   orbitBy(dxPixels: number, dyPixels: number): void {
-    const scale = 0.25 * (this.orbit.altitude / 3.2);
-    this.orbit.lon = ((this.orbit.lon - dxPixels * scale + 540) % 360) - 180;
-    this.orbit.lat = Math.min(89, Math.max(-89, this.orbit.lat + dyPixels * scale));
-    this.applyOrbit();
+    this.flight = null;
+    this.spin = null;
+    const scale = 0.25 * Math.min(1, (this.cam.altitude - 1) / 2.2);
+    this.cam = clampState({ ...this.cam, lon: this.cam.lon - dxPixels * scale, lat: this.cam.lat + dyPixels * scale });
+    this.applyCamera();
     this.requestRender();
   }
 
-  zoomBy(factor: number): void {
-    this.orbit.altitude = Math.min(50, Math.max(1.05, this.orbit.altitude * factor));
-    this.applyOrbit();
+  /** Zoom toward a screen point (the centre when omitted): the ground under the
+   *  cursor stays under the cursor. */
+  zoomBy(factor: number, x?: number, y?: number): void {
+    this.flight = null;
+    this.spin = null;
+    const before = x !== undefined && y !== undefined ? this.rayAt(x, y) : null;
+    const p = before ? raySphere(before.origin, before.dir) : null;
+    const range = (this.cam.altitude - 1) * factor;
+    this.cam = clampState({ ...this.cam, altitude: 1 + range });
+    this.applyCamera();
+    if (p && x !== undefined && y !== undefined) {
+      const after = this.rayAt(x, y);
+      const q = raySphere(after.origin, after.dir);
+      if (q) {
+        this.cam = rotateBy(this.cam, p, q);
+        this.applyCamera();
+      }
+    }
     this.requestRender();
+  }
+
+  /** Right-drag: turn the heading and tip the view. */
+  turnBy(dHeading: number, dTilt: number): void {
+    this.flight = null;
+    this.spin = null;
+    this.cam = clampState({ ...this.cam, heading: this.cam.heading + dHeading, tilt: this.cam.tilt + dTilt });
+    this.applyCamera();
+    this.requestRender();
+  }
+
+  /** North up and looking straight down, keeping position and range. */
+  resetOrientation(): void {
+    this.flyTo({ ...this.cam, heading: 0, tilt: 0 }, 600);
   }
 
   requestRender(): void {
@@ -296,22 +477,66 @@ export class GlobeRenderer {
     this.requestRender();
   }
 
-  private applyOrbit(): void {
-    const latRad = (this.orbit.lat * Math.PI) / 180;
-    const lonRad = (this.orbit.lon * Math.PI) / 180;
-    const r = this.orbit.altitude;
-    this.camera.position.set(
-      r * Math.cos(latRad) * Math.cos(lonRad),
-      r * Math.sin(latRad),
-      r * Math.cos(latRad) * Math.sin(lonRad),
-    );
-    this.camera.lookAt(0, 0, 0);
+  private applyCamera(): void {
+    const pose = cameraPose(this.cam);
+    this.camera.position.set(...pose.position);
+    this.camera.up.set(...pose.up);
+    this.camera.lookAt(...pose.target);
+    // Near and far follow the altitude: 1.5 km above the ground and a whole
+    // hemisphere away cannot share one fixed depth range.
+    const dist = Math.hypot(...pose.position);
+    const height = Math.max(1e-6, dist - 1);
+    const horizon = Math.sqrt(Math.max(0, dist * dist - 1));
+    this.camera.near = Math.max(2e-6, height * 0.25);
+    this.camera.far = horizon + (this.xray.target > 0 || this.xray.value > 0 ? 2.2 : 0.3) + 0.05;
+    this.camera.updateProjectionMatrix();
+    this.earth.setRange(height);
+    this.starCamera.quaternion.copy(this.camera.quaternion);
+    // The atmosphere is seen from outside; from inside it would tint the whole sky.
+    this.atmosphere.material.uniforms.uStrength!.value = Math.min(1, Math.max(0, (dist - 1.03) / 0.25));
+    this.opts.onCameraChange?.(this.cam);
+  }
+
+  /** Advances fly-to, inertia and x-ray; true while any of them needs another frame. */
+  private animate(now: number): boolean {
+    let busy = false;
+    const dt = Math.min(0.05, Math.max(0, (now - (this.lastFrameTime || now)) / 1000));
+    this.lastFrameTime = now;
+    if (this.flight) {
+      const u = Math.min(1, (now - this.flight.start) / this.flight.ms);
+      this.cam = flyPath(this.flight.from, this.flight.to, u);
+      if (u >= 1) this.flight = null;
+      this.applyCamera();
+      busy = true;
+    } else if (this.spin) {
+      const decay = Math.exp(-dt * 4.5);
+      this.spin = { dLon: this.spin.dLon * decay, dLat: this.spin.dLat * decay };
+      this.cam = clampState({ ...this.cam, lon: this.cam.lon + this.spin.dLon, lat: this.cam.lat + this.spin.dLat });
+      this.applyCamera();
+      if (Math.hypot(this.spin.dLon, this.spin.dLat) < 1e-4 * Math.max(0.01, this.cam.altitude - 1)) this.spin = null;
+      busy = this.spin !== null;
+    }
+    if (this.xray.value !== this.xray.target) {
+      const step = dt / XRAY_SECONDS;
+      this.xray.value = this.xray.target > this.xray.value ? Math.min(this.xray.target, this.xray.value + step) : Math.max(this.xray.target, this.xray.value - step);
+      this.applyXray();
+      this.applyCamera();
+      busy = true;
+    }
+    return busy;
   }
 
   private frame(): void {
     this.frameHandle = null;
     if (this.disposed) return;
     const t0 = performance.now();
+    const animating = this.animate(t0);
+    this.stats.animating = animating;
+
+    this.earth.update(this.camera, this.viewportHeight);
+    this.stats.tilesDrawn = this.earth.stats.drawn;
+    this.stats.tilesPending = this.earth.pending;
+    this.stats.tileLevel = this.earth.stats.maxLevel;
 
     if (this.pendingPick !== null) {
       const { x, y } = this.pendingPick;
@@ -324,6 +549,9 @@ export class GlobeRenderer {
     }
 
     this.renderer.setRenderTarget(null);
+    this.renderer.clear();
+    this.renderer.render(this.starScene, this.starCamera);
+    this.renderer.clearDepth();
     if (this.mechanisms) {
       this.camera.updateMatrixWorld();
       (this.mechanisms.material.uniforms.uViewInv!.value as THREE.Matrix3).setFromMatrix4(this.camera.matrixWorld);
@@ -332,6 +560,8 @@ export class GlobeRenderer {
     this.stats.renders++;
     this.stats.frames++;
     this.stats.lastFrameMs = performance.now() - t0;
+    if (animating) this.requestRender();
+    else this.lastFrameTime = 0;
   }
 
   private pickAt(x: number, y: number): number | null {
@@ -347,26 +577,24 @@ export class GlobeRenderer {
       1,
       1,
     );
+    // The ground stays in the pick pass, drawn black, so it occludes events on
+    // the far side exactly as it does on screen. Everything else is hidden.
+    const candidates: (THREE.Object3D | null | undefined)[] = [this.atmosphere.mesh, this.graticule, this.wave?.mesh, this.stationLayer?.points, this.slabs, this.mechanisms?.points];
+    const hidden = candidates.filter((o): o is THREE.Object3D => o != null && o.visible);
+    for (const o of hidden) o.visible = false;
+    const groundOpaque = this.xray.value === 0;
+    if (!groundOpaque) this.earth.group.visible = false;
+    else this.earth.setPickMode(true);
     points.material = this.pickMaterial;
-    this.shell.visible = false;
-    this.graticule.visible = false;
-    if (this.wave) this.wave.mesh.visible = false;
-    if (this.stationLayer) this.stationLayer.points.visible = false;
-    if (this.slabs) this.slabs.visible = false;
-    if (this.mechanisms) this.mechanisms.points.visible = false;
     this.renderer.setRenderTarget(this.pickTarget);
     this.renderer.setClearColor(0x000000, 1);
     this.renderer.clear();
     this.renderer.render(this.scene, cam);
     this.renderer.readRenderTargetPixels(this.pickTarget, 0, 0, 1, 1, this.pickPixel);
     this.renderer.setRenderTarget(null);
-    this.renderer.setClearColor(0x0a0c0e, 1);
-    this.shell.visible = true;
-    this.graticule.visible = true;
-    if (this.wave) this.wave.mesh.visible = true;
-    if (this.stationLayer) this.stationLayer.points.visible = true;
-    if (this.slabs) this.slabs.visible = true;
-    if (this.mechanisms) this.mechanisms.points.visible = true;
+    for (const o of hidden) o.visible = true;
+    this.earth.group.visible = true;
+    this.earth.setPickMode(false);
     points.material = this.displayMaterial;
     return decodeId(this.pickPixel[0]!, this.pickPixel[1]!, this.pickPixel[2]!);
   }
@@ -390,13 +618,17 @@ export class GlobeRenderer {
     // Frustum culling uses the bounding sphere, which for a globe is always in
     // view; computing it on every upload costs more than it saves.
     this.points.frustumCulled = false;
+    this.points.renderOrder = 2;
     this.scene.add(this.points);
   }
 
   resize(width: number, height: number): void {
     this.camera.aspect = width / Math.max(1, height);
     this.camera.updateProjectionMatrix();
+    this.starCamera.aspect = this.camera.aspect;
+    this.starCamera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
+    this.viewportHeight = Math.max(1, height);
     this.requestRender();
   }
 
@@ -408,13 +640,16 @@ export class GlobeRenderer {
     this.disposed = true;
     if (this.frameHandle !== null) cancelAnimationFrame(this.frameHandle);
     this.geometry?.dispose();
+    this.earth.dispose();
+    this.atmosphere.mesh.geometry.dispose();
+    this.atmosphere.material.dispose();
+    this.stars.geometry.dispose();
+    (this.stars.material as THREE.Material).dispose();
     this.pickTarget.dispose();
     this.displayMaterial.dispose();
     this.pickMaterial.dispose();
-    this.shell.geometry.dispose();
     this.graticule.geometry.dispose();
     (this.graticule.material as THREE.Material).dispose();
-    (this.shell.material as THREE.Material).dispose();
     this.renderer.dispose();
   }
 }

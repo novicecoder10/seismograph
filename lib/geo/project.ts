@@ -24,10 +24,14 @@ export function projectHypocenter(
 
   const r = Math.max(MIN_RADIUS, SCENE_RADIUS * (1 - depth / EARTH_RADIUS_KM));
 
+  // Scene axes: +X through 0N 0E, +Y through the north pole, +Z through 0N 90W.
+  // That is ECEF (X, Y, Z) mapped to (X, Z, −Y), a rotation. Until Phase 9 the
+  // third term had no minus sign, which is a reflection: the globe was drawn
+  // mirror-imaged, invisible only because it had no coastlines.
   return [
     r * Math.cos(lat) * Math.cos(lon),
     r * Math.sin(lat),
-    r * Math.cos(lat) * Math.sin(lon),
+    -r * Math.cos(lat) * Math.sin(lon),
   ];
 }
 
@@ -38,5 +42,5 @@ export function unprojectDirection(
 ): { lat: number; lon: number } {
   const r = Math.hypot(x, y, z);
   if (r === 0) return { lat: 0, lon: 0 };
-  return { lat: Math.asin(y / r) / DEG, lon: Math.atan2(z, x) / DEG };
+  return { lat: Math.asin(y / r) / DEG, lon: Math.atan2(-z, x) / DEG };
 }

@@ -1,3 +1,4 @@
+import { MAX_ALTITUDE, MIN_ALTITUDE } from "../globe/camera";
 import type { BBox, EventFilter } from "../events/types";
 import { clampRate, clampT } from "./time";
 
@@ -6,7 +7,7 @@ export interface ViewState {
   t: number;
   rate: number;
   view: "globe" | "map" | "table";
-  camera: { lon: number; lat: number; altitude: number } | null;
+  camera: { lon: number; lat: number; altitude: number; heading?: number; tilt?: number } | null;
   selectedId: string | null;
 }
 
@@ -67,10 +68,12 @@ export function encodeViewState(v: ViewState): string {
   if (v.rate !== 1) q.set("rate", String(v.rate));
   if (v.view !== "globe") q.set("view", v.view);
   if (v.camera) {
-    q.set(
-      "cam",
-      [v.camera.lon, v.camera.lat, v.camera.altitude].map((n) => n.toFixed(4)).join(","),
-    );
+    const c = v.camera;
+    // Altitude to 1e-6 Earth radii (6 m): 4 decimals was 640 m, coarser than a
+    // close view. Heading and tilt only when the view is turned or tipped.
+    const parts = [c.lon.toFixed(4), c.lat.toFixed(4), c.altitude.toFixed(6)];
+    if ((c.heading ?? 0) !== 0 || (c.tilt ?? 0) !== 0) parts.push((c.heading ?? 0).toFixed(1), (c.tilt ?? 0).toFixed(1));
+    q.set("cam", parts.join(","));
   }
   if (v.selectedId) q.set("sel", v.selectedId);
   return q.toString();
@@ -155,12 +158,14 @@ export function decodeViewState(qs: string, now: number = Date.now()): ViewState
   const camRaw = q.get("cam");
   if (camRaw) {
     const parts = camRaw.split(",").map(Number);
-    if (parts.length === 3 && parts.every((n) => Number.isFinite(n))) {
-      const [lon, lat, altitude] = parts as [number, number, number];
+    if ((parts.length === 3 || parts.length === 5) && parts.every((n) => Number.isFinite(n))) {
+      const [lon, lat, altitude, heading = 0, tilt = 0] = parts as number[];
       camera = {
-        lon: clampLon(lon),
-        lat: clampLat(lat),
-        altitude: Math.min(50, Math.max(1.05, altitude)),
+        lon: clampLon(lon!),
+        lat: clampLat(lat!),
+        altitude: Math.min(MAX_ALTITUDE, Math.max(MIN_ALTITUDE, altitude!)),
+        heading: ((heading % 360) + 360) % 360,
+        tilt: Math.min(75, Math.max(0, tilt)),
       };
     }
   }
