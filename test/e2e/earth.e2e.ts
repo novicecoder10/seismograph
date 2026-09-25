@@ -108,3 +108,24 @@ test("3D terrain puts Everest at its real height, and turns off to a smooth sphe
   await page.getByTestId("layer-terrain").click();
   await expect.poll(elevation, { timeout: 10_000 }).toBe(0);
 });
+
+test("the selection card's links navigate even while the catalogue is playing", async ({ page }) => {
+  // Playback rewrites the URL every frame (t changes); that must never cancel
+  // a link the reader just clicked.
+  await page.goto("/");
+  await page.waitForFunction(() => ((window as unknown as { __globeStats?: Stats }).__globeStats?.eventCount ?? 0) > 0, null, { timeout: 90_000 });
+  await settle(page);
+  const target = await page.evaluate(() => {
+    const t = (window as unknown as { __globeTest: { focusOn(i: number): boolean; screenPositionOf(i: number): { x: number; y: number } | null } }).__globeTest;
+    t.focusOn(0);
+    return t.screenPositionOf(0);
+  });
+  const box = (await page.locator("[data-testid=globe-canvas]").boundingBox())!;
+  await page.mouse.click(box.x + target!.x, box.y + target!.y);
+  await expect(page.getByTestId("selection-card")).toBeVisible({ timeout: 10_000 });
+  await page.getByTestId("play-toggle").click();
+  await page.waitForTimeout(1500); // playing, flying, rewriting the URL
+  await page.getByTestId("selection-event-link").click();
+  await expect(page).toHaveURL(/\/event\//, { timeout: 30_000 });
+  await expect(page.getByRole("heading").first()).toBeVisible({ timeout: 60_000 });
+});

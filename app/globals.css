@@ -89,3 +89,10 @@ button {
   .time-scrubber input[type="range"] { flex-basis: 100% !important; order: 5; }
   .time-readout { min-width: 0 !important; }
 }
+
+/* Loading screens: a calm pulse, not a spinner race. Reduced motion: static. */
+.loading-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 4px; background: var(--accent-warn); margin-right: 6px; animation: pulse 1.1s ease-in-out infinite; vertical-align: middle; }
+.loading-block { background: var(--bg-panel); border: 1px solid var(--line); animation: shimmer 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+@keyframes shimmer { 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .loading-pulse, .loading-block { animation: none; } }
