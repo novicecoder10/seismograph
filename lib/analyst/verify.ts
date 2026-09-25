@@ -29,7 +29,11 @@ function vocabulary(b: Bundle): { numerals: Set<string>; words: Set<string>; num
 export function verify(text: string, b: Bundle, allowedExtra: string[] = []): Violation[] {
   const v: Violation[] = [];
   const vocab = vocabulary(b);
-  for (const extra of allowedExtra) for (const w of extra.match(/[\p{L}'’-]+/gu) ?? []) vocab.words.add(w.toLowerCase());
+  for (const extra of allowedExtra) {
+    for (const w of extra.match(/[\p{L}'’-]+/gu) ?? []) vocab.words.add(w.toLowerCase());
+    for (const n of extra.match(NUMERAL) ?? []) vocab.numerals.add(n);
+    for (const w of extra.match(NUMBER_WORDS) ?? []) vocab.numberWords.add(w.toLowerCase());
+  }
 
   for (const n of text.match(NUMERAL) ?? []) if (!vocab.numerals.has(n)) v.push({ kind: "numeral", detail: n });
   for (const w of text.match(NUMBER_WORDS) ?? []) if (!vocab.numberWords.has(w.toLowerCase())) v.push({ kind: "number-word", detail: w });

@@ -30,3 +30,7 @@ spikes/.venv/
 next-env.d.ts
 out/
 *.tsbuildinfo
+
+# Secrets: the owner's API key lives here and must never be committed.
+.env
+.env*.local

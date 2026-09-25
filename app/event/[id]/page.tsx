@@ -70,6 +70,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <span style={{ color: "var(--text-faint)" }}>
           fifty years of earthquakes beneath this one, with the subducting slab
         </span>
+        <br />
+        <Link href={`/compare/${encodeURIComponent(event.id)}`} data-testid="compare-link" style={{ color: "var(--text-primary)", textDecoration: "underline" }}>
+          Compare with past sequences →
+        </Link>{" "}
+        <span style={{ color: "var(--text-faint)" }}>
+          which well-studied sequences this one resembles so far, and what followed in them
+        </span>
       </p>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
