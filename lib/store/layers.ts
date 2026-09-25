@@ -1,10 +1,12 @@
 import { create } from "zustand";
 
-export type LayerName = "labels" | "sunlight" | "xray" | "slabs" | "mechanisms" | "grid";
+export type LayerName = "terrain" | "labels" | "sunlight" | "xray" | "slabs" | "mechanisms" | "grid";
 
 /** Globe layers. Kept out of the URL state: they are a reading aid, not part of
  *  what a shared link is about. */
 export interface LayerState {
+  /** Real relief under the imagery. */
+  terrain: boolean;
   labels: boolean;
   sunlight: boolean;
   /** Translucent ground, hypocenters at true depth. */
@@ -16,6 +18,7 @@ export interface LayerState {
 }
 
 export const useLayerStore = create<LayerState>((set, get) => ({
+  terrain: true,
   labels: true,
   sunlight: true,
   xray: false,

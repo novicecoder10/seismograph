@@ -23,5 +23,9 @@ All free and CORS-open; nothing is proxied, cached server-side or redistributed.
 - Fallback day texture: NASA GIBS `BlueMarble_ShadedRelief_Bathymetry` (public domain), stitched in
   the browser from level-1 tiles.
 - Night lights: NASA GIBS `VIIRS_Black_Marble` 2016 (public domain), stitched from level-2 tiles.
+- Terrain: Terrain Tiles on AWS (open data; Mapzen "terrarium" encoding, zooms 0–15), compiled
+  from SRTM, GMTED2010, ETOPO1, NED and other public sources; see
+  https://github.com/tilezen/joerd/blob/master/docs/attribution.md. Heights below sea level are
+  drawn at sea level so the imagery's water stays flat.
 - Place search: Nominatim (© OpenStreetMap contributors), asked on submit only, per its usage
   policy of at most one request a second.

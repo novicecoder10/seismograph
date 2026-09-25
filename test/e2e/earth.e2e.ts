@@ -96,3 +96,15 @@ test("x-ray shows the slabs and says so", async ({ page }) => {
   await page.getByTestId("layer-xray").click();
   await expect(page.getByTestId("layer-slabs")).toHaveAttribute("aria-pressed", "false");
 });
+
+test("3D terrain puts Everest at its real height, and turns off to a smooth sphere", async ({ page }) => {
+  await page.goto("/?cam=86.9250,27.9500,1.005494,15.0,70.0");
+  await settle(page);
+  const elevation = () => page.evaluate(() => (window as unknown as { __globeTest: { elevationAt(la: number, lo: number): number } }).__globeTest.elevationAt(27.9881, 86.925));
+  // The summit is 8,849 m; the DEM at tile resolution smooths the peak a little.
+  const h = await elevation();
+  expect(h).toBeGreaterThan(7500);
+  expect(h).toBeLessThan(9000);
+  await page.getByTestId("layer-terrain").click();
+  await expect.poll(elevation, { timeout: 10_000 }).toBe(0);
+});

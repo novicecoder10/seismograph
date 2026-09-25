@@ -40,8 +40,12 @@ export default function Home() {
   useEffect(() => {
     if (!hydrated.current) return;
     const write = () => {
+      // Once a link has been followed this page is on its way out; writing its
+      // state into the URL now would clobber the navigation in flight.
+      if (window.location.pathname !== "/") return;
       const qs = useFilterStore.getState().toQueryString();
-      window.history.replaceState(null, "", qs === "" ? window.location.pathname : `?${qs}`);
+      if (`?${qs}` === window.location.search || (qs === "" && window.location.search === "")) return;
+      window.history.replaceState(window.history.state, "", qs === "" ? window.location.pathname : `?${qs}`);
     };
     write();
     const unsubFilter = useFilterStore.subscribe(write);

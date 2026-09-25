@@ -8,7 +8,7 @@ import {
 } from "./hypocenters";
 import { unprojectDirection } from "@/lib/geo/project";
 import { sunDirection } from "@/lib/geo/sun";
-import { cameraPose, clampState, DEFAULT_CAMERA, flyPath, raySphere, rotateBy, type CameraState, type V3 } from "@/lib/globe/camera";
+import { cameraPose, clampState, DEFAULT_CAMERA, EARTH_KM, flyPath, raySphere, rotateBy, type CameraState, type V3 } from "@/lib/globe/camera";
 import { EarthLayer, makeAtmosphere, makeStars } from "./earth";
 import { makeGraticule } from "./graticule";
 import { EPICENTRE_LIFT, makeDisplayMaterial, makePickMaterial } from "./materials";
@@ -184,6 +184,18 @@ export class GlobeRenderer {
   setLabels(on: boolean): void {
     this.earth.setLabels(on);
     this.requestRender();
+  }
+
+  /** Real relief (AWS Terrain Tiles) under the imagery, or a smooth sphere. */
+  setTerrain(on: boolean): void {
+    this.earth.setTerrain(on);
+    this.applyCamera();
+    this.requestRender();
+  }
+
+  /** Metres above sea level at a point, from the terrain loaded so far. */
+  elevationAt(lat: number, lon: number): number {
+    return this.earth.elevationAt(lat, lon);
   }
 
   setGrid(on: boolean): void {
@@ -386,10 +398,26 @@ export class GlobeRenderer {
     return { origin: [o.x, o.y, o.z], dir: [d.x, d.y, d.z] };
   }
 
+  /**
+   * Where a ray meets the ground: the sea-level sphere first, then the sphere
+   * through the terrain height found there, twice, which converges to within
+   * metres on any real slope.
+   */
+  private hitGround(origin: V3, dir: V3): V3 | null {
+    let hit = raySphere(origin, dir);
+    if (hit === null) return null;
+    for (let i = 0; i < 2; i++) {
+      const ll = unprojectDirection(...hit);
+      const r = 1 + this.earth.elevationAt(ll.lat, ll.lon) / 1000 / EARTH_KM;
+      hit = raySphere(origin, dir, r) ?? hit;
+    }
+    return hit;
+  }
+
   /** The ground point under a screen position, or null over space. */
   groundAt(x: number, y: number): { lat: number; lon: number } | null {
     const r = this.rayAt(x, y);
-    const hit = raySphere(r.origin, r.dir);
+    const hit = this.hitGround(r.origin, r.dir);
     return hit ? unprojectDirection(...hit) : null;
   }
 
@@ -397,7 +425,7 @@ export class GlobeRenderer {
   grab(fromX: number, fromY: number, toX: number, toY: number): void {
     this.flight = null;
     const a = this.rayAt(fromX, fromY), b = this.rayAt(toX, toY);
-    const p = raySphere(a.origin, a.dir), q = raySphere(b.origin, b.dir);
+    const p = this.hitGround(a.origin, a.dir), q = this.hitGround(b.origin, b.dir);
     if (p && q) {
       const next = rotateBy(this.cam, p, q);
       this.spin = { dLon: ((next.lon - this.cam.lon + 540) % 360) - 180, dLat: next.lat - this.cam.lat };
@@ -436,13 +464,13 @@ export class GlobeRenderer {
     this.flight = null;
     this.spin = null;
     const before = x !== undefined && y !== undefined ? this.rayAt(x, y) : null;
-    const p = before ? raySphere(before.origin, before.dir) : null;
+    const p = before ? this.hitGround(before.origin, before.dir) : null;
     const range = (this.cam.altitude - 1) * factor;
     this.cam = clampState({ ...this.cam, altitude: 1 + range });
     this.applyCamera();
     if (p && x !== undefined && y !== undefined) {
       const after = this.rayAt(x, y);
-      const q = raySphere(after.origin, after.dir);
+      const q = this.hitGround(after.origin, after.dir);
       if (q) {
         this.cam = rotateBy(this.cam, p, q);
         this.applyCamera();
@@ -477,15 +505,23 @@ export class GlobeRenderer {
     this.requestRender();
   }
 
+  /** Elevation under the camera's target, Earth radii; follows terrain as it loads. */
+  private ground = 0;
+
   private applyCamera(): void {
-    const pose = cameraPose(this.cam);
+    this.ground = this.earth.elevationAt(this.cam.lat, this.cam.lon) / 1000 / EARTH_KM;
+    const pose = cameraPose(this.cam, this.ground);
     this.camera.position.set(...pose.position);
     this.camera.up.set(...pose.up);
     this.camera.lookAt(...pose.target);
     // Near and far follow the altitude: 1.5 km above the ground and a whole
     // hemisphere away cannot share one fixed depth range.
     const dist = Math.hypot(...pose.position);
-    const height = Math.max(1e-6, dist - 1);
+    // Height above the GROUND below, not sea level: over the Himalaya a near
+    // plane set from sea level would sit inside the mountain.
+    const nadir = unprojectDirection(...pose.position);
+    const below = this.earth.elevationAt(nadir.lat, nadir.lon) / 1000 / EARTH_KM;
+    const height = Math.max(1e-6, dist - 1 - below);
     const horizon = Math.sqrt(Math.max(0, dist * dist - 1));
     this.camera.near = Math.max(2e-6, height * 0.25);
     this.camera.far = horizon + (this.xray.target > 0 || this.xray.value > 0 ? 2.2 : 0.3) + 0.05;
@@ -494,8 +530,16 @@ export class GlobeRenderer {
     this.starCamera.quaternion.copy(this.camera.quaternion);
     // The atmosphere is seen from outside; from inside it would tint the whole sky.
     this.atmosphere.material.uniforms.uStrength!.value = Math.min(1, Math.max(0, (dist - 1.03) / 0.25));
-    this.opts.onCameraChange?.(this.cam);
+    // Only real moves are news: re-seating on refined terrain changes the pose,
+    // not the view state, and each notification rewrites the page URL.
+    const c = this.cam, l = this.lastNotified;
+    if (l === null || c.lon !== l.lon || c.lat !== l.lat || c.altitude !== l.altitude || c.heading !== l.heading || c.tilt !== l.tilt) {
+      this.lastNotified = { ...c };
+      this.opts.onCameraChange?.(this.cam);
+    }
   }
+
+  private lastNotified: CameraState | null = null;
 
   /** Advances fly-to, inertia and x-ray; true while any of them needs another frame. */
   private animate(now: number): boolean {
@@ -532,6 +576,8 @@ export class GlobeRenderer {
     const t0 = performance.now();
     const animating = this.animate(t0);
     this.stats.animating = animating;
+    // Heights arrive after the camera settles: re-seat it on the refined ground.
+    if (Math.abs(this.earth.elevationAt(this.cam.lat, this.cam.lon) / 1000 / EARTH_KM - this.ground) > 1e-7) this.applyCamera();
 
     this.earth.update(this.camera, this.viewportHeight);
     this.stats.tilesDrawn = this.earth.stats.drawn;

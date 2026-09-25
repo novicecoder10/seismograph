@@ -129,6 +129,7 @@ export function GlobeCanvas({ events, t, fadeSeconds, onSelect, onCameraChange, 
     renderer.setLabels(L.labels);
     renderer.setSunlight(L.sunlight);
     renderer.setGrid(L.grid);
+    renderer.setTerrain(L.terrain);
     renderer.setXray(L.xray, false);
     setView(renderer.getCamera());
 
@@ -177,6 +178,7 @@ export function GlobeCanvas({ events, t, fadeSeconds, onSelect, onCameraChange, 
           camera: () => renderer.getCamera(),
           setCamera: (c: CameraState) => renderer.setCamera(c),
           groundAt: (x: number, y: number) => renderer.groundAt(x, y),
+          elevationAt: (lat: number, lon: number) => renderer.elevationAt(lat, lon),
         }),
       });
     }
@@ -208,6 +210,7 @@ export function GlobeCanvas({ events, t, fadeSeconds, onSelect, onCameraChange, 
   useEffect(() => rendererRef.current?.setLabels(layers.labels), [layers.labels, supported]);
   useEffect(() => rendererRef.current?.setSunlight(layers.sunlight), [layers.sunlight, supported]);
   useEffect(() => rendererRef.current?.setGrid(layers.grid), [layers.grid, supported]);
+  useEffect(() => rendererRef.current?.setTerrain(layers.terrain), [layers.terrain, supported]);
   useEffect(() => rendererRef.current?.setXray(layers.xray), [layers.xray, supported]);
 
   const mechanismsOn = layers.mechanisms;

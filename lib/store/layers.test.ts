@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { useLayerStore } from "./layers";
 
 describe("layer store", () => {
-  beforeEach(() => useLayerStore.setState({ labels: true, sunlight: true, xray: false, slabs: false, mechanisms: false, grid: false }));
+  beforeEach(() => useLayerStore.setState({ terrain: true, labels: true, sunlight: true, xray: false, slabs: false, mechanisms: false, grid: false }));
 
   it("starts as a lit, labelled, opaque planet", () => {
     expect(useLayerStore.getState()).toMatchObject({ labels: true, sunlight: true, xray: false, slabs: false });

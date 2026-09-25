@@ -50,6 +50,8 @@ export function subRect(inner: TileKey, outer: TileKey): { offset: [number, numb
 type V3 = [number, number, number];
 const dot = (a: V3, b: V3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const DEG = Math.PI / 180;
+/** The highest ground on Earth plus margin, in Earth radii. */
+const TERRAIN_PAD = 9.5 / 6371;
 
 /** The point of the tile nearest the camera's nadir: the tile's best chance of being seen. */
 function nearestPoint(b: TileBounds, nadir: { lat: number; lon: number }): V3 {
@@ -101,10 +103,12 @@ export function selectTiles(o: SelectOptions): Selected[] {
     const p = nearestPoint(b, nadir);
     // Horizon culling: a point p on the unit sphere is visible from C iff p·C > 1.
     // The margin keeps tiles straddling the horizon.
-    if (dot(p, C) < 1 - 1e-3) return;
+    if (dot(p, C) < 1 - 1e-3 - 2 * TERRAIN_PAD * Math.hypot(...C)) return;
     if (o.inFrustum && k.z > 1) {
       const c = projectHypocenter((b.north + b.south) / 2, (b.east + b.west) / 2, 0);
-      const radius = (Math.max(b.north - b.south, (b.east - b.west) * Math.cos(Math.min(Math.abs(b.north), Math.abs(b.south)) * DEG)) * DEG) * 0.75;
+      // Padded by the highest terrain (Everest, 8.8 km): raised ground reaches
+      // into the view from a tile whose sea-level sphere is just outside it.
+      const radius = (Math.max(b.north - b.south, (b.east - b.west) * Math.cos(Math.min(Math.abs(b.north), Math.abs(b.south)) * DEG)) * DEG) * 0.75 + TERRAIN_PAD;
       if (!o.inFrustum(c, radius)) return;
     }
     const distance = Math.max(1e-6, Math.hypot(C[0] - p[0], C[1] - p[1], C[2] - p[2]));

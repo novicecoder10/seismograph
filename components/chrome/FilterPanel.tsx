@@ -14,6 +14,7 @@ const RANGES = [
 const VIEWS = ["globe", "table"] as const;
 
 const LAYERS: [LayerName, string, string][] = [
+  ["terrain", "3D terrain", "Real mountains and valleys (Terrain Tiles on AWS); tilt with right-drag to see them"],
   ["labels", "labels", "Place names and borders (OpenStreetMap)"],
   ["sunlight", "sunlight", "Real day and night at the time on the scrubber, with city lights"],
   ["xray", "x-ray", "See through the ground: every earthquake sinks to its true depth"],

@@ -74,24 +74,27 @@ export interface Pose {
   up: V3;
 }
 
-export function cameraPose(s: CameraState): Pose {
+/** `ground`: the target's elevation in Earth radii, so the camera orbits the
+ *  mountain top it is looking at rather than a point under it at sea level. */
+export function cameraPose(s: CameraState, ground = 0): Pose {
   const f = localFrame(s.lat, s.lon);
   const h = s.heading * DEG, t = s.tilt * DEG;
   const forward = add(scale(f.north, Math.cos(h)), scale(f.east, Math.sin(h)));
   const range = s.altitude - 1;
   const back = add(scale(f.up, Math.cos(t)), scale(forward, -Math.sin(t)));
+  const target = scale(f.up, 1 + ground);
   return {
-    position: add(f.up, scale(back, range)),
-    target: f.up,
+    position: add(target, scale(back, range)),
+    target,
     up: add(scale(forward, Math.cos(t)), scale(f.up, Math.sin(t))),
   };
 }
 
-/** First intersection of a ray with the unit sphere, or null. */
-export function raySphere(origin: V3, dir: V3): V3 | null {
+/** First intersection of a ray with a sphere of `radius` (default the sea-level sphere), or null. */
+export function raySphere(origin: V3, dir: V3, radius = 1): V3 | null {
   const d = norm(dir);
   const b = dot(origin, d);
-  const c = dot(origin, origin) - 1;
+  const c = dot(origin, origin) - radius * radius;
   const disc = b * b - c;
   if (disc < 0) return null;
   const tHit = -b - Math.sqrt(disc);
