@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { ChartDownload } from "./ChartDownload";
 import { CHART, VIEW } from "./theme";
 
 export interface HoverRow {
@@ -74,7 +75,7 @@ export function HoverChart({ testId, ariaLabel, points, children, nearestBy = "x
       >
         {children}
         {p && (
-          <g pointerEvents="none">
+          <g pointerEvents="none" data-export="skip">
             {nearestBy === "x" && <line x1={p.x} x2={p.x} y1={VIEW.top} y2={height - VIEW.bottom} stroke={CHART.textMuted} strokeWidth={1} />}
             <circle cx={p.x} cy={p.y} r={5} fill={CHART.observed} stroke={CHART.surface} strokeWidth={2} />
           </g>
@@ -106,6 +107,7 @@ export function HoverChart({ testId, ariaLabel, points, children, nearestBy = "x
           ))}
         </div>
       )}
+      <ChartDownload svgRef={svgRef} name={testId} />
     </div>
   );
 }

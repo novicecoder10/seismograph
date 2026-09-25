@@ -30,6 +30,12 @@ export function Header() {
       <Link href="/scoreboard" data-testid="scoreboard-link" style={{ marginLeft: "auto", fontSize: 12, color: "var(--text-dim)" }}>
         forecast scoreboard
       </Link>
+      <Link href="/watchlist" data-testid="watchlist-link" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+        watchlist
+      </Link>
+      <Link href="/api" data-testid="api-link" style={{ fontSize: 12, color: "var(--text-dim)" }}>
+        API
+      </Link>
     </header>
   );
 }

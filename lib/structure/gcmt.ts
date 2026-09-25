@@ -45,3 +45,11 @@ export async function fetchMechanisms(fromMs: number, toMs: number, fetchText: (
   const all = [...monthly.flatMap((t) => (t ? parseNdk(t) : [])), ...(quick ? parseNdk(quick) : [])];
   return dedupe(all.filter((m) => m.time >= fromMs && m.time <= toMs)).sort((a, b) => a.time - b.time);
 }
+
+/** Server-side NDK fetch with Next's data cache: a 404 is a month not yet published. */
+export async function cachedFetchText(u: string, revalidate: number): Promise<string | null> {
+  const res = await fetch(u, { next: { revalidate } } as RequestInit);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`GCMT ${res.status}`);
+  return res.text();
+}

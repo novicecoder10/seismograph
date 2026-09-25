@@ -9,6 +9,7 @@ export interface StatusBannerProps {
   matchedCount: number | null;
   isError: boolean;
   isFetching: boolean;
+  children?: React.ReactNode;
 }
 
 /**
@@ -23,6 +24,7 @@ export function StatusBanner({
   matchedCount,
   isError,
   isFetching,
+  children,
 }: StatusBannerProps) {
   const truncated = matchedCount !== null && matchedCount > eventCount;
   return (
@@ -61,6 +63,7 @@ export function StatusBanner({
       {repository !== null && <span>source: {repository}</span>}
       {fetchedAt !== null && <span>confirmed {formatUtc(fetchedAt)}</span>}
       {isFetching && <span data-testid="status-fetching">updating…</span>}
+      {children}
       <span style={{ marginLeft: "auto", color: "var(--text-faint)" }}>
         Data: USGS (public domain), EMSC (CC BY 4.0). Research and hobby use.
       </span>

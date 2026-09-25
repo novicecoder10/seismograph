@@ -77,6 +77,15 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         <span style={{ color: "var(--text-faint)" }}>
           which well-studied sequences this one resembles so far, and what followed in them
         </span>
+        <br />
+        <Link
+          href={`/watchlist?lat=${event.lat.toFixed(3)}&lon=${event.lon.toFixed(3)}&name=${encodeURIComponent(event.place)}`}
+          data-testid="watch-link"
+          style={{ color: "var(--text-primary)", textDecoration: "underline" }}
+        >
+          Watch this area →
+        </Link>{" "}
+        <span style={{ color: "var(--text-faint)" }}>a digest of what happens here, kept in your browser</span>
       </p>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />

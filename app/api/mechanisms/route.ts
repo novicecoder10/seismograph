@@ -1,4 +1,4 @@
-import { fetchMechanisms } from "@/lib/structure/gcmt";
+import { cachedFetchText, fetchMechanisms } from "@/lib/structure/gcmt";
 
 /**
  * Global CMT focal mechanisms as JSON. GCMT serves NDK files without CORS
@@ -13,12 +13,7 @@ export async function GET(req: Request) {
     return Response.json({ error: "from and to must be epoch milliseconds, from < to" }, { status: 400 });
   }
   try {
-    const mechanisms = await fetchMechanisms(from, to, async (u, revalidate) => {
-      const res = await fetch(u, { next: { revalidate } } as RequestInit);
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error(`GCMT ${res.status}`);
-      return res.text();
-    });
+    const mechanisms = await fetchMechanisms(from, to, cachedFetchText);
     return Response.json(
       { source: "Global CMT Project (globalcmt.org)", mechanisms },
       { headers: { "Cache-Control": "public, max-age=3600" } },

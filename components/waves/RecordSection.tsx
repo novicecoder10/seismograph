@@ -5,6 +5,7 @@ import { linearScale } from "@/lib/charts/scales";
 import { bandpass, detrend, taper } from "@/lib/seismic/dsp";
 import type { SectionStation, ThreeComponent } from "@/lib/seismic/network";
 import { arrivals, phaseRow, type TravelTimeTable } from "@/lib/seismic/traveltime";
+import { ChartDownload } from "../charts/ChartDownload";
 import { DataTable } from "../charts/DataTable";
 import { Frame } from "../charts/Frame";
 import { Legend } from "../charts/Legend";
@@ -130,9 +131,10 @@ export function RecordSection(p: RecordSectionProps) {
               </text>
             </g>
           ))}
-          <line x1={x(p.clockS)} x2={x(p.clockS)} y1={M.top} y2={H - M.bottom} stroke={CHART.textPrimary} strokeWidth={1} strokeDasharray="3 3" />
+          <line x1={x(p.clockS)} x2={x(p.clockS)} y1={M.top} y2={H - M.bottom} stroke={CHART.textPrimary} strokeWidth={1} strokeDasharray="3 3" data-export="skip" />
         </Frame>
       </svg>
+      <ChartDownload svgRef={svgRef} name="record-section" />
       <p style={{ fontSize: 11, color: "var(--text-dim)", margin: "4px 0 0" }}>
         Each trace is scaled to its own maximum and filtered {band.label}; instrument response is not removed, so
         amplitudes are not comparable between stations. Coloured curves are iasp91 predictions, not picks.

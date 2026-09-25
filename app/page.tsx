@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GlobeCanvas } from "@/components/globe/GlobeCanvas";
+import { ExportMenu } from "@/components/chrome/ExportMenu";
 import { FilterPanel } from "@/components/chrome/FilterPanel";
 import { Header } from "@/components/chrome/Header";
 import { StatusBanner } from "@/components/chrome/StatusBanner";
@@ -86,7 +87,9 @@ export default function Home() {
         matchedCount={query.data?.total ?? null}
         isError={query.isError}
         isFetching={query.isFetching}
-      />
+      >
+        <ExportMenu events={events} filter={filter} />
+      </StatusBanner>
       <div style={{ flex: 1, minHeight: 0 }}>
         {view === "table" ? (
           <EventTable events={events} onSelect={(e) => onSelect(e)} />
