@@ -52,7 +52,7 @@ describe("formats", () => {
   it("QuakeML resource IDs match the schema's ResourceReference pattern", () => {
     // From QuakeML-BED-1.2.xsd; validated once with lxml against the official schema.
     const pattern = /^(smi|quakeml):[\w\d][\w\d\-.*()_~']{2,}\/[\w\d\-.*()_~'][\w\d\-.*()+?_~'=,;#/&]*$/;
-    const ids = [...toQuakeMl([...events, { ...events[0]!, id: "emsc:2026 0901+x" }]).matchAll(/publicID="([^"]+)"|ID>([^<]+)</g)].map((m) => m[1] ?? m[2]!);
+    const ids = [...toQuakeMl([...events, { ...events[0]!, id: "emsc:2026 0901+x" }]).matchAll(/publicID="([^"]+)"|<(?:originID|preferredOriginID|preferredMagnitudeID)>([^<]+)</g)].map((m) => m[1] ?? m[2]!);
     expect(ids.length).toBeGreaterThan(10);
     for (const id of ids) expect(id, id).toMatch(pattern);
   });
