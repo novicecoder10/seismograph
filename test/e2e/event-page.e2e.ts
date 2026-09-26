@@ -80,3 +80,16 @@ test("an event near a citizen seismometer shows its waveform and can play it", a
   await page.click("[data-testid=waveform-play]");
   // Playing must not throw: an AudioContext failure would surface as a page error.
 });
+
+test("an event page explains the earthquake in plain words and answers questions about it", async ({ page }) => {
+  await page.goto(`/event/${encodeURIComponent(RICH)}`);
+  // The template is built on the server, so it is in the page at once.
+  await expect(page.getByTestId("event-plain")).toContainText(/M 6\.\d earthquake/, { timeout: 60_000 });
+  await expect(page.getByTestId("event-prose-source")).toContainText("template");
+  const prose = ((await page.getByTestId("event-prose").textContent()) ?? "").toLowerCase();
+  for (const banned of [" will ", "predict", "likely", "safe", "chance"]) expect(prose).not.toContain(banned);
+  // Questions about the future are answered without a model, and point to the forecast.
+  await page.getByTestId("ask-input").fill("Will there be a bigger one?");
+  await page.getByRole("button", { name: "Ask" }).click();
+  await expect(page.getByTestId("ask-routed")).toContainText("does not say what will happen");
+});

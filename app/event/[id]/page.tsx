@@ -5,6 +5,10 @@ import { createUsgsProductRepository } from "@/lib/repositories/products";
 import { createUsgsFdsnRepository } from "@/lib/repositories/usgs-fdsn";
 import { Beachball } from "@/components/structure/Beachball";
 import { WaveformPanelLazy } from "@/components/waveform/WaveformPanelLazy";
+import { Ask } from "@/components/analyst/Ask";
+import { Prose } from "@/components/analyst/Prose";
+import { eventEvidence, eventTemplate } from "@/lib/analyst/facts";
+import { regimeAt, type RegimeCode } from "@/lib/oaf/regimes";
 
 const repo = createUsgsFdsnRepository();
 const products = createUsgsProductRepository();
@@ -47,6 +51,11 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         {formatUtc(event.time)} · {formatDepth(event.depthKm)} · {event.lat.toFixed(4)}°,{" "}
         {event.lon.toFixed(4)}° · {event.source.toUpperCase()} · {event.status}
       </p>
+
+      <section data-testid="event-plain" style={{ border: "1px solid var(--line)", background: "var(--bg-panel)", padding: "12px 14px", margin: "0 0 18px", maxWidth: 760 }}>
+        <h3 style={{ fontFamily: "var(--font-display)", fontSize: 13, margin: "0 0 8px" }}>In plain words</h3>
+        <Prose eventId={event.id} kind="event" template={eventTemplate(eventEvidence(event, regimeOf(event.lat, event.lon)))} testId="event-prose" />
+      </section>
 
       <p style={{ margin: "0 0 18px", fontSize: 12 }}>
         <Link href={`/sequence/${encodeURIComponent(event.id)}`} data-testid="sequence-link" style={{ color: "var(--text-primary)", textDecoration: "underline" }}>
@@ -93,6 +102,10 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
         </Link>{" "}
         <span style={{ color: "var(--text-faint)" }}>a digest of what happens here, kept in your browser</span>
       </p>
+
+      <div style={{ maxWidth: 760, margin: "0 0 18px" }}>
+        <Ask eventId={event.id} kind="event" title="Ask about this earthquake" placeholder="e.g. Why was it so deep? What does mww mean?" scope="the facts about this earthquake and a short glossary" />
+      </div>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
 
@@ -318,4 +331,13 @@ function Shell({ children }: { children: React.ReactNode }) {
       <div style={{ marginTop: 18 }}>{children}</div>
     </main>
   );
+}
+
+/** The tectonic setting is a reading aid: a missing table must not cost the page. */
+function regimeOf(lat: number, lon: number): RegimeCode | null {
+  try {
+    return regimeAt(lat, lon).code;
+  } catch {
+    return null;
+  }
 }

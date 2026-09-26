@@ -145,7 +145,7 @@ export function buildBundle(target: TargetSequence, library: LibrarySequence[], 
 }
 
 /** Every string in the bundle, for the verifier's whitelist and vocabulary. */
-export function bundleStrings(b: Bundle): string[] {
+export function bundleStrings(b: unknown): string[] {
   const out: string[] = [];
   const walk = (v: unknown) => {
     if (typeof v === "string") out.push(v);

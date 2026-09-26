@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { canonical } from "../ledger/chain";
 import type { Bundle } from "./bundle";
 import { renderTemplate } from "./template";
-import { verify, type Violation } from "./verify";
+import { verify, type Evidence, type Violation } from "./verify";
 
 /** Fixed definitions the model may quote when explaining; they are verified like the bundle. */
 export const GLOSSARY = [
@@ -33,6 +33,25 @@ export const ANSWER_PROMPT = `You answer a reader's question about an earthquake
 The same software-checked rules apply: only numbers and names from the bundle or glossary, copied exactly; no statement about what will, could, may or might happen; no reassurance; no safety advice; no self-description. If the bundle does not answer the question, say that the comparison does not cover it.
 Reply with JSON only: {"answer": "..."}`;
 
+export const EVENT_PROMPT = `You rewrite a short, factual description of one earthquake for a general reader who is not a scientist.
+
+You are given an EVIDENCE BUNDLE, a GLOSSARY and a DRAFT written from the bundle. Rewrite the draft in plain, clear language, in at most two short paragraphs. You may briefly explain a technical term using the glossary.
+
+Rules that are checked by software, and any violation discards your answer:
+- Use only numbers, magnitudes, dates, times and place names that appear in the bundle or glossary, copied exactly. Do not compute, round, convert or spell out numbers.
+- Say nothing about what will, could, may or might happen next. Do not use: will, could, might, may, should, likely, expect, chance, odds, risk, safe, future, forecast, predict, danger, tsunami.
+- Do not reassure and do not alarm: stay neutral and factual.
+- Give no advice about safety or what anyone should do.
+- Do not describe yourself, and do not present yourself as an authority.
+
+Reply with JSON only: {"paragraphs": ["...", "..."]}`;
+
+export const SEQUENCE_PROMPT = EVENT_PROMPT.replace("description of one earthquake", "description of an earthquake sequence and its statistics").replace("in at most two short paragraphs", "in at most three short paragraphs, keeping every statistic and its uncertainty");
+
+export const EVENT_ANSWER_PROMPT = `You answer a reader's question about one earthquake, or its aftershock sequence, using ONLY the EVIDENCE BUNDLE and GLOSSARY given.
+Rules checked by software: only numbers and names from the bundle or glossary, copied exactly; no statement about what will, could, may or might happen; no reassurance and no alarm; no safety advice; no self-description. If the bundle and glossary do not answer the question, say that the available facts do not cover it. Answer in at most four sentences.
+Reply with JSON only: {"answer": "..."}`;
+
 export interface Generated {
   paragraphs: string[];
   mode: "model" | "template";
@@ -54,12 +73,23 @@ function parseJson<T>(text: string): T | null {
 export async function polish(bundle: Bundle, call: ModelCall): Promise<Generated> {
   const draft = renderTemplate(bundle);
   if (bundle.limited) return { paragraphs: draft, mode: "template", reason: "limited", violations: [] };
+  return rewrite(bundle, draft, SYSTEM_PROMPT, [], call);
+}
+
+/**
+ * The one rewrite loop every page uses: the model gets the evidence and the
+ * template's draft; its paragraphs are shown only if every one passes the
+ * verifier, with one retry told exactly what failed. Otherwise the draft stands.
+ */
+export async function rewrite(evidence: Evidence, draft: string[], prompt: string, glossary: string[], call: ModelCall): Promise<Generated> {
+  const bundle = evidence;
   let feedback = "";
   let last: Violation[] = [];
   for (let attempt = 0; attempt < 2; attempt++) {
     let out: { paragraphs?: unknown } | null = null;
     try {
-      out = parseJson(await call(SYSTEM_PROMPT, `EVIDENCE BUNDLE:\n${JSON.stringify(bundle, null, 1)}\n\nDRAFT:\n${draft.join("\n\n")}${feedback}`));
+      const gl = glossary.length ? `\n\nGLOSSARY:\n${glossary.join("\n")}` : "";
+      out = parseJson(await call(prompt, `EVIDENCE BUNDLE:\n${JSON.stringify(bundle, null, 1)}${gl}\n\nDRAFT:\n${draft.join("\n\n")}${feedback}`));
     } catch (e) {
       return { paragraphs: draft, mode: "template", reason: `model error: ${e instanceof Error ? e.message : String(e)}`, violations: [] };
     }
@@ -67,7 +97,7 @@ export async function polish(bundle: Bundle, call: ModelCall): Promise<Generated
     if (paras.length === 0) {
       last = [{ kind: "forbidden", detail: "no paragraphs in reply" }];
     } else {
-      last = paras.flatMap((p) => verify(p, bundle));
+      last = paras.flatMap((p) => verify(p, bundle, glossary));
       if (last.length === 0) return { paragraphs: paras, mode: "model", reason: null, violations: [] };
     }
     feedback = `\n\nYOUR PREVIOUS ANSWER WAS REJECTED FOR: ${last.map((v) => `${v.kind} "${v.detail}"`).join("; ")}. Fix these and nothing else.`;
@@ -75,20 +105,20 @@ export async function polish(bundle: Bundle, call: ModelCall): Promise<Generated
   return { paragraphs: draft, mode: "template", reason: "the rewrite failed verification twice", violations: last };
 }
 
-export async function answer(bundle: Bundle, question: string, call: ModelCall): Promise<{ text: string; mode: "model" | "none"; violations: Violation[] }> {
+export async function answer(bundle: Evidence, question: string, call: ModelCall, glossary: string[] = GLOSSARY, prompt: string = ANSWER_PROMPT): Promise<{ text: string; mode: "model" | "none"; violations: Violation[] }> {
   let feedback = "";
   let last: Violation[] = [];
   for (let attempt = 0; attempt < 2; attempt++) {
-    const out = parseJson<{ answer?: unknown }>(await call(ANSWER_PROMPT, `EVIDENCE BUNDLE:\n${JSON.stringify(bundle, null, 1)}\n\nGLOSSARY:\n${GLOSSARY.join("\n")}\n\nQUESTION: ${question.slice(0, 500)}${feedback}`));
+    const out = parseJson<{ answer?: unknown }>(await call(prompt, `EVIDENCE BUNDLE:\n${JSON.stringify(bundle, null, 1)}\n\nGLOSSARY:\n${glossary.join("\n")}\n\nQUESTION: ${question.slice(0, 500)}${feedback}`));
     const text = typeof out?.answer === "string" ? out.answer.trim() : "";
-    last = text ? verify(text, bundle, GLOSSARY) : [{ kind: "forbidden", detail: "empty answer" }];
+    last = text ? verify(text, bundle, glossary) : [{ kind: "forbidden", detail: "empty answer" }];
     if (text && last.length === 0) return { text, mode: "model", violations: [] };
     feedback = `\n\nYOUR PREVIOUS ANSWER WAS REJECTED FOR: ${last.map((v) => `${v.kind} "${v.detail}"`).join("; ")}.`;
   }
   return { text: "", mode: "none", violations: last };
 }
 
-export function bundleHash(b: Bundle): string {
+export function bundleHash(b: Evidence): string {
   return createHash("sha256").update(canonical(b)).digest("hex").slice(0, 24);
 }
 

@@ -82,6 +82,9 @@ test("clicking an earthquake flies to it and opens its card, without leaving the
   await expect(page.getByTestId("selection-card")).toBeVisible({ timeout: 10_000 });
   await expect(page.getByTestId("selection-event-link")).toHaveAttribute("href", /^\/event\//);
   await expect(page).toHaveURL(/sel=/);
+  // The plain-words summary appears at once from the template (no key in tests).
+  await expect(page.getByTestId("card-prose")).toContainText("earthquake", { timeout: 15_000 });
+  await expect(page.getByTestId("card-prose-source")).toContainText("template");
   expect(page.url()).not.toContain("/event/");
   await page.getByTestId("selection-close").click();
   await expect(page.getByTestId("selection-card")).toHaveCount(0);

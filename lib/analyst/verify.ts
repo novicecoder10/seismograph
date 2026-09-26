@@ -1,4 +1,8 @@
 import { bundleStrings, type Bundle } from "./bundle";
+import type { EventEvidence, SequenceEvidence } from "./facts";
+
+/** Anything the plain-language layer may be given to rewrite or answer from. */
+export type Evidence = Bundle | EventEvidence | SequenceEvidence;
 
 /**
  * The verifier (spec §6). Architecture, not instruction: anything the model
@@ -17,7 +21,7 @@ const FORBIDDEN = /\b(will|won't|shall|going to|expect|expects|expected|expectin
 const SENTENCE_START_OK = new Set(["the", "it", "its", "in", "at", "of", "over", "by", "after", "among", "this", "that", "these", "those", "there", "both", "each", "all", "only", "like", "unlike", "compared", "here", "a", "an", "and", "but", "so", "for", "with", "during", "from", "on", "to", "measured", "counting", "at", "none", "no", "since", "within", "as", "comparisons"]);
 const ALWAYS_OK = new Set(["M", "USGS", "ComCat", "Båth", "Reasenberg", "Jones", "Omori", "UTC", "I"]);
 
-function vocabulary(b: Bundle): { numerals: Set<string>; words: Set<string>; numberWords: Set<string> } {
+function vocabulary(b: Evidence): { numerals: Set<string>; words: Set<string>; numberWords: Set<string> } {
   const text = bundleStrings(b).join(" \n ");
   return {
     numerals: new Set(text.match(NUMERAL) ?? []),
@@ -26,7 +30,7 @@ function vocabulary(b: Bundle): { numerals: Set<string>; words: Set<string>; num
   };
 }
 
-export function verify(text: string, b: Bundle, allowedExtra: string[] = []): Violation[] {
+export function verify(text: string, b: Evidence, allowedExtra: string[] = []): Violation[] {
   const v: Violation[] = [];
   const vocab = vocabulary(b);
   for (const extra of allowedExtra) {
@@ -53,7 +57,8 @@ export function verify(text: string, b: Bundle, allowedExtra: string[] = []): Vi
   }
 
   // A comparison with a named past sequence must point the way the bundle says.
-  for (const c of [...b.most, ...b.least]) {
+  const comparisons = "most" in b ? [...b.most, ...b.least] : [];
+  for (const c of comparisons) {
     for (const sentence of text.split(/(?<=[.!?])\s+/)) {
       if (!sentence.includes(c.name)) continue;
       for (const phrase of ["more productive than", "less productive than", "about as productive as"] as const) {
@@ -79,7 +84,7 @@ export function classify(question: string): Intent {
 
 export const ROUTED_REPLY: Record<Exclude<Intent, "explain">, string> = {
   prediction:
-    "This page compares the sequence with past ones; it does not say what will happen next. The aftershock forecast page gives probabilities, with their uncertainty, computed by the method the U.S. Geological Survey uses.",
+    "The explainer describes what has happened; it does not say what will happen next. The aftershock forecast page gives probabilities, with their uncertainty, computed by the method the U.S. Geological Survey uses.",
   safety:
     "For anything about safety, follow your local civil-protection or emergency-management authority, and for tsunami warnings, your national tsunami warning centre. This page cannot advise on safety.",
 };

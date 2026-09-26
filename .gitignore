@@ -36,3 +36,4 @@ out/
 .env*.local
 scratch/
 /.next-dev/
+/.cache/

@@ -13,6 +13,9 @@ test("the Ridgecrest sequence matches the published statistics, with uncertainti
   await page.goto(`/sequence/${encodeURIComponent(RIDGECREST)}`, { timeout: 150_000 });
   await expect(page.locator("h2")).toContainText(/M\s7\.1/, { timeout: 150_000 });
   await expect(page.getByTestId("classification")).toContainText(/mainshock-aftershock/i);
+  await expect(page.getByTestId("sequence-plain")).toContainText(/the catalogue records \d+ earthquakes/);
+  await expect(page.getByTestId("sequence-prose-source")).toContainText("template");
+  await expect(page.getByTestId("ask-input")).toBeVisible();
 
   const b = (await page.getByTestId("stat-b-aki-utsu").textContent()) ?? "";
   const bm = b.match(/b = (\d\.\d\d) ± (\d\.\d\d)/);

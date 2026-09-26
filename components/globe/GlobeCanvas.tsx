@@ -14,6 +14,7 @@ import { attachControls } from "./controls";
 import { IMAGERY_ATTRIBUTION } from "./earth";
 import { GlobeRenderer } from "./GlobeRenderer";
 import { PlaceSearch } from "./PlaceSearch";
+import { Prose } from "../analyst/Prose";
 
 function webglAvailable(): boolean {
   try {
@@ -406,6 +407,9 @@ function SelectionCard({ event, onClose }: { event: Event; onClose(): void }) {
       </div>
       <div>{event.place}</div>
       <div style={{ color: "#b8c1c8" }}>{formatUtc(event.time)} · {formatDepth(event.depthKm)}</div>
+      <div style={{ marginTop: 10, paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.12)", maxHeight: 190, overflowY: "auto" }}>
+        <Prose key={event.id} eventId={event.id} kind="event" compact testId="card-prose" />
+      </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", marginTop: 10 }}>
         <Link prefetch={true} href={`/event/${id}`} style={link} data-testid="selection-event-link">event page</Link>
         <Link prefetch={true} href={`/sequence/${id}`} style={link}>aftershock sequence</Link>
