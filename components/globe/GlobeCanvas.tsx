@@ -386,6 +386,10 @@ function HoverTooltip({ event, x, y }: Hover) {
 
 function SelectionCard({ event, onClose }: { event: Event; onClose(): void }) {
   const id = encodeURIComponent(event.id);
+  // prefetch={true}: the full page for each link is fetched as soon as the card
+  // is on screen (Next otherwise prefetches dynamic routes only up to their
+  // loading screen). Each first visit waits 0.5-3 s on USGS; by the time the
+  // reader has read the card and picked a link, the page is usually ready.
   const link: React.CSSProperties = { color: "#e7ebee", textDecoration: "underline", textUnderlineOffset: 3 };
   return (
     <div
@@ -403,12 +407,12 @@ function SelectionCard({ event, onClose }: { event: Event; onClose(): void }) {
       <div>{event.place}</div>
       <div style={{ color: "#b8c1c8" }}>{formatUtc(event.time)} · {formatDepth(event.depthKm)}</div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", marginTop: 10 }}>
-        <Link href={`/event/${id}`} style={link} data-testid="selection-event-link">event page</Link>
-        <Link href={`/sequence/${id}`} style={link}>aftershock sequence</Link>
-        <Link href={`/forecast/${id}`} style={link}>forecast</Link>
-        <Link href={`/waves/${id}`} style={link}>seismic waves</Link>
-        <Link href={`/section/${id}`} style={link}>cross-section</Link>
-        <Link href={`/compare/${id}`} style={link}>past sequences</Link>
+        <Link prefetch={true} href={`/event/${id}`} style={link} data-testid="selection-event-link">event page</Link>
+        <Link prefetch={true} href={`/sequence/${id}`} style={link}>aftershock sequence</Link>
+        <Link prefetch={true} href={`/forecast/${id}`} style={link}>forecast</Link>
+        <Link prefetch={true} href={`/waves/${id}`} style={link}>seismic waves</Link>
+        <Link prefetch={true} href={`/section/${id}`} style={link}>cross-section</Link>
+        <Link prefetch={true} href={`/compare/${id}`} style={link}>past sequences</Link>
       </div>
     </div>
   );

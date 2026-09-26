@@ -16,7 +16,13 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const decoded = decodeURIComponent(id);
 
-  const event = await repo.byId(decoded).catch(() => null);
+  // The product tree needs only the id, which the URL already has: fetch it
+  // alongside the event rather than after it (each USGS call is 1-2 s cold).
+  const [source, sourceId] = decoded.split(":", 2);
+  const [event, prefetched] = await Promise.all([
+    repo.byId(decoded).catch(() => null),
+    source === "usgs" && sourceId ? products.byEvent(sourceId).catch(() => null) : Promise.resolve(null),
+  ]);
   if (event === null) {
     return (
       <Shell>
@@ -28,7 +34,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  const tree: EventProducts | null = await products.byEvent(event.sourceId);
+  const tree: EventProducts | null = prefetched ?? (sourceId === event.sourceId ? null : await products.byEvent(event.sourceId));
   const productsError = products.lastError();
 
   return (
