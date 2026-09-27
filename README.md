@@ -64,6 +64,32 @@ running cost.
   </tr>
 </table>
 
+## Plain-language explanations
+
+Event, sequence and comparison pages open with a few paragraphs saying what happened in plain
+words, and take questions about it. The text is always written first from a fixed template, from
+the numbers on the page, and appears at once; with no language-model key configured, that is the
+whole feature.
+
+With a key, a language model may rewrite the template into more natural prose. The rewrite
+replaces the template only if a verifier passes it. The verifier checks that:
+- every number appears in the page's own evidence;
+- every name appears in it too;
+- no direction is changed;
+- no construction implies a prediction.
+
+A failed rewrite is retried once, then the template stays. Questions about prediction or
+personal safety are answered by a fixed reply before any model is asked.
+
+- **Providers**, tried in order: OpenRouter's free models (NVIDIA Nemotron), then Google Gemini's
+  free tier, then Anthropic, which is paid and used only if its key is set.
+- **Cost and privacy.** Only public earthquake statistics are ever sent. Verified rewrites are
+  cached by the hash of their evidence, and a spend guard caps model calls per hour.
+- **Speed.** Free endpoints are slow and often busy, so a rewrite can take a minute or two. The
+  page shows the template meanwhile.
+
+Each page marks which it is showing: the template, or a verified rewrite.
+
 ## What it does not do
 
 **It makes no forward-looking claim of any kind.** Deterministic earthquake prediction is not
@@ -79,10 +105,20 @@ npm install
 npm run dev
 ```
 
-**No credentials are needed.** Every data source is public and keyless. The plain-words
-explanations are written from a fixed template; a language-model key in `.env.local` (see
-`.env.example`) is optional, only rewrites the template, and every rewrite is checked against
-the numbers before it is shown.
+**No credentials are needed.** Every data source is public and keyless. Language-model keys
+for the plain-language rewrites are optional; put them in `.env.local`, using `.env.example`
+as the guide.
+
+Or run the published container image:
+
+```bash
+docker run -p 3000:3000 ghcr.io/novicecoder10/seismograph
+# with language-model keys:
+docker run -p 3000:3000 --env-file .env.local ghcr.io/novicecoder10/seismograph
+```
+
+The image's scoreboard is a snapshot of the ledger at release; the live ledger is in this
+repository.
 
 ```bash
 npm test               # unit and component tests

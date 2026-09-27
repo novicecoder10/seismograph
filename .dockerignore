@@ -1,0 +1,12 @@
+node_modules
+.next
+.next-dev
+.next-check
+.cache
+.env*
+!.env.example
+scratch
+spikes
+test-results
+docs
+.git

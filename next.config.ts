@@ -7,6 +7,9 @@ const config: NextConfig = {
   // running site then 400s on every chunk a navigation needs, so links on an
   // already-loaded page silently stop working. `npm run dev` uses .next-dev.
   distDir: process.env.NEXT_DIST_DIR ?? ".next",
+  // The container image (Dockerfile) runs Next's self-contained server; `next
+  // start` does not support that output, so it is opt-in.
+  ...(process.env.NEXT_OUTPUT === "standalone" ? { output: "standalone" as const } : {}),
   typescript: { ignoreBuildErrors: false },
   // oxlint runs as its own script; next lint would need a second config.
   eslint: { ignoreDuringBuilds: true },
