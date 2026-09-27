@@ -1,0 +1,269 @@
+{
+ "batchcomplete": true,
+ "query": {
+  "pages": [
+   {
+    "pageid": 80217094,
+    "ns": 6,
+    "title": "File:2019 Ridgecrest earthquakes.svg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 894506,
+      "width": 988,
+      "height": 615,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/2019_Ridgecrest_earthquakes.svg/500px-2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 311,
+      "responsiveUrls": {
+       "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/2019_Ridgecrest_earthquakes.svg/1280px-2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/2019_Ridgecrest_earthquakes.svg/500px-2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 311,
+       "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/2019_Ridgecrest_earthquakes.svg/1280px-2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/34/2019_Ridgecrest_earthquakes.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:2019_Ridgecrest_earthquakes.svg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=80217094",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "2019 Ridgecrest earthquakes",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2019-07-06",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Phoenix7777\" title=\"User:Phoenix7777\">Phoenix7777</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/svg+xml"
+     }
+    ]
+   },
+   {
+    "pageid": 80223915,
+    "ns": 6,
+    "title": "File:Map of 2019 Ridgecrest earthquakes.svg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 1145864,
+      "width": 814,
+      "height": 637,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Map_of_2019_Ridgecrest_earthquakes.svg/500px-Map_of_2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 391,
+      "responsiveUrls": {
+       "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Map_of_2019_Ridgecrest_earthquakes.svg/1280px-Map_of_2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Map_of_2019_Ridgecrest_earthquakes.svg/500px-Map_of_2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 391,
+       "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Map_of_2019_Ridgecrest_earthquakes.svg/1280px-Map_of_2019_Ridgecrest_earthquakes.svg.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Map_of_2019_Ridgecrest_earthquakes.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:Map_of_2019_Ridgecrest_earthquakes.svg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=80223915",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "Map of 2019 Ridgecrest earthquakes",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2019-07-06",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Phoenix7777\" title=\"User:Phoenix7777\">Phoenix7777</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/svg+xml"
+     }
+    ]
+   },
+   {
+    "pageid": 80244450,
+    "ns": 6,
+    "title": "File:July 4, 2019, Ridgecrest surface rupture.jpg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 606852,
+      "width": 1200,
+      "height": 1600,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg/500px-July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 667,
+      "responsiveUrls": {
+       "2": "https://upload.wikimedia.org/wikipedia/commons/0/09/July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg/500px-July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 667,
+       "srcset": "https://upload.wikimedia.org/wikipedia/commons/0/09/July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/09/July_4%2C_2019%2C_Ridgecrest_surface_rupture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:July_4,_2019,_Ridgecrest_surface_rupture.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=80244450",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "Surface rupture associated with a 6.4 M<sub>W</sub> earthquake on July 4, 2019, near Ridgecrest, California.",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2019-07-05",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "Ben Brooks and Todd Ericksen, <a href=\"https://en.wikipedia.org/wiki/United_States_Geological_Survey\" class=\"extiw\" title=\"w:United States Geological Survey\">United States Geological Survey</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "Public domain",
+        "source": "commons-desc-page",
+        "hidden": ""
+       }
+      },
+      "mime": "image/jpeg"
+     }
+    ]
+   },
+   {
+    "pageid": 80315642,
+    "ns": 6,
+    "title": "File:July 5, 2019, Ridgecrest earthquake road offset.jpg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 4325567,
+      "width": 7360,
+      "height": 4912,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg/500px-July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 334,
+      "responsiveUrls": {
+       "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg/1280px-July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg/500px-July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 334,
+       "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg/1280px-July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/1e/July_5%2C_2019%2C_Ridgecrest_earthquake_road_offset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:July_5,_2019,_Ridgecrest_earthquake_road_offset.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=80315642",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "\"California Geological Survey and USGS geologists and geophysicists with National Guard and Navy personnel view road damage from 3 to 5 feet of right-lateral motion near the expected maximum slip locality along the primary tectonic rupture associated with the M 7.1 event.\"",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2019-07-06 14:13:50",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "Ken Hudnut",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "Public domain",
+        "source": "commons-desc-page",
+        "hidden": ""
+       }
+      },
+      "mime": "image/jpeg"
+     }
+    ]
+   },
+   {
+    "pageid": 80551661,
+    "ns": 6,
+    "title": "File:Ridgecrest Earthquake July 4th & July 5th Reporters stand in wait of the next catastrophe. Trousdale Estates Mobile Home Park where woman and child barely escape the 1st quake. Damaged by both quakes Space 24.jpg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 5727965,
+      "width": 3000,
+      "height": 3964,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Ridgecrest_Earthquake_July_4th_%26_July_5th_Reporters_stand_in_wait_of_the_next_catastrophe._Trousdale_Estates_Mobile_Home_Park_where_woman_and_child_barely_escape_the_1st_quake._Damaged_by_both_quakes_Space_24.jpg/500px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 661,
+      "responsiveUrls": {
+       "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Ridgecrest_Earthquake_July_4th_%26_July_5th_Reporters_stand_in_wait_of_the_next_catastrophe._Trousdale_Estates_Mobile_Home_Park_where_woman_and_child_barely_escape_the_1st_quake._Damaged_by_both_quakes_Space_24.jpg/1280px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Ridgecrest_Earthquake_July_4th_%26_July_5th_Reporters_stand_in_wait_of_the_next_catastrophe._Trousdale_Estates_Mobile_Home_Park_where_woman_and_child_barely_escape_the_1st_quake._Damaged_by_both_quakes_Space_24.jpg/500px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 661,
+       "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Ridgecrest_Earthquake_July_4th_%26_July_5th_Reporters_stand_in_wait_of_the_next_catastrophe._Trousdale_Estates_Mobile_Home_Park_where_woman_and_child_barely_escape_the_1st_quake._Damaged_by_both_quakes_Space_24.jpg/1280px-thumbnail.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Ridgecrest_Earthquake_July_4th_%26_July_5th_Reporters_stand_in_wait_of_the_next_catastrophe._Trousdale_Estates_Mobile_Home_Park_where_woman_and_child_barely_escape_the_1st_quake._Damaged_by_both_quakes_Space_24.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:Ridgecrest_Earthquake_July_4th_%26_July_5th_Reporters_stand_in_wait_of_the_next_catastrophe._Trousdale_Estates_Mobile_Home_Park_where_woman_and_child_barely_escape_the_1st_quake._Damaged_by_both_quakes_Space_24.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=80551661",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "The strength of Mother Nature\n<p>Reporters standing at the scene of a mobile home made popular by by earthquake devastation. Trousdale  Estates Mobile Home Park, Space 24, Ridgecrest Ca. \nThe 1st quake, M6.4 ,hit hard. Woman a child nearly escapes after quake tosses trailer off jacks and to its side.\nJuly 5th, M7.1 levels mobile home rocked to its side. \n</p>\n One of many Red Tagged by July 4th &amp; July 5th back to back quakes",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2019-01-09",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Michelle_MH_GhostGrrrl13\" title=\"User:Michelle MH GhostGrrrl13\">Michelle MH GhostGrrrl13</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/jpeg"
+     }
+    ]
+   }
+  ]
+ }
+}

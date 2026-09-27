@@ -1,0 +1,51 @@
+{
+ "head": {
+  "vars": [
+   "q",
+   "qLabel",
+   "when",
+   "start",
+   "end",
+   "dist",
+   "image",
+   "cat",
+   "commons",
+   "topicCommons",
+   "article"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "q": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q65034920"
+    },
+    "article": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/2019_Ridgecrest_earthquakes"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "0.7005892548613848"
+    },
+    "start": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2019-07-04T00:00:00Z"
+    },
+    "end": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2019-07-05T00:00:00Z"
+    },
+    "qLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "2019 Ridgecrest earthquakes"
+    }
+   }
+  ]
+ }
+}

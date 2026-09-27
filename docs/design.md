@@ -575,6 +575,27 @@ The owner expected Google Earth and found a dark wireframe ball. **Built, 2026-0
   rewritten by Nemotron 3 Ultra with no verifier violations, at no cost, in about 2 minutes.
   The page shows the template meanwhile.
 
+### Photographs (added 2026-09-28, at the owner's request)
+
+Event pages of notable earthquakes show photographs from Wikimedia Commons, free and keyless.
+- **Which earthquake.** Wikidata is asked for an earthquake item (Q7944 or a subclass) dated from
+  three days before the event to one after, within 250 km. Dates are filtered before distance: a
+  radius search over California touches 34,000 items and took 10 s, the date range about 1 s.
+  Sequences are dated by their start (P580), so the window reaches back three days.
+- **Which photographs.** The item's own images (P18), its Commons category (P373, the Commons
+  sitelink, or the category item's), or a category named after it, interleaved with up to six
+  subcategories, damage and rescue first. JPEGs only, 500 px wide or more, at most 12 and at most
+  2 per photographer, since one uploader often files dozens of near-identical frames together.
+- **Left out.** Maps, charts, art, scanned documents, portraits of officials and reaction
+  categories, and pictures of the dead, matched on file name, description and subcategory name.
+- **Credit.** Every photograph is credited beneath it with its author and licence; the full view
+  adds the description, date, licence link and Commons page.
+- **Layout.** Justified rows keep each photograph at its own proportions, uncropped. Commons
+  serves thumbnails only at standard widths (500, 960, 1280, 1920; 640 and 1600 return 400).
+- **Loading.** The section streams in behind a Suspense boundary, so the page never waits on
+  Wikimedia: 2–4 s cold, then cached for a day. Most earthquakes have no item, and the section
+  is omitted.
+
 ---
 
 ## 6. The LLM layer

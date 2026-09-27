@@ -1,0 +1,32 @@
+{
+ "batchcomplete": true,
+ "query": {
+  "categorymembers": [
+   {
+    "pageid": 143851181,
+    "ns": 14,
+    "title": "Category:2024 Noto earthquake aerial and satellite imagery"
+   },
+   {
+    "pageid": 143854580,
+    "ns": 14,
+    "title": "Category:2024 Noto earthquake damages"
+   },
+   {
+    "pageid": 145249517,
+    "ns": 14,
+    "title": "Category:Maps of the 2024 Noto earthquake"
+   },
+   {
+    "pageid": 143925829,
+    "ns": 14,
+    "title": "Category:Politicians during the 2024 Noto earthquake"
+   },
+   {
+    "pageid": 143854510,
+    "ns": 14,
+    "title": "Category:2024 Noto earthquake relief efforts"
+   }
+  ]
+ }
+}

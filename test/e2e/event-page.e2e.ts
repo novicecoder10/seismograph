@@ -93,3 +93,32 @@ test("an event page explains the earthquake in plain words and answers questions
   await page.getByRole("button", { name: "Ask" }).click();
   await expect(page.getByTestId("ask-routed")).toContainText("does not say what will happen");
 });
+
+test("a notable earthquake shows credited photographs, and opens them full size", async ({ page }) => {
+  // The 2024 Noto earthquake: a Wikidata item with a Commons category.
+  await page.goto("/event/usgs%3Aus6000m0xl");
+  const photos = page.getByTestId("event-photos");
+  await expect(photos).toBeVisible({ timeout: 60_000 });
+  await expect(photos).toContainText("2024 Noto earthquake");
+  const tiles = photos.locator(".photos-rows button");
+  expect(await tiles.count()).toBeGreaterThan(3);
+  // Every photograph is credited with its author and licence beside it.
+  for (const credit of await photos.locator(".photos-credit").allTextContents()) {
+    expect(credit).toMatch(/, .+/);
+  }
+  await tiles.first().click();
+  const viewer = page.locator("dialog.photos-viewer[open]");
+  await expect(viewer).toBeVisible();
+  await expect(viewer.getByRole("link", { name: /on Commons/ })).toHaveAttribute("href", /commons\.wikimedia\.org/);
+  await page.keyboard.press("ArrowRight");
+  await expect(viewer.locator(".photos-nav span")).toHaveText(/^2 of \d+$/);
+  await page.keyboard.press("Escape");
+  await expect(viewer).toHaveCount(0);
+});
+
+test("an ordinary earthquake has no photographs section at all", async ({ page }) => {
+  await page.goto("/event/usgs%3Aus7000tj1b");
+  await expect(page.locator("h2")).toBeVisible({ timeout: 60_000 });
+  await page.waitForLoadState("networkidle");
+  await expect(page.getByTestId("event-photos")).toHaveCount(0);
+});

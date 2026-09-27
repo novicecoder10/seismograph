@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { formatDepth, formatMagnitude, formatUtc } from "@/lib/events/format";
 import type { EventProducts } from "@/lib/events/products";
 import { createUsgsProductRepository } from "@/lib/repositories/products";
 import { createUsgsFdsnRepository } from "@/lib/repositories/usgs-fdsn";
 import { Beachball } from "@/components/structure/Beachball";
 import { WaveformPanelLazy } from "@/components/waveform/WaveformPanelLazy";
+import { EventPhotos } from "@/components/photos/EventPhotos";
 import { Ask } from "@/components/analyst/Ask";
 import { Prose } from "@/components/analyst/Prose";
 import { eventEvidence, eventTemplate } from "@/lib/analyst/facts";
@@ -106,6 +108,10 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
       <div style={{ maxWidth: 760, margin: "0 0 18px" }}>
         <Ask eventId={event.id} kind="event" title="Ask about this earthquake" placeholder="e.g. Why was it so deep? What does mww mean?" scope="the facts about this earthquake and a short glossary" />
       </div>
+
+      <Suspense fallback={null}>
+        <EventPhotos lat={event.lat} lon={event.lon} timeMs={event.time} />
+      </Suspense>
 
       <WaveformPanelLazy lat={event.lat} lon={event.lon} timeMs={event.time} />
 

@@ -1,0 +1,327 @@
+{
+ "batchcomplete": true,
+ "query": {
+  "pages": [
+   {
+    "pageid": 143338678,
+    "ns": 6,
+    "title": "File:Tokaido shinkansen delayed due to Noto earthquake 2024 January 1.jpg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 2360868,
+      "width": 5152,
+      "height": 3864,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg/500px-Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 375,
+      "responsiveUrls": {
+       "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg/1280px-Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg/500px-Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 375,
+       "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg/1280px-Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/10/Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:Tokaido_shinkansen_delayed_due_to_Noto_earthquake_2024_January_1.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=143338678",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "静岡駅の電光掲示板。令和6年能登半島地震により東海道新幹線に遅延が発生した。",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "1 January 2024, 17:19",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "Halowand",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/jpeg"
+     }
+    ]
+   },
+   {
+    "pageid": 145792137,
+    "ns": 6,
+    "title": "File:令和6年能登半島地震震源球.png",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 65045,
+      "width": 276,
+      "height": 390,
+      "thumburl": "https://upload.wikimedia.org/wikipedia/commons/2/2d/%E4%BB%A4%E5%92%8C6%E5%B9%B4%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E9%9C%87%E6%BA%90%E7%90%83.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "thumbwidth": 500,
+      "thumbheight": 707,
+      "thumbattribs": {
+       "src": "https://upload.wikimedia.org/wikipedia/commons/2/2d/%E4%BB%A4%E5%92%8C6%E5%B9%B4%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E9%9C%87%E6%BA%90%E7%90%83.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 707
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/%E4%BB%A4%E5%92%8C6%E5%B9%B4%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E9%9C%87%E6%BA%90%E7%90%83.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:%E4%BB%A4%E5%92%8C6%E5%B9%B4%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E9%9C%87%E6%BA%90%E7%90%83.png",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=145792137",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "令和6年能登半島地震（前震）の震源球",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2024-01-01",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "気象庁",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/png"
+     }
+    ]
+   },
+   {
+    "pageid": 145839203,
+    "ns": 6,
+    "title": "File:能登半島地震に伴う主要な在来線の復旧状況.png",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 131220,
+      "width": 1280,
+      "height": 720,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png/500px-%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 281,
+      "responsiveUrls": {
+       "2": "https://upload.wikimedia.org/wikipedia/commons/c/cd/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png/500px-%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 281,
+       "srcset": "https://upload.wikimedia.org/wikipedia/commons/c/cd/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87%E3%81%AB%E4%BC%B4%E3%81%86%E4%B8%BB%E8%A6%81%E3%81%AA%E5%9C%A8%E6%9D%A5%E7%B7%9A%E3%81%AE%E5%BE%A9%E6%97%A7%E7%8A%B6%E6%B3%81.png",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=145839203",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "2024年の能登半島地震に伴う主要な在来線の復旧状況",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2024-02-26",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Prefuture\" title=\"User:Prefuture\">Prefuture</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/png"
+     }
+    ]
+   },
+   {
+    "pageid": 145897460,
+    "ns": 6,
+    "title": "File:能登半島地震 地震回数.png",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 91060,
+      "width": 1027,
+      "height": 474,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png/500px-%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 231,
+      "responsiveUrls": {
+       "2": "https://upload.wikimedia.org/wikipedia/commons/c/c7/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png/500px-%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 231,
+       "srcset": "https://upload.wikimedia.org/wikipedia/commons/c/c7/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c7/%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:%E8%83%BD%E7%99%BB%E5%8D%8A%E5%B3%B6%E5%9C%B0%E9%9C%87_%E5%9C%B0%E9%9C%87%E5%9B%9E%E6%95%B0.png",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=145897460",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "能登半島地震における石川県能登での地震回数。",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2024-02-21",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "気象庁",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/png"
+     }
+    ]
+   },
+   {
+    "pageid": 145935890,
+    "ns": 6,
+    "title": "File:電波式津波計設置の様子.jpg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 214213,
+      "width": 640,
+      "height": 480,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg/500px-%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 375,
+      "responsiveUrls": {
+       "2": "https://upload.wikimedia.org/wikipedia/commons/1/12/%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg/500px-%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 375,
+       "srcset": "https://upload.wikimedia.org/wikipedia/commons/1/12/%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/12/%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:%E9%9B%BB%E6%B3%A2%E5%BC%8F%E6%B4%A5%E6%B3%A2%E8%A8%88%E8%A8%AD%E7%BD%AE%E3%81%AE%E6%A7%98%E5%AD%90.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=145935890",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "2024年能登半島地震で被害を受けた津波計の代わりに新たな津波計を設置している様子。",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2024-01-14 17:02:07",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "気象庁",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/jpeg"
+     }
+    ]
+   },
+   {
+    "pageid": 185580557,
+    "ns": 6,
+    "title": "File:Houryu, Suzu, Ishikawa, Japan 20240913.jpg",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "size": 3078381,
+      "width": 4000,
+      "height": 3000,
+      "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg/500px-Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "thumbwidth": 500,
+      "thumbheight": 375,
+      "responsiveUrls": {
+       "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg/1280px-Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+      },
+      "thumbattribs": {
+       "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg/500px-Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 500,
+       "height": 375,
+       "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg/1280px-Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Houryu%2C_Suzu%2C_Ishikawa%2C_Japan_20240913.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:Houryu,_Suzu,_Ishikawa,_Japan_20240913.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=185580557",
+      "extmetadata": {
+       "ImageDescription": {
+        "value": "Scenery of the Horyu district of Suzu city, Ishikawa city",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2024-09-13 10:10:18",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Sekiyuka&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Sekiyuka (page does not exist)\">Sekiyuka</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+       }
+      },
+      "mime": "image/jpeg"
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,95 @@
+{
+ "head": {
+  "vars": [
+   "q",
+   "qLabel",
+   "when",
+   "start",
+   "end",
+   "dist",
+   "image",
+   "cat",
+   "commons",
+   "topicCommons",
+   "article"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "q": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q124060919"
+    },
+    "article": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/2024_Noto_earthquake"
+    },
+    "commons": {
+     "type": "uri",
+     "value": "https://commons.wikimedia.org/wiki/Category:2024_Noto_earthquake"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.4924906979045343"
+    },
+    "when": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2024-01-01T00:00:00Z"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/R6%20noto%20earthquake%20wajima%20street%202024-02-17%2012.jpg"
+    },
+    "cat": {
+     "type": "literal",
+     "value": "2024 Noto earthquake"
+    },
+    "qLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "2024 Noto earthquake"
+    }
+   },
+   {
+    "q": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q124060919"
+    },
+    "article": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/2024_Noto_earthquake"
+    },
+    "commons": {
+     "type": "uri",
+     "value": "https://commons.wikimedia.org/wiki/Category:2024_Noto_earthquake"
+    },
+    "dist": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "2.4924906979045343"
+    },
+    "when": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+     "type": "literal",
+     "value": "2024-01-01T00:00:00Z"
+    },
+    "image": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Air%20Self-Defense%20Force%20drone%20search%20operation%20at%20Wajima%20Asaichi.jpg"
+    },
+    "cat": {
+     "type": "literal",
+     "value": "2024 Noto earthquake"
+    },
+    "qLabel": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "2024 Noto earthquake"
+    }
+   }
+  ]
+ }
+}
