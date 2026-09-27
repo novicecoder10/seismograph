@@ -29,6 +29,7 @@ jobs:
             type=raw,value=latest
           labels: |
             org.opencontainers.image.title=Seismograph
+            org.opencontainers.image.licenses=MIT
             org.opencontainers.image.description=Earthquake globe with sequence analysis, aftershock forecasts, and a public forecast scoreboard
       - uses: docker/build-push-action@v6
         with:

@@ -2,6 +2,7 @@
   "name": "seismograph",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "scripts": {
     "dev": "NEXT_DIST_DIR=.next-dev next dev",
     "build": "next build",

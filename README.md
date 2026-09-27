@@ -157,6 +157,11 @@ against published values; the aftershock forecasts reproduce USGS's published nu
 0.2% in the unit suite. The forecast ledger is two append-only, SHA-256-chained JSON Lines files in
 `ledger/`, committed to this repository.
 
+## Licence
+
+The code is MIT-licensed; see `LICENSE`. Data, imagery and photographs keep their own
+licences, listed above.
+
 ## Documents
 
 - `docs/design.md` — the design, and what each phase built and found.
