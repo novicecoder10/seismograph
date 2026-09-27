@@ -1,6 +1,6 @@
 # Issues forecasts for new M5+ earthquakes hourly and scores closed windows daily,
 # committing the append-only ledger back to the repository. Free on public
-# repositories (GitHub Actions); inactive until this repository is pushed.
+# repositories (GitHub Actions).
 name: forecast ledger
 on:
   schedule:
