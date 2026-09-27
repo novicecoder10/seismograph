@@ -1,6 +1,6 @@
 **Throwaway spike code. Nothing here is imported by production code.**
 
-Phase 0 of `docs/superpowers/specs/2026-09-23-seismograph-design.md` resolves three
+Phase 0 of `docs/design.md` resolves three
 unknowns before production code is written. Each spike answers one question and its
 answer is recorded in `FINDINGS.md`.
 

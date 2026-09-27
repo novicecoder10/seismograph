@@ -66,9 +66,8 @@ Phase 2.
 
 ## Documents
 
-- `docs/superpowers/specs/2026-09-23-seismograph-design.md` — the design.
-- `docs/superpowers/specs/2026-09-23-research-findings.md` — the evidence behind it.
-- `docs/superpowers/plans/` — implementation plans, one per phase.
+- `docs/design.md` — the design.
+- `docs/research-findings.md` — the evidence behind it.
 - `spikes/FINDINGS.md` — what the Phase 0 spike week measured. Two of its findings are
   load-bearing: the globe never renders continuously, and `seisplotjs` never reaches the
   server.

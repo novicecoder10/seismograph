@@ -37,3 +37,9 @@ out/
 scratch/
 /.next-dev/
 /.cache/
+
+# Local working notes, not published
+docs/superpowers/
+test-results/
+.claude/
+CLAUDE.md
